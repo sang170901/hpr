@@ -1,0 +1,10 @@
+<!-- SVG Icon: Materials -->
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="40" cy="40" r="38" fill="#E0F2FE" stroke="#0891B2" stroke-width="4"/>
+  <rect x="20" y="25" width="40" height="30" rx="4" fill="#0891B2"/>
+  <rect x="25" y="30" width="10" height="5" rx="1" fill="white"/>
+  <rect x="40" y="30" width="10" height="5" rx="1" fill="white"/>
+  <rect x="25" y="40" width="10" height="5" rx="1" fill="white"/>
+  <rect x="40" y="40" width="10" height="5" rx="1" fill="white"/>
+  <circle cx="40" cy="62" r="3" fill="#F59E0B"/>
+</svg>

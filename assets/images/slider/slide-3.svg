@@ -1,0 +1,52 @@
+<!-- SVG Slider 3: Xi Măng Thông Minh -->
+<svg width="800" height="400" viewBox="0 0 800 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="smartGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="smartGrad2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#fffbeb;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#fef3c7;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="800" height="400" fill="url(#smartGrad2)"/>
+  
+  <!-- Cement bags -->
+  <rect x="60" y="150" width="80" height="120" rx="5" fill="url(#smartGrad1)"/>
+  <rect x="150" y="130" width="80" height="140" rx="5" fill="#0891b2"/>
+  <rect x="240" y="160" width="80" height="110" rx="5" fill="#10b981"/>
+  
+  <!-- Smart tech symbols -->
+  <circle cx="100" cy="100" r="20" fill="#f59e0b"/>
+  <path d="M90 100 L100 90 L110 100 L100 110 Z" fill="white"/>
+  
+  <circle cx="190" cy="80" r="20" fill="#0891b2"/>
+  <rect x="185" y="75" width="10" height="10" fill="white"/>
+  
+  <circle cx="280" cy="110" r="20" fill="#10b981"/>
+  <circle cx="280" cy="110" r="8" fill="white"/>
+  
+  <!-- Text content -->
+  <text x="420" y="80" fill="#f59e0b" font-family="Inter, Arial" font-size="36" font-weight="bold">Xi Măng</text>
+  <text x="420" y="115" fill="#f59e0b" font-family="Inter, Arial" font-size="36" font-weight="bold">Thông Minh</text>
+  
+  <text x="420" y="155" fill="#475569" font-family="Inter, Arial" font-size="18">Công nghệ IoT tích hợp</text>
+  <text x="420" y="180" fill="#475569" font-family="Inter, Arial" font-size="18">Tự điều chỉnh độ cứng theo môi trường</text>
+  <text x="420" y="205" fill="#475569" font-family="Inter, Arial" font-size="18">Giảm 30% thời gian thi công</text>
+  
+  <!-- Smart badge -->
+  <rect x="420" y="230" width="100" height="30" rx="15" fill="#f59e0b"/>
+  <text x="470" y="250" text-anchor="middle" fill="white" font-family="Inter, Arial" font-size="14" font-weight="bold">SMART TECH</text>
+  
+  <!-- Price -->
+  <rect x="420" y="280" width="200" height="40" rx="20" fill="#d97706"/>
+  <text x="520" y="305" text-anchor="middle" fill="white" font-family="Inter, Arial" font-size="16" font-weight="bold">Liên hệ báo giá</text>
+  
+  <!-- Innovation symbols -->
+  <rect x="680" y="60" width="40" height="40" rx="20" fill="#f59e0b" opacity="0.3"/>
+  <circle cx="720" cy="150" r="25" fill="#0891b2" opacity="0.3"/>
+  <polygon points="650,250 680,230 680,270" fill="#10b981" opacity="0.3"/>
+</svg>

@@ -1,0 +1,11 @@
+<!-- SVG Icon: Suppliers -->
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="40" cy="40" r="38" fill="#E0F2FE" stroke="#0891B2" stroke-width="4"/>
+  <rect x="15" y="35" width="50" height="25" rx="4" fill="#0891B2"/>
+  <circle cx="25" cy="30" r="6" fill="#F59E0B"/>
+  <circle cx="40" cy="30" r="6" fill="#F59E0B"/>
+  <circle cx="55" cy="30" r="6" fill="#F59E0B"/>
+  <rect x="20" y="40" width="40" height="3" rx="1" fill="white"/>
+  <rect x="20" y="45" width="25" height="3" rx="1" fill="white"/>
+  <rect x="20" y="50" width="35" height="3" rx="1" fill="white"/>
+</svg>

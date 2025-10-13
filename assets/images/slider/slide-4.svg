@@ -1,0 +1,59 @@
+<!-- SVG Slider 4: Thép Xây Dựng Chất Lượng Cao -->
+<svg width="800" height="400" viewBox="0 0 800 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="steelGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#475569;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1e293b;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="steelGrad2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#f8fafc;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e2e8f0;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="800" height="400" fill="url(#steelGrad2)"/>
+  
+  <!-- Steel bars -->
+  <rect x="80" y="120" width="20" height="200" fill="url(#steelGrad1)"/>
+  <rect x="110" y="100" width="20" height="220" fill="url(#steelGrad1)"/>
+  <rect x="140" y="130" width="20" height="190" fill="url(#steelGrad1)"/>
+  <rect x="170" y="110" width="20" height="210" fill="url(#steelGrad1)"/>
+  <rect x="200" y="140" width="20" height="180" fill="url(#steelGrad1)"/>
+  <rect x="230" y="120" width="20" height="200" fill="url(#steelGrad1)"/>
+  <rect x="260" y="100" width="20" height="220" fill="url(#steelGrad1)"/>
+  
+  <!-- Strength indicators -->
+  <circle cx="90" cy="80" r="15" fill="#0891b2"/>
+  <text x="90" y="85" text-anchor="middle" fill="white" font-family="Inter, Arial" font-size="10" font-weight="bold">A3</text>
+  
+  <circle cx="120" cy="60" r="15" fill="#10b981"/>
+  <text x="120" y="65" text-anchor="middle" fill="white" font-family="Inter, Arial" font-size="10" font-weight="bold">A4</text>
+  
+  <!-- Text content -->
+  <text x="400" y="90" fill="#475569" font-family="Inter, Arial" font-size="36" font-weight="bold">Thép Xây Dựng</text>
+  <text x="400" y="125" fill="#475569" font-family="Inter, Arial" font-size="36" font-weight="bold">Chất Lượng Cao</text>
+  
+  <text x="400" y="165" fill="#64748b" font-family="Inter, Arial" font-size="18">Thép cuộn, thép thanh các loại</text>
+  <text x="400" y="190" fill="#64748b" font-family="Inter, Arial" font-size="18">Đạt chuẩn TCVN, JIS, ASTM</text>
+  <text x="400" y="215" fill="#64748b" font-family="Inter, Arial" font-size="18">Độ bền kéo cao, chống ăn mòn</text>
+  
+  <!-- Quality badges -->
+  <rect x="400" y="240" width="80" height="25" rx="12" fill="#0891b2"/>
+  <text x="440" y="256" text-anchor="middle" fill="white" font-family="Inter, Arial" font-size="12" font-weight="bold">TCVN</text>
+  
+  <rect x="490" y="240" width="60" height="25" rx="12" fill="#10b981"/>
+  <text x="520" y="256" text-anchor="middle" fill="white" font-family="Inter, Arial" font-size="12" font-weight="bold">JIS</text>
+  
+  <rect x="560" y="240" width="80" height="25" rx="12" fill="#f59e0b"/>
+  <text x="600" y="256" text-anchor="middle" fill="white" font-family="Inter, Arial" font-size="12" font-weight="bold">ASTM</text>
+  
+  <!-- Price -->
+  <rect x="400" y="290" width="220" height="40" rx="20" fill="#1e293b"/>
+  <text x="510" y="315" text-anchor="middle" fill="white" font-family="Inter, Arial" font-size="16" font-weight="bold">Từ 18.500đ/kg</text>
+  
+  <!-- Geometric decorations -->
+  <rect x="680" y="80" width="30" height="30" fill="#0891b2" opacity="0.3" transform="rotate(45 695 95)"/>
+  <rect x="720" y="160" width="25" height="25" fill="#475569" opacity="0.3" transform="rotate(45 732 172)"/>
+  <rect x="650" y="280" width="35" height="35" fill="#10b981" opacity="0.3" transform="rotate(45 667 297)"/>
+</svg>

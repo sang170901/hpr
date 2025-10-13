@@ -1,0 +1,13 @@
+<!-- SVG Icon: Categories -->
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="40" cy="40" r="38" fill="#E0F2FE" stroke="#0891B2" stroke-width="4"/>
+  <rect x="15" y="15" width="15" height="15" rx="3" fill="#0891B2"/>
+  <rect x="35" y="15" width="15" height="15" rx="3" fill="#F59E0B"/>
+  <rect x="55" y="15" width="15" height="15" rx="3" fill="#0891B2"/>
+  <rect x="15" y="35" width="15" height="15" rx="3" fill="#F59E0B"/>
+  <rect x="35" y="35" width="15" height="15" rx="3" fill="#0891B2"/>
+  <rect x="55" y="35" width="15" height="15" rx="3" fill="#F59E0B"/>
+  <rect x="15" y="55" width="15" height="15" rx="3" fill="#0891B2"/>
+  <rect x="35" y="55" width="15" height="15" rx="3" fill="#F59E0B"/>
+  <rect x="55" y="55" width="15" height="15" rx="3" fill="#0891B2"/>
+</svg>
