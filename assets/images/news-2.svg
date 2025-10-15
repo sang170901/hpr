@@ -1,0 +1,14 @@
+<!-- SVG Placeholder: News 2 - Drainage System -->
+<svg width="400" height="200" viewBox="0 0 400 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="200" fill="#E0F2FE"/>
+  <path d="M50 150c50-20 100-40 150-30s100 20 150 10" stroke="#0891B2" stroke-width="8" fill="none"/>
+  <path d="M50 170c50-15 100-30 150-20s100 15 150 5" stroke="#10B981" stroke-width="6" fill="none"/>
+  <circle cx="100" cy="50" r="20" fill="#F59E0B"/>
+  <circle cx="200" cy="60" r="15" fill="#0891B2"/>
+  <circle cx="300" cy="45" r="18" fill="#10B981"/>
+  <rect x="80" y="80" width="40" height="20" rx="10" fill="#0891B2"/>
+  <rect x="180" y="90" width="40" height="20" rx="10" fill="#0891B2"/>
+  <rect x="280" y="75" width="40" height="20" rx="10" fill="#0891B2"/>
+  <text x="200" y="25" text-anchor="middle" fill="#0891B2" font-family="Arial" font-size="16" font-weight="bold">Hệ Thống Thoát Nước Thông Minh</text>
+  <text x="200" y="195" text-anchor="middle" fill="#64748B" font-family="Arial" font-size="12">Giải pháp chống ngập lụt</text>
+</svg>

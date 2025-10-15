@@ -1,0 +1,8 @@
+<!-- SVG Partner 2: Material Supplier -->
+<svg width="120" height="80" viewBox="0 0 120 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="120" height="80" fill="white"/>
+  <circle cx="60" cy="30" r="15" fill="#E0F2FE" stroke="#0891B2" stroke-width="2"/>
+  <circle cx="60" cy="30" r="8" fill="#F59E0B"/>
+  <rect x="40" y="45" width="40" height="10" rx="2" fill="#0891B2"/>
+  <text x="60" y="70" text-anchor="middle" fill="#0891B2" font-family="Arial" font-size="10" font-weight="bold">ARMSTRONG</text>
+</svg>

@@ -1,0 +1,6 @@
+<!-- SVG Icon: Commitment -->
+<svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="30" cy="30" r="28" fill="#E0F2FE" stroke="#0891B2" stroke-width="4"/>
+  <path d="M20 30l8 8 12-16" stroke="#0891B2" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="30" cy="30" r="15" stroke="#F59E0B" stroke-width="3" fill="none"/>
+</svg>

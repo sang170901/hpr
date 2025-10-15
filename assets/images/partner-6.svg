@@ -1,0 +1,10 @@
+<!-- SVG Partner 6: ALSAFLOOR -->
+<svg width="120" height="80" viewBox="0 0 120 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="120" height="80" fill="white"/>
+  <rect x="15" y="25" width="90" height="30" rx="4" fill="#E0F2FE" stroke="#0891B2" stroke-width="2"/>
+  <rect x="20" y="30" width="20" height="5" rx="1" fill="#0891B2"/>
+  <rect x="20" y="38" width="20" height="5" rx="1" fill="#F59E0B"/>
+  <rect x="20" y="46" width="20" height="5" rx="1" fill="#10B981"/>
+  <rect x="50" y="30" width="50" height="20" rx="2" fill="#0891B2" opacity="0.3"/>
+  <text x="60" y="70" text-anchor="middle" fill="#0891B2" font-family="Arial" font-size="9" font-weight="bold">ALSAFLOOR</text>
+</svg>
