@@ -15,7 +15,7 @@ try {
     $pdo = getPDO();
     
     // Build query with filters
-    $whereClause = "WHERE category = 'vật liệu'";
+    $whereClause = "WHERE category = 'thiết bị'";
     $params = [];
     
     if (!empty($search)) {
@@ -44,37 +44,37 @@ try {
     $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
     $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
     $stmt->execute();
-    $materials = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $equipment = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
-    // Get material categories for filter
-    $categoryQuery = "SELECT DISTINCT subcategory FROM products WHERE category = 'vật liệu' AND subcategory IS NOT NULL ORDER BY subcategory";
+    // Get equipment categories for filter
+    $categoryQuery = "SELECT DISTINCT subcategory FROM products WHERE category = 'thiết bị' AND subcategory IS NOT NULL ORDER BY subcategory";
     $categoryStmt = $pdo->query($categoryQuery);
     $categories = $categoryStmt->fetchAll(PDO::FETCH_ASSOC);
     
 } catch (Exception $e) {
-    $materials = [];
+    $equipment = [];
     $categories = [];
     $totalItems = 0;
     $totalPages = 0;
-    error_log("Lỗi khi truy xuất vật liệu: " . $e->getMessage());
+    error_log("Lỗi khi truy xuất thiết bị: " . $e->getMessage());
 }
 ?>
 
 <style>
-.materials-page {
+.equipment-page {
     min-height: 100vh;
     background: #f8f9fa;
     padding-top: 100px;
 }
 
-.materials-container {
+.equipment-container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
 }
 
 .page-header {
-    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     padding: 60px 0;
     margin-bottom: 40px;
@@ -156,7 +156,7 @@ try {
 
 .search-input:focus {
     outline: none;
-    border-color: #007bff;
+    border-color: #667eea;
 }
 
 .category-filter {
@@ -174,7 +174,7 @@ try {
 }
 
 .filter-btn {
-    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     border: none;
     padding: 12px 25px;
@@ -200,14 +200,14 @@ try {
     color: #495057;
 }
 
-.materials-grid {
+.equipment-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
     gap: 30px;
     margin-bottom: 50px;
 }
 
-.material-card {
+.equipment-card {
     background: white;
     border-radius: 15px;
     overflow: hidden;
@@ -216,19 +216,19 @@ try {
     border: 1px solid #f0f0f0;
 }
 
-.material-card:hover {
+.equipment-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 15px 35px rgba(0,0,0,0.15);
 }
 
 .card-image {
     height: 200px;
-    background: linear-gradient(45deg, #e3f2fd, #bbdefb);
+    background: linear-gradient(45deg, #f8f9fa, #e9ecef);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 3rem;
-    color: #007bff;
+    color: #6c757d;
     position: relative;
     overflow: hidden;
 }
@@ -240,7 +240,7 @@ try {
     left: 0;
     right: 0;
     bottom: 0;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23e3f2fd"/><rect x="20" y="20" width="60" height="60" fill="%23007bff" opacity="0.3"/></svg>');
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23f8f9fa"/><circle cx="50" cy="50" r="20" fill="%23dee2e6"/></svg>');
     opacity: 0.3;
 }
 
@@ -275,7 +275,7 @@ try {
 
 .card-category {
     background: #e3f2fd;
-    color: #007bff;
+    color: #1976d2;
     padding: 5px 12px;
     border-radius: 20px;
     font-size: 0.85rem;
@@ -311,7 +311,7 @@ try {
 }
 
 .view-details {
-    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     text-decoration: none;
     padding: 10px 20px;
@@ -370,15 +370,15 @@ try {
 }
 
 .page-link:hover {
-    background: #007bff;
+    background: #667eea;
     color: white;
-    border-color: #007bff;
+    border-color: #667eea;
 }
 
 .page-link.active {
-    background: #007bff;
+    background: #667eea;
     color: white;
-    border-color: #007bff;
+    border-color: #667eea;
 }
 
 .page-link.disabled {
@@ -387,7 +387,7 @@ try {
 }
 
 @media (max-width: 768px) {
-    .materials-container {
+    .equipment-container {
         padding: 0 15px;
     }
     
@@ -406,7 +406,7 @@ try {
         width: 100%;
     }
     
-    .materials-grid {
+    .equipment-grid {
         grid-template-columns: 1fr;
         gap: 20px;
     }
@@ -427,24 +427,24 @@ try {
 }
 </style>
 
-<div class="materials-page">
+<div class="equipment-page">
     <!-- Page Header -->
     <div class="page-header">
-        <div class="materials-container">
-            <h1 class="page-title">VẬT LIỆU</h1>
+        <div class="equipment-container">
+            <h1 class="page-title">THIẾT BỊ</h1>
             <p class="page-subtitle">
-                Vật liệu xây dựng bao gồm gỗ, thép, bê tông, gạch, đá và các vật liệu khác.
-                Chúng được sử dụng để xây dựng móng, tường, mái, sàn và các kết cấu công trình.
-                Vật liệu xây dựng không chỉ tạo nên độ bền vững mà còn đảm bảo tính thẩm mỹ và an toàn cho công trình.
+                Thiết bị xây dựng bao gồm máy móc, công cụ và dụng cụ chuyên dụng.
+                Chúng được sử dụng để xây dựng, lắp đặt, vận hành và bảo trì các công trình.
+                Thiết bị xây dựng không chỉ tăng hiệu quả thi công mà còn đảm bảo an toàn và chất lượng công trình.
             </p>
         </div>
     </div>
 
-    <div class="materials-container">
+    <div class="equipment-container">
         <!-- Breadcrumb -->
         <nav class="breadcrumb">
             <span class="breadcrumb-item"><a href="/vnmt/">Trang chủ</a></span>
-            <span class="breadcrumb-item active">Vật liệu</span>
+            <span class="breadcrumb-item active">Thiết bị</span>
         </nav>
 
         <!-- Filter Section -->
@@ -458,7 +458,7 @@ try {
                         <input type="text" 
                                name="search" 
                                class="search-input" 
-                               placeholder="Tìm kiếm vật liệu..." 
+                               placeholder="Tìm kiếm thiết bị..." 
                                value="<?php echo htmlspecialchars($search); ?>">
                     </div>
                     <div class="category-filter">
@@ -482,7 +482,7 @@ try {
         <!-- Results Info -->
         <div class="results-info">
             <div class="results-count">
-                Tìm thấy <strong><?php echo number_format($totalItems); ?></strong> vật liệu
+                Tìm thấy <strong><?php echo number_format($totalItems); ?></strong> thiết bị
                 <?php if (!empty($search) || !empty($category)): ?>
                     <?php if (!empty($search)): ?>
                         cho từ khóa "<strong><?php echo htmlspecialchars($search); ?></strong>"
@@ -494,13 +494,13 @@ try {
             </div>
         </div>
 
-        <?php if (!empty($materials)): ?>
-            <!-- Materials Grid -->
-            <div class="materials-grid">
-                <?php foreach ($materials as $item): ?>
-                    <div class="material-card">
+        <?php if (!empty($equipment)): ?>
+            <!-- Equipment Grid -->
+            <div class="equipment-grid">
+                <?php foreach ($equipment as $item): ?>
+                    <div class="equipment-card">
                         <div class="card-image">
-                            <i class="fas fa-cube"></i>
+                            <i class="fas fa-tools"></i>
                         </div>
                         <div class="card-content">
                             <h3 class="card-title"><?php echo htmlspecialchars($item['name']); ?></h3>
@@ -577,16 +577,16 @@ try {
                 <div class="no-results-icon">
                     <i class="fas fa-search"></i>
                 </div>
-                <h3 class="no-results-title">Không tìm thấy vật liệu nào</h3>
+                <h3 class="no-results-title">Không tìm thấy thiết bị nào</h3>
                 <p class="no-results-text">
-                    Hãy thử thay đổi từ khóa tìm kiếm hoặc bộ lọc để tìm thấy vật liệu phù hợp.
+                    Hãy thử thay đổi từ khóa tìm kiếm hoặc bộ lọc để tìm thấy thiết bị phù hợp.
                 </p>
-                <a href="materials.php" class="view-details">
-                    <i class="fas fa-refresh"></i> Xem tất cả vật liệu
+                <a href="equipment.php" class="view-details">
+                    <i class="fas fa-refresh"></i> Xem tất cả thiết bị
                 </a>
             </div>
         <?php endif; ?>
     </div>
 </div>
 
-<?php include __DIR__ . '/inc/footer-new.php'; ?>
+<?php include 'inc/footer-new.php'; ?>

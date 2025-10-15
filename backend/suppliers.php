@@ -18,16 +18,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $address = trim($_POST['address'] ?? '');
         $logo = trim($_POST['logo'] ?? '');
         $description = trim($_POST['description'] ?? '');
+        $product_types = implode(', ', $_POST['product_types'] ?? []);
         $status = isset($_POST['status']) ? 1 : 0;
 
         try {
             if ($id) {
-                $stmt = $pdo->prepare('UPDATE suppliers SET name=?, slug=?, email=?, phone=?, address=?, logo=?, description=?, status=? WHERE id=?');
-                $stmt->execute([$name, $slug, $email, $phone, $address, $logo, $description, $status, $id]);
+                $stmt = $pdo->prepare('UPDATE suppliers SET name=?, slug=?, email=?, phone=?, address=?, logo=?, description=?, product_types=?, status=? WHERE id=?');
+                $stmt->execute([$name, $slug, $email, $phone, $address, $logo, $description, $product_types, $status, $id]);
                 log_activity($_SESSION['user']['id'] ?? null, 'update_supplier', 'supplier', $id, json_encode(['name'=>$name]));
             } else {
-                $stmt = $pdo->prepare('INSERT INTO suppliers (name, slug, email, phone, address, logo, description) VALUES (?, ?, ?, ?, ?, ?, ?)');
-                $stmt->execute([$name, $slug, $email, $phone, $address, $logo, $description]);
+                $stmt = $pdo->prepare('INSERT INTO suppliers (name, slug, email, phone, address, logo, description, product_types) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
+                $stmt->execute([$name, $slug, $email, $phone, $address, $logo, $description, $product_types]);
                 $newId = $pdo->lastInsertId();
                 log_activity($_SESSION['user']['id'] ?? null, 'create_supplier', 'supplier', $newId, json_encode(['name'=>$name]));
             }
@@ -89,9 +90,22 @@ if (!empty($search)) {
     $stmt = $pdo->prepare('SELECT * FROM suppliers WHERE name LIKE ? OR slug LIKE ? ORDER BY id DESC');
     $like = "%$search%";
     $stmt->execute([$like, $like]);
-    $suppliers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $groupedSuppliers = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } else {
-    $suppliers = $pdo->query('SELECT * FROM suppliers ORDER BY id DESC')->fetchAll(PDO::FETCH_ASSOC);
+    $groupedSuppliers = $pdo->query('SELECT * FROM suppliers ORDER BY name')->fetchAll(PDO::FETCH_ASSOC);
+}
+
+// New: Group by product_types
+$options = ['Vật liệu', 'Giải Pháp', 'Kết cấu', 'Thiết bị', 'Công nghệ', 'Cảnh quan'];
+$groupedByProduct = [];
+foreach ($groupedSuppliers as $s) {
+    $types = explode(', ', $s['product_types'] ?? '');
+    foreach ($types as $type) {
+        $type = trim($type);
+        if (in_array($type, $options)) {
+            $groupedByProduct[$type][] = $s;
+        }
+    }
 }
 
 ?>
@@ -109,37 +123,46 @@ if (!empty($search)) {
         </form>
     </div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Tên</th>
-                <th>Email</th>
-                <th>Điện thoại</th>
-                <th>Địa chỉ</th>
-                <th>Trạng thái</th>
-                <th>Ngày tạo</th>
-                <th>Hành động</th>
-            </tr>
-        </thead>
-        <tbody>
-        <?php foreach ($suppliers as $s): ?>
-            <tr>
-                <td><?php echo $s['id'] ?></td>
-                <td><?php echo htmlspecialchars($s['name']) ?></td>
-                <td><?php echo htmlspecialchars($s['email']) ?></td>
-                <td><?php echo htmlspecialchars($s['phone']) ?></td>
-                <td><?php echo htmlspecialchars($s['address']) ?></td>
-                <td><?php echo ($s['status'] ?? 1) ? 'Hoạt động' : 'Không hoạt động' ?> <a class="small-btn" href="suppliers.php?action=toggle&id=<?php echo $s['id'] ?>">Bật/Tắt</a></td>
-                <td><?php echo $s['created_at'] ?? '' ?></td>
-                <td class="btn-row">
-                    <a class="small-btn" href="suppliers.php?action=edit&id=<?php echo $s['id'] ?>">Sửa</a>
-                    <a class="small-btn warn" href="suppliers.php?action=delete&id=<?php echo $s['id'] ?>" onclick="return confirm('Xóa nhà cung cấp?')">Xóa</a>
-                </td>
-            </tr>
-        <?php endforeach; ?>
-        </tbody>
-    </table>
+    <?php foreach ($options as $opt): ?>
+        <?php if (isset($groupedByProduct[$opt])): ?>
+            <h3><?php echo htmlspecialchars($opt) ?></h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Danh mục</th>
+                        <th>ID</th>
+                        <th>Tên</th>
+                        <th>Email</th>
+                        <th>Điện thoại</th>
+                        <th>Địa chỉ</th>
+                        <th>Loại sản phẩm</th>
+                        <th>Trạng thái</th>
+                        <th>Ngày tạo</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($groupedByProduct[$opt] as $s): ?>
+                    <tr>
+                        <td>Không phân loại</td>
+                        <td><?php echo $s['id'] ?></td>
+                        <td><?php echo htmlspecialchars($s['name']) ?></td>
+                        <td><?php echo htmlspecialchars($s['email']) ?></td>
+                        <td><?php echo htmlspecialchars($s['phone']) ?></td>
+                        <td><?php echo htmlspecialchars($s['address']) ?></td>
+                        <td><?php echo htmlspecialchars($s['product_types'] ?? '') ?></td>
+                        <td><?php echo ($s['status'] ?? 1) ? 'Hoạt động' : 'Không hoạt động' ?> <a class="small-btn" href="suppliers.php?action=toggle&id=<?php echo $s['id'] ?>">Bật/Tắt</a></td>
+                        <td><?php echo $s['created_at'] ?? '' ?></td>
+                        <td class="btn-row">
+                            <a class="small-btn" href="suppliers.php?action=edit&id=<?php echo $s['id'] ?>">Sửa</a>
+                            <a class="small-btn warn" href="suppliers.php?action=delete&id=<?php echo $s['id'] ?>" onclick="return confirm('Xóa nhà cung cấp?')">Xóa</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php endif; ?>
+    <?php endforeach; ?>
 </div>
 
 <?php if ($action === 'add' || $action === 'edit'): ?>
@@ -169,6 +192,17 @@ if (!empty($search)) {
         </label>
         <label>Mô tả
             <textarea name="description"><?php echo isset($supplier['description']) ? htmlspecialchars($supplier['description']) : '' ?></textarea>
+        </label>
+        <label>Loại sản phẩm cung cấp
+            <?php
+            $options = ['Vật liệu', 'Giải Pháp', 'Kết cấu', 'Thiết bị', 'Công nghệ', 'Cảnh quan'];
+            $selected_types = explode(', ', $supplier['product_types'] ?? '');
+            ?>
+            <select name="product_types[]" multiple style="height:100px;">
+                <?php foreach ($options as $opt): ?>
+                    <option value="<?php echo htmlspecialchars($opt) ?>" <?php echo in_array($opt, $selected_types) ? 'selected' : '' ?>><?php echo htmlspecialchars($opt) ?></option>
+                <?php endforeach; ?>
+            </select>
         </label>
         <label>
             <input type="checkbox" name="status" <?php echo (isset($supplier['status']) && $supplier['status']) ? 'checked' : '' ?>> Hoạt động

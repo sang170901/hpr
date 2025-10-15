@@ -45,20 +45,28 @@ if (!defined('TRACKING_DISABLED')) {
                         </a>
                     </li>
                     <li class="nav-item">
-                        <span class="nav-number">02</span>
-                        <span class="nav-text">THIẾT BỊ</span>
+                        <a href="/vnmt/equipment.php" class="nav-link">
+                            <span class="nav-number">02</span>
+                            <span class="nav-text">THIẾT BỊ</span>
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <span class="nav-number">03</span>
-                        <span class="nav-text">CÔNG NGHỆ</span>
+                        <a href="/vnmt/technology.php" class="nav-link">
+                            <span class="nav-number">03</span>
+                            <span class="nav-text">CÔNG NGHỆ</span>
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <span class="nav-number">04</span>
-                        <span class="nav-text">CẢNH QUAN</span>
+                        <a href="/vnmt/landscape.php" class="nav-link">
+                            <span class="nav-number">04</span>
+                            <span class="nav-text">CẢNH QUAN</span>
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <span class="nav-number">05</span>
-                        <span class="nav-text">NHÀ CUNG CẤP</span>
+                        <a href="/vnmt/suppliers.php" class="nav-link">
+                            <span class="nav-number">05</span>
+                            <span class="nav-text">NHÀ CUNG CẤP</span>
+                        </a>
                     </li>
                     <li class="nav-item">
                         <span class="nav-number">06</span>

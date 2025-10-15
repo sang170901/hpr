@@ -1,4 +1,30 @@
 <?php include 'inc/header-new.php'; ?>
+<?php
+require_once 'backend/inc/db.php';
+
+// Lấy số liệu từ cơ sở dữ liệu
+try {
+    $pdo = getPDO();
+
+    // Đếm số vật tư
+    $stmtMaterials = $pdo->query("SELECT COUNT(*) AS total_materials FROM products");
+    $totalMaterials = $stmtMaterials->fetch(PDO::FETCH_ASSOC)['total_materials'];
+
+    // Đếm số nhà cung cấp
+    $stmtSuppliers = $pdo->query("SELECT COUNT(*) AS total_suppliers FROM suppliers WHERE status = 1");
+    $totalSuppliers = $stmtSuppliers->fetch(PDO::FETCH_ASSOC)['total_suppliers'];
+
+    // Đếm số danh mục vật tư
+    $stmtCategories = $pdo->query("SELECT COUNT(*) AS total_categories FROM categories");
+    $totalCategories = $stmtCategories->fetch(PDO::FETCH_ASSOC)['total_categories'];
+
+} catch (Exception $e) {
+    $totalMaterials = 0;
+    $totalSuppliers = 0;
+    $totalCategories = 0;
+    error_log("Lỗi khi truy xuất số liệu: " . $e->getMessage());
+}
+?>
 
     <!-- Product Slider Section -->
     <section class="product-slider">
@@ -84,6 +110,45 @@
     </section>
 
     <style>
+    body {
+        font-family: Arial, sans-serif; /* Simple and readable font */
+        color: #333; /* Neutral dark color for text */
+        background-color: #f9f9f9; /* Light background for better contrast */
+    }
+
+    h1, h2, h3 {
+        color: #222; /* Slightly darker for headings */
+    }
+
+    a {
+        color: #0e97f1ff; /* Softer blue for links */
+        text-decoration: none;
+    }
+
+    a:hover {
+        color: #0ed2f5ff; /* Darker shade on hover */
+    }
+
+    p {
+        color: #475569; /* Màu xanh nhạt cho đoạn văn */
+        line-height: 1.6;
+    }
+
+    button {
+        background-color: #25b3ebff; /* Nền xanh cho nút */
+        color: #fff; /* Chữ trắng trên nút */
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+        background-color: #007da3ff; /* Nền xanh đậm hơn khi hover */
+    }
+
     .main-search {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         padding: 60px 0;
@@ -123,7 +188,7 @@
     
     .main-search-btn {
         padding: 18px 30px;
-        background: #2563eb;
+        background: #0ba9daff;
         color: white;
         border: none;
         font-size: 1rem;
@@ -136,7 +201,7 @@
     }
     
     .main-search-btn:hover {
-        background: #1d4ed8;
+        background: #1db3d8ff;
     }
     
     .main-search-btn i {
@@ -158,6 +223,128 @@
             justify-content: center;
         }
     }
+
+    /* Hiệu ứng chuyển động cho slider */
+    .slider-container {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .slide {
+        opacity: 0;
+        transform: translateX(100%);
+        transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .slide.active {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    .slider-arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 10;
+    }
+
+    .slider-arrow:hover {
+        background: rgba(0, 0, 0, 0.8);
+    }
+
+    .prev-arrow {
+        left: 10px;
+    }
+
+    .next-arrow {
+        right: 10px;
+    }
+
+    .slider-dots {
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 8px;
+    }
+
+    .dot {
+        width: 12px;
+        height: 12px;
+        background: white;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    .dot.active {
+        background: #09aefaff;
+    }
+
+    /* Hiệu ứng hover cho nút tìm kiếm */
+    .main-search-btn {
+        background: #764ba2;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    .main-search-btn:hover {
+        background: #5a3a8c;
+    }
+
+    .stats-container {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin: 40px 0;
+    }
+
+    .stat-card {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 20px;
+        text-align: center;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    }
+
+    .stat-icon img {
+        width: 50px;
+        height: 50px;
+        margin-bottom: 10px;
+    }
+
+    .stat-number {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #25c3ebff;
+    }
+
+    .stat-label {
+        font-size: 1rem;
+        color: #475569;
+    }
     </style>
 
     <!-- Statistics Section -->
@@ -168,21 +355,27 @@
                     <div class="stat-icon">
                         <img src="assets/images/materials-icon.svg" alt="Vật tư">
                     </div>
-                    <div class="stat-number">1,483</div>
+                    <div class="stat-number">
+                        <?php echo number_format($totalMaterials); ?>
+                    </div>
                     <div class="stat-label">Vật Tư Đăng Tải</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-icon">
                         <img src="assets/images/suppliers-icon.svg" alt="Nhà cung cấp">
                     </div>
-                    <div class="stat-number">185</div>
+                    <div class="stat-number">
+                        <?php echo number_format($totalSuppliers); ?>
+                    </div>
                     <div class="stat-label">Nhà Cung Cấp</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-icon">
                         <img src="assets/images/categories-icon.svg" alt="Danh mục">
                     </div>
-                    <div class="stat-number">37</div>
+                    <div class="stat-number">
+                        <?php echo number_format($totalCategories); ?>
+                    </div>
                     <div class="stat-label">Danh Mục Vật Tư</div>
                 </div>
             </div>
@@ -308,7 +501,7 @@
                         <div class="news-category">BẢN TIN TỔNG HỢP</div>
                         <div class="news-date">04/10/2025</div>
                         <h3 class="news-title">
-                            GỖ TRONG SUỐT – VẬT LIỆU TƯƠNG LAI THAY THẾ KÍNH TRONG KIẾN TRÚC XANH
+                            GỖ TRONG SUỐT – VẬT LIỆU TƯƠI TRONG KIẾN TRÚC XANH
                         </h3>
                         <p class="news-excerpt">
                             Khi các tòa nhà chuyển dịch sang kiến trúc net zero và chiếu sáng tự nhiên không gây lóa, 
@@ -376,3 +569,30 @@
     </section>
 
 <?php include 'inc/footer-new.php'; ?>
+
+    <script>
+    // Hiệu ứng chuyển động cho slider
+    let currentIndex = 0;
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.dot');
+
+    function changeSlide(step) {
+        slides[currentIndex].classList.remove('active');
+        dots[currentIndex].classList.remove('active');
+
+        currentIndex = (currentIndex + step + slides.length) % slides.length;
+
+        slides[currentIndex].classList.add('active');
+        dots[currentIndex].classList.add('active');
+    }
+
+    function currentSlide(index) {
+        slides[currentIndex].classList.remove('active');
+        dots[currentIndex].classList.remove('active');
+
+        currentIndex = index - 1;
+
+        slides[currentIndex].classList.add('active');
+        dots[currentIndex].classList.add('active');
+    }
+    </script>

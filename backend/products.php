@@ -43,6 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $warranty = trim($_POST['warranty'] ?? '');
         $stock = isset($_POST['stock']) ? (int)$_POST['stock'] : null;
         $classification = isset($_POST['classification']) ? implode(',', $_POST['classification']) : ''; // Handle multiple selections
+        $brand = trim($_POST['brand'] ?? ''); // New brand field
 
         try {
             // If supplier_id empty, try to find based on slug/manufacturer
@@ -51,12 +52,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($auto) { $supplier_id = $auto; }
             }
             if ($id) {
-                $stmt = $pdo->prepare('UPDATE products SET name=?, slug=?, description=?, price=?, status=?, featured=?, images=?, supplier_id=?, manufacturer=?, origin=?, material_type=?, application=?, website=?, featured_image=?, product_function=?, category=?, thickness=?, color=?, warranty=?, stock=?, classification=? WHERE id=?');
-                $stmt->execute([$name, $slug, $description, $price, $status, $featured, $images, $supplier_id, $manufacturer, $origin, $material_type, $application, $website, $featured_image, $product_function, $category, $thickness, $color, $warranty, $stock, $classification, $id]);
+                $stmt = $pdo->prepare('UPDATE products SET name=?, slug=?, description=?, price=?, status=?, featured=?, images=?, supplier_id=?, manufacturer=?, origin=?, material_type=?, application=?, website=?, featured_image=?, product_function=?, category=?, thickness=?, color=?, warranty=?, stock=?, classification=?, brand=? WHERE id=?');
+                $stmt->execute([$name, $slug, $description, $price, $status, $featured, $images, $supplier_id, $manufacturer, $origin, $material_type, $application, $website, $featured_image, $product_function, $category, $thickness, $color, $warranty, $stock, $classification, $brand, $id]);
                 log_activity($_SESSION['user']['id'] ?? null, 'update_product', 'product', $id, json_encode(['name'=>$name,'price'=>$price]));
             } else {
-                $stmt = $pdo->prepare('INSERT INTO products (name, slug, description, price, status, featured, images, supplier_id, manufacturer, origin, material_type, application, website, featured_image, product_function, category, thickness, color, warranty, stock, classification) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
-                $stmt->execute([$name, $slug, $description, $price, $status, $featured, $images, $supplier_id, $manufacturer, $origin, $material_type, $application, $website, $featured_image, $product_function, $category, $thickness, $color, $warranty, $stock, $classification]);
+                $stmt = $pdo->prepare('INSERT INTO products (name, slug, description, price, status, featured, images, supplier_id, manufacturer, origin, material_type, application, website, featured_image, product_function, category, thickness, color, warranty, stock, classification, brand) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+                $stmt->execute([$name, $slug, $description, $price, $status, $featured, $images, $supplier_id, $manufacturer, $origin, $material_type, $application, $website, $featured_image, $product_function, $category, $thickness, $color, $warranty, $stock, $classification, $brand]);
                 $newId = $pdo->lastInsertId();
                 log_activity($_SESSION['user']['id'] ?? null, 'create_product', 'product', $newId, json_encode(['name'=>$name,'price'=>$price]));
             }
@@ -275,6 +276,10 @@ $flash['message'] = $flash['message'] === 'Không thể xóa' ? 'Không thể x�
                     </option>
                 <?php endforeach; ?>
             </select>
+        </div>
+        <div class="form-group">
+            <label for="brand">Thương hiệu</label>
+            <input type="text" name="brand" id="brand" value="<?php echo isset($product['brand']) ? htmlspecialchars($product['brand']) : '' ?>">
         </div>
         <div class="form-group">
             <label>
