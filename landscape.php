@@ -63,8 +63,8 @@ try {
 <style>
 .landscapes-page {
     min-height: 100vh;
-    background: #f8f9fa;
-    padding-top: 100px;
+    background: #f8fcff;
+    padding-top: 10px;
 }
 
 .landscapes-container {
@@ -73,28 +73,51 @@ try {
     padding: 0 20px;
 }
 
+.page-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="dots" width="10" height="10" patternUnits="userSpaceOnUse"><circle cx="5" cy="5" r="1" fill="%23e2e8f0" opacity="0.4"/></pattern></defs><rect width="100" height="100" fill="url(%23dots)"/></svg>');
+    opacity: 0.6;
+}
+
 .page-header {
-    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-    color: white;
-    padding: 60px 0;
-    margin-bottom: 40px;
+    background: linear-gradient(135deg, #f8faff 0%, #e8f4fd 100%);
+    color: #2d3748;
+    padding: 40px 0 30px;
+    margin-bottom: 10px;
+    border-radius: 0;
+    position: relative;
+    overflow: hidden;
 }
 
 .page-title {
-    font-size: 3rem;
+    font-size: 2.5rem;
     font-weight: 700;
     margin: 0;
     text-align: center;
+    color: #1a202c;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    position: relative;
+    z-index: 1;
 }
 
 .page-subtitle {
-    font-size: 1.2rem;
-    opacity: 0.9;
+    font-size: 1rem;
     text-align: center;
-    margin-top: 10px;
-    max-width: 600px;
+    margin-top: 12px;
+    max-width: 800px;
     margin-left: auto;
     margin-right: auto;
+    color: #4a5568;
+    font-weight: 400;
+    line-height: 1.5;
+    position: relative;
+    z-index: 1;
 }
 
 .breadcrumb {
@@ -433,8 +456,8 @@ try {
         <div class="landscapes-container">
             <h1 class="page-title">CẢNH QUAN</h1>
             <p class="page-subtitle">
-                Cảnh quan bao gồm thiết kế và bố trí không gian ngoại thất, cây xanh, sân vườn và môi trường xung quanh công trình.
-                Cảnh quan không chỉ tạo nên vẻ đẹp tự nhiên mà còn cải thiện chất lượng cuộc sống và môi trường sống.
+                Cảnh quan bao gồm thiết kế và bố trí không gian ngoại thất, cây xanh, sân vườn và các yếu tố môi trường.<br>
+                Chúng được sử dụng để tạo nên vẻ đẹp tự nhiên và cải thiện chất lượng cuộc sống xung quanh công trình.
             </p>
         </div>
     </div>

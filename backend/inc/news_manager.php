@@ -13,7 +13,7 @@ class NewsManager {
     
     // Instance method getNews()
     public function getNews($category = '', $search = '') {
-        $news = $this->getSampleNews();
+        $news = self::getSampleNews();
         
         // Filter by category
         if (!empty($category)) {
@@ -34,15 +34,15 @@ class NewsManager {
         return array_values($news);
     }
     
-    // Instance method getCategories()
-    public function getCategories() {
-        $news = $this->getSampleNews();
+    // Static method getCategories()
+    public static function getCategories() {
+        $news = self::getSampleNews();
         $categories = array_unique(array_column($news, 'category'));
         return array_values($categories);
     }
     
     // Template dữ liệu mẫu cho tin tức
-    public function getSampleNews() {
+    public static function getSampleNews() {
         return [
             [
                 'id' => 1,

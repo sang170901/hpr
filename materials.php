@@ -63,8 +63,8 @@ try {
 <style>
 .materials-page {
     min-height: 100vh;
-    background: #f8f9fa;
-    padding-top: 100px;
+    background: #f8fcff;
+    padding-top: 10px;
 }
 
 .materials-container {
@@ -73,28 +73,62 @@ try {
     padding: 0 20px;
 }
 
+.page-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="dots" width="10" height="10" patternUnits="userSpaceOnUse"><circle cx="5" cy="5" r="1" fill="%23e2e8f0" opacity="0.4"/></pattern></defs><rect width="100" height="100" fill="url(%23dots)"/></svg>');
+    opacity: 0.6;
+}
+
+.page-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="dots" width="10" height="10" patternUnits="userSpaceOnUse"><circle cx="5" cy="5" r="1" fill="%23e2e8f0" opacity="0.4"/></pattern></defs><rect width="100" height="100" fill="url(%23dots)"/></svg>');
+    opacity: 0.6;
+}
+
 .page-header {
-    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-    color: white;
-    padding: 60px 0;
-    margin-bottom: 40px;
+    background: linear-gradient(135deg, #f8faff 0%, #e8f4fd 100%);
+    color: #2d3748;
+    padding: 40px 0 30px;
+    margin-bottom: 10px;
+    border-radius: 0;
+    position: relative;
+    overflow: hidden;
 }
 
 .page-title {
-    font-size: 3rem;
+    font-size: 2.5rem;
     font-weight: 700;
     margin: 0;
     text-align: center;
+    color: #1a202c;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    position: relative;
+    z-index: 1;
 }
 
 .page-subtitle {
-    font-size: 1.2rem;
-    opacity: 0.9;
+    font-size: 1rem;
     text-align: center;
-    margin-top: 10px;
-    max-width: 600px;
+    margin-top: 12px;
+    max-width: 800px;
     margin-left: auto;
     margin-right: auto;
+    color: #4a5568;
+    font-weight: 400;
+    line-height: 1.5;
+    position: relative;
+    z-index: 1;
 }
 
 .breadcrumb {
@@ -120,10 +154,11 @@ try {
 
 .filter-section {
     background: white;
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    margin-bottom: 30px;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    margin-bottom: 40px;
+    border: 1px solid #e2e8f0;
 }
 
 .filter-header {
@@ -433,9 +468,8 @@ try {
         <div class="materials-container">
             <h1 class="page-title">VẬT LIỆU</h1>
             <p class="page-subtitle">
-                Vật liệu xây dựng bao gồm gỗ, thép, bê tông, gạch, đá và các vật liệu khác.
-                Chúng được sử dụng để xây dựng móng, tường, mái, sàn và các kết cấu công trình.
-                Vật liệu xây dựng không chỉ tạo nên độ bền vững mà còn đảm bảo tính thẩm mỹ và an toàn cho công trình.
+                Vật liệu xây dựng bao gồm gỗ, thép, bê tông, gạch, đá và các vật liệu khác được sử dụng trong xây dựng.<br>
+                Chúng được sử dụng để xây dựng móng, tường, mái, sàn và các kết cấu quan trọng khác của công trình.
             </p>
         </div>
     </div>

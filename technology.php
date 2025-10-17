@@ -63,8 +63,8 @@ try {
 <style>
 .technology-page {
     min-height: 100vh;
-    background: #f8f9fa;
-    padding-top: 100px;
+    background: #f8fcff;
+    padding-top: 10px;
 }
 
 .technology-container {
@@ -73,28 +73,51 @@ try {
     padding: 0 20px;
 }
 
+.page-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="dots" width="10" height="10" patternUnits="userSpaceOnUse"><circle cx="5" cy="5" r="1" fill="%23e2e8f0" opacity="0.4"/></pattern></defs><rect width="100" height="100" fill="url(%23dots)"/></svg>');
+    opacity: 0.6;
+}
+
 .page-header {
-    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-    color: white;
-    padding: 60px 0;
-    margin-bottom: 40px;
+    background: linear-gradient(135deg, #f8faff 0%, #e8f4fd 100%);
+    color: #2d3748;
+    padding: 40px 0 30px;
+    margin-bottom: 10px;
+    border-radius: 0;
+    position: relative;
+    overflow: hidden;
 }
 
 .page-title {
-    font-size: 3rem;
+    font-size: 2.5rem;
     font-weight: 700;
     margin: 0;
     text-align: center;
+    color: #1a202c;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    position: relative;
+    z-index: 1;
 }
 
 .page-subtitle {
-    font-size: 1.2rem;
-    opacity: 0.9;
+    font-size: 1rem;
     text-align: center;
-    margin-top: 10px;
-    max-width: 600px;
+    margin-top: 12px;
+    max-width: 800px;
     margin-left: auto;
     margin-right: auto;
+    color: #4a5568;
+    font-weight: 400;
+    line-height: 1.5;
+    position: relative;
+    z-index: 1;
 }
 
 .breadcrumb {
@@ -433,9 +456,8 @@ try {
         <div class="technology-container">
             <h1 class="page-title">CÔNG NGHỆ</h1>
             <p class="page-subtitle">
-                Công nghệ xây dựng bao gồm các giải pháp và hệ thống hiện đại.
-                Chúng được ứng dụng để tối ưu hóa quy trình thi công, quản lý dự án và vận hành công trình.
-                Công nghệ xây dựng không chỉ nâng cao hiệu quả mà còn đảm bảo chất lượng và tính bền vững.
+                Công nghệ xây dựng bao gồm các giải pháp và hệ thống hiện đại được sử dụng trong ngành xây dựng.<br>
+                Chúng được ứng dụng để nâng cao hiệu quả thi công và đảm bảo chất lượng công trình.
             </p>
         </div>
     </div>

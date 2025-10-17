@@ -18,12 +18,12 @@ $categories = $newsManager->getCategories();
 
 <style>
     :root {
-        --primary-color: #2563eb;
-        --secondary-color: #f1f5f9;
-        --accent-color: #0ea5e9;
+        --primary-color: #0d9488;
+        --secondary-color: #f0fdfa;
+        --accent-color: #14b8a6;
         --text-primary: #1e293b;
         --text-secondary: #64748b;
-        --border-color: #e2e8f0;
+        --border-color: #d1fae5;
         --success-color: #10b981;
         --warning-color: #f59e0b;
     }
@@ -32,12 +32,12 @@ $categories = $newsManager->getCategories();
         max-width: 1200px;
         margin: 0 auto;
         padding: 2rem 1rem;
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+        font-family: 'Nunito Sans', 'Open Sans', 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
     }
 
     /* Hero Header */
     .news-hero {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #0d9488 0%, #14b8a6 100%);
         border-radius: 20px;
         padding: 4rem 2rem;
         text-align: center;
@@ -59,8 +59,8 @@ $categories = $newsManager->getCategories();
     }
 
     .news-hero h1 {
-        font-size: 3.5rem;
-        font-weight: 800;
+        font-size: 2.8rem;
+        font-weight: 700;
         margin-bottom: 1rem;
         text-shadow: 0 4px 8px rgba(0,0,0,0.3);
         position: relative;
@@ -195,8 +195,8 @@ $categories = $newsManager->getCategories();
 
     /* Article Cards */
     .articles-section h2 {
-        font-size: 2rem;
-        font-weight: 700;
+        font-size: 1.6rem;
+        font-weight: 600;
         color: var(--text-primary);
         margin-bottom: 2rem;
         display: flex;
@@ -221,7 +221,7 @@ $categories = $newsManager->getCategories();
 
     .article-image {
         height: 200px;
-        background: linear-gradient(45deg, #667eea, #764ba2);
+        background: linear-gradient(45deg, #0d9488, #14b8a6);
         position: relative;
         overflow: hidden;
     }
@@ -267,8 +267,8 @@ $categories = $newsManager->getCategories();
     }
 
     .article-title {
-        font-size: 1.5rem;
-        font-weight: 700;
+        font-size: 1.3rem;
+        font-weight: 600;
         color: var(--text-primary);
         line-height: 1.4;
         margin-bottom: 1rem;
@@ -388,7 +388,7 @@ $categories = $newsManager->getCategories();
     /* Stats Widget */
     .stats-grid {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr;
         gap: 1rem;
     }
 
@@ -433,7 +433,7 @@ $categories = $newsManager->getCategories();
         }
 
         .news-hero h1 {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
         }
 
         .filter-grid {
@@ -567,10 +567,6 @@ $categories = $newsManager->getCategories();
                 </h3>
                 
                 <div class="stats-grid">
-                    <div class="stat-item">
-                        <div class="stat-number"><?php echo count($newsList); ?></div>
-                        <div class="stat-label">Bài viết</div>
-                    </div>
                     <div class="stat-item">
                         <div class="stat-number"><?php echo count($categories); ?></div>
                         <div class="stat-label">Danh mục</div>

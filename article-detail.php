@@ -1,4 +1,37 @@
-<?php include 'inc/header-new.php'; ?>
+<?php 
+include 'inc/header-new.php';
+require_once 'backend/inc/news_manager.php';
+
+// Get article slug from URL
+$slug = isset($_GET['slug']) ? $_GET['slug'] : '';
+
+// Get current article (for demo, we'll use sample data)
+$currentArticle = null;
+$allNews = NewsManager::getSampleNews();
+
+foreach ($allNews as $article) {
+    if ($article['slug'] === $slug) {
+        $currentArticle = $article;
+        break;
+    }
+}
+
+// If no article found, use first article as default
+if (!$currentArticle) {
+    $currentArticle = $allNews[0];
+}
+
+// Get related articles from same category
+$relatedArticles = [];
+foreach ($allNews as $article) {
+    if ($article['category'] === $currentArticle['category'] && $article['slug'] !== $currentArticle['slug']) {
+        $relatedArticles[] = $article;
+    }
+}
+
+// Limit to 3 related articles
+$relatedArticles = array_slice($relatedArticles, 0, 3);
+?>
 
 <style>
 /* Article Detail Styles */
@@ -21,9 +54,9 @@
 }
 
 .article-container {
-    max-width: 800px;
+    max-width: 640px;
     margin: 0 auto;
-    padding: 0 2rem;
+    padding: 0 3rem;
     position: relative;
 }
 
@@ -65,7 +98,7 @@
 }
 
 .article-title {
-    font-size: 3rem;
+    font-size: 2.7rem;
     font-weight: 800;
     color: #1e293b;
     line-height: 1.2;
@@ -74,7 +107,7 @@
 }
 
 .article-excerpt {
-    font-size: 1.3rem;
+    font-size: 1.17rem;
     color: #64748b;
     line-height: 1.6;
     margin-bottom: 2rem;
@@ -127,12 +160,12 @@
 }
 
 .article-body {
-    padding: 3rem;
+    padding: 2.5rem;
     max-width: none;
 }
 
 .article-body h2 {
-    font-size: 1.8rem;
+    font-size: 1.62rem;
     font-weight: 700;
     color: #1e293b;
     margin: 2.5rem 0 1rem;
@@ -145,14 +178,14 @@
 }
 
 .article-body h3 {
-    font-size: 1.4rem;
+    font-size: 1.26rem;
     font-weight: 600;
     color: #1e293b;
     margin: 2rem 0 1rem;
 }
 
 .article-body p {
-    font-size: 1.1rem;
+    font-size: 0.99rem;
     line-height: 1.8;
     color: #374151;
     margin-bottom: 1.5rem;
@@ -166,7 +199,7 @@
 }
 
 .article-body li {
-    font-size: 1.1rem;
+    font-size: 0.99rem;
     line-height: 1.7;
     color: #374151;
     margin-bottom: 0.5rem;
@@ -190,7 +223,7 @@
     left: 15px;
     font-size: 3rem;
     color: #3b82f6;
-    font-family: serif;
+    font-family: 'Times New Roman', Georgia, serif;
 }
 
 .highlight-box {
@@ -350,6 +383,9 @@
     overflow: hidden;
     box-shadow: 0 4px 20px rgba(0,0,0,0.08);
     transition: all 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+    display: block;
 }
 
 .related-card:hover {
@@ -393,7 +429,7 @@
 /* Responsive */
 @media (max-width: 768px) {
     .article-title {
-        font-size: 2rem;
+        font-size: 1.8rem;
     }
     
     .article-container,
@@ -458,19 +494,18 @@
 
         <!-- Article Meta -->
         <div class="article-meta">
-            <span class="article-category">Công Nghệ Mới</span>
-            <span><i class="fas fa-calendar"></i> 15 tháng 10, 2025</span>
-            <span><i class="fas fa-clock"></i> 5 phút đọc</span>
-            <span><i class="fas fa-eye"></i> 1,234 lượt xem</span>
+            <span class="article-category"><?php echo htmlspecialchars($currentArticle['category']); ?></span>
+            <span><i class="fas fa-calendar"></i> <?php echo date('d/m/Y', strtotime($currentArticle['published_date'])); ?></span>
+            <span><i class="fas fa-clock"></i> <?php echo $currentArticle['reading_time']; ?> phút đọc</span>
+            <span><i class="fas fa-eye"></i> <?php echo number_format($currentArticle['views'] ?? 1234); ?> lượt xem</span>
         </div>
 
         <!-- Article Title -->
-        <h1 class="article-title">Công Nghệ AI Trong Sản Xuất Vật Liệu Xây Dựng - Tương Lai Đã Đến</h1>
+        <h1 class="article-title"><?php echo htmlspecialchars($currentArticle['title']); ?></h1>
 
         <!-- Article Excerpt -->
         <p class="article-excerpt">
-            Khám phá cách trí tuệ nhân tạo đang cách mạng hóa ngành sản xuất vật liệu xây dựng, 
-            từ tối ưu hóa quy trình sản xuất đến phát triển vật liệu thông minh mới.
+            <?php echo htmlspecialchars($currentArticle['excerpt']); ?>
         </p>
 
         <!-- Author Info -->
@@ -666,41 +701,36 @@
     <div class="related-container">
         <h2 class="related-title">Bài Viết Liên Quan</h2>
         <div class="related-grid">
-            <!-- Related Article 1 -->
-            <article class="related-card">
-                <div class="related-image" style="background: linear-gradient(45deg, #3b82f6, #8b5cf6);"></div>
-                <div class="related-content">
-                    <div class="related-meta">Công Nghệ • 12/10/2025</div>
-                    <h3 class="related-card-title">In 3D Trong Xây Dựng - Xu Hướng Tương Lai</h3>
-                    <p class="related-excerpt">
-                        Công nghệ in 3D đang mở ra khả năng in cả ngôi nhà, tạo ra cuộc cách mạng trong xây dựng...
-                    </p>
-                </div>
-            </article>
-
-            <!-- Related Article 2 -->
-            <article class="related-card">
-                <div class="related-image" style="background: linear-gradient(45deg, #06b6d4, #3b82f6);"></div>
-                <div class="related-content">
-                    <div class="related-meta">Vật Liệu • 10/10/2025</div>
-                    <h3 class="related-card-title">Vật Liệu Sinh Học - Thân Thiện Môi Trường</h3>
-                    <p class="related-excerpt">
-                        Khám phá các loại vật liệu sinh học mới, từ gạch làm từ nấm đến bê tông sử dụng vi khuẩn...
-                    </p>
-                </div>
-            </article>
-
-            <!-- Related Article 3 -->
-            <article class="related-card">
-                <div class="related-image" style="background: linear-gradient(45deg, #10b981, #06b6d4);"></div>
-                <div class="related-content">
-                    <div class="related-meta">Xu Hướng • 08/10/2025</div>
-                    <h3 class="related-card-title">Smart Building - Tòa Nhà Thông Minh 2025</h3>
-                    <p class="related-excerpt">
-                        Tòa nhà thông minh với hệ thống AI tích hợp, tự động điều chỉnh môi trường và tiết kiệm năng lượng...
-                    </p>
-                </div>
-            </article>
+            <?php if (empty($relatedArticles)): ?>
+                <p style="text-align: center; color: #64748b; grid-column: 1 / -1;">
+                    Không có bài viết liên quan trong danh mục "<?php echo htmlspecialchars($currentArticle['category']); ?>"
+                </p>
+            <?php else: ?>
+                <?php foreach ($relatedArticles as $index => $related): ?>
+                    <?php 
+                    // Different gradient colors for each card
+                    $gradients = [
+                        'linear-gradient(45deg, #3b82f6, #8b5cf6)',
+                        'linear-gradient(45deg, #06b6d4, #3b82f6)', 
+                        'linear-gradient(45deg, #10b981, #06b6d4)'
+                    ];
+                    $gradient = $gradients[$index % 3];
+                    ?>
+                    <a href="article-detail.php?slug=<?php echo $related['slug']; ?>" class="related-card">
+                        <div class="related-image" style="background: <?php echo $gradient; ?>;"></div>
+                        <div class="related-content">
+                            <div class="related-meta">
+                                <?php echo htmlspecialchars($related['category']); ?> • 
+                                <?php echo date('d/m/Y', strtotime($related['published_date'])); ?>
+                            </div>
+                            <h3 class="related-card-title"><?php echo htmlspecialchars($related['title']); ?></h3>
+                            <p class="related-excerpt">
+                                <?php echo htmlspecialchars($related['excerpt']); ?>
+                            </p>
+                        </div>
+                    </a>
+                <?php endforeach; ?>
+            <?php endif; ?>
         </div>
     </div>
 </section>

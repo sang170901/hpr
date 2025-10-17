@@ -19,7 +19,9 @@ if (!defined('TRACKING_DISABLED')) {
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;500;600;700;800&family=Open+Sans:wght@300;400;500;600;700&family=Source+Sans+Pro:wght@300;400;600;700&display=swap&subset=vietnamese" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -55,7 +57,7 @@ if (!defined('TRACKING_DISABLED')) {
         }
 
         body {
-            font-family: 'Poppins', 'Roboto', sans-serif;
+            font-family: 'Open Sans', Gadget, sans-serif;
             padding-top: var(--header-height);
             transition: var(--transition);
         }
@@ -213,31 +215,32 @@ if (!defined('TRACKING_DISABLED')) {
         }
 
         .nav-number {
-            font-size: 0.88rem; /* Increased by 10% from 0.8rem */
-            font-weight: 700;
-            color: var(--text-secondary);
-            letter-spacing: 1px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #60a5fa;
+            letter-spacing: 2px;
             transition: var(--transition);
         }
 
         .nav-text {
-            font-size: 0.935rem; /* Increased by 10% from 0.85rem */
-            font-weight: 600;
-            color: var(--text-primary);
-            letter-spacing: 0.5px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #60a5fa;
+            letter-spacing: 2px;
             white-space: nowrap;
             transition: var(--transition);
         }
 
         .nav-link:hover .nav-number {
-            color: var(--primary-light);
-            transform: scale(1.15);
+            color: #3b82f6;
+            transform: translateY(-2px) scale(1.1);
         }
 
         .nav-link:hover .nav-text {
-            color: var(--text-hover);
-            font-weight: 700;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            color: #3b82f6;
+            font-weight: inherit;
+            transform: translateY(-2px);
+            text-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
         }
 
         /* Action Buttons */
@@ -255,7 +258,7 @@ if (!defined('TRACKING_DISABLED')) {
             align-items: center;
             justify-content: center;
             background: transparent;
-            border: 2px solid var(--border-light);
+            border: none;
             border-radius: 12px;
             color: var(--text-secondary);
             text-decoration: none;
@@ -388,6 +391,16 @@ if (!defined('TRACKING_DISABLED')) {
 
         .new-header {
             animation: fadeInUp 0.6s ease-out;
+        }
+
+        .nav-link:focus {
+            outline: none;
+        }
+
+        /* Text stroke for nav numbers and texts */
+        .nav-number,
+        .nav-text {
+            -webkit-text-stroke: 0.15px currentColor;
         }
     </style>
 </head>

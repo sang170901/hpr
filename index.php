@@ -26,24 +26,290 @@ try {
 }
 ?>
 
-    <!-- Main Search Section -->
-    <section class="main-search">
-        <div class="container">
-            <div class="search-box">
-                <h2>Tìm kiếm vật liệu xây dựng</h2>
-                <p>Nhập từ khóa để tìm kiếm vật liệu phù hợp với nhu cầu của bạn</p>
-                <form method="get" action="products.php" class="search-form">
-                    <div class="search-input-group">
-                        <input type="text" name="q" placeholder="Nhập tên vật liệu: gạch, sơn, xi măng..." class="main-search-input">
-                        <button type="submit" class="main-search-btn">
-                            <i class="fas fa-search"></i>
-                            Tìm kiếm
-                        </button>
+    <!-- Main Slider Section -->
+    <section class="main-slider">
+        <div class="slider-container">
+            <div class="slider-wrapper">
+                <div class="slide active">
+                    <div class="slide-background" style="background-image: url('assets/images/slider-1.jpg');"></div>
+                    <div class="slide-content">
+                        <div class="container">
+                            <h2 class="slide-title">Vật Liệu Xây Dựng Chất Lượng Cao</h2>
+                            <p class="slide-subtitle">Khám phá bộ sưu tập vật liệu xây dựng đa dạng và hiện đại</p>
+                            <a href="materials.php" class="slide-btn">Khám Phá Ngay</a>
+                        </div>
                     </div>
-                </form>
+                </div>
+                <div class="slide">
+                    <div class="slide-background" style="background-image: url('assets/images/slider-2.jpg');"></div>
+                    <div class="slide-content">
+                        <div class="container">
+                            <h2 class="slide-title">Công Nghệ Xây Dựng Tiên Tiến</h2>
+                            <p class="slide-subtitle">Giải pháp công nghệ hiện đại cho ngành xây dựng Việt Nam</p>
+                            <a href="technology.php" class="slide-btn">Tìm Hiểu Thêm</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="slide">
+                    <div class="slide-background" style="background-image: url('assets/images/slider-3.jpg');"></div>
+                    <div class="slide-content">
+                        <div class="container">
+                            <h2 class="slide-title">Thiết Bị Xây Dựng Chuyên Nghiệp</h2>
+                            <p class="slide-subtitle">Máy móc và thiết bị hỗ trợ thi công hiệu quả</p>
+                            <a href="equipment.php" class="slide-btn">Xem Sản Phẩm</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slider Navigation -->
+            <div class="slider-nav">
+                <button class="slider-prev"><i class="fas fa-chevron-left"></i></button>
+                <button class="slider-next"><i class="fas fa-chevron-right"></i></button>
+            </div>
+            
+            <!-- Slider Dots -->
+            <div class="slider-dots">
+                <span class="dot active" data-slide="0"></span>
+                <span class="dot" data-slide="1"></span>
+                <span class="dot" data-slide="2"></span>
             </div>
         </div>
     </section>
+
+    <style>
+    .main-slider {
+        width: 100%;
+        height: 400px;
+        position: relative;
+        overflow: hidden;
+        margin-top: 80px;
+    }
+    
+    .slider-container {
+        width: 100%;
+        height: 100%;
+        position: relative;
+    }
+    
+    .slider-wrapper {
+        width: 100%;
+        height: 100%;
+        position: relative;
+    }
+    
+    .slide {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        transition: opacity 0.8s ease-in-out;
+    }
+    
+    .slide.active {
+        opacity: 1;
+    }
+    
+    .slide-background {
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        position: relative;
+    }
+    
+    .slide-background::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(45deg, rgba(0,0,0,0.4), rgba(0,0,0,0.2));
+    }
+    
+    .slide-content {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        transform: translateY(-50%);
+        z-index: 2;
+        text-align: center;
+        color: white;
+    }
+    
+    .slide-title {
+        font-size: 3rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+    
+    .slide-subtitle {
+        font-size: 1.2rem;
+        margin-bottom: 2rem;
+        opacity: 0.9;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    }
+    
+    .slide-btn {
+        display: inline-block;
+        padding: 12px 30px;
+        background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+        color: white;
+        text-decoration: none;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+    }
+    
+    .slide-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        color: white;
+        text-decoration: none;
+    }
+    
+    .slider-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 3;
+    }
+    
+    .slider-prev {
+        left: 20px;
+    }
+    
+    .slider-next {
+        right: 20px;
+    }
+    
+    .slider-prev, .slider-next {
+        position: absolute;
+        background: rgba(255,255,255,0.2);
+        border: 2px solid rgba(255,255,255,0.3);
+        color: white;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 18px;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+    }
+    
+    .slider-prev:hover, .slider-next:hover {
+        background: rgba(255,255,255,0.3);
+        border-color: rgba(255,255,255,0.5);
+        transform: scale(1.1);
+    }
+    
+    .slider-dots {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 10px;
+        z-index: 3;
+    }
+    
+    .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.4);
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .dot.active {
+        background: white;
+        transform: scale(1.2);
+    }
+    
+    .dot:hover {
+        background: rgba(255,255,255,0.7);
+    }
+    
+    @media (max-width: 768px) {
+        .main-slider {
+            height: 300px;
+        }
+        
+        .slide-title {
+            font-size: 2rem;
+        }
+        
+        .slide-subtitle {
+            font-size: 1rem;
+        }
+        
+        .slider-prev, .slider-next {
+            width: 40px;
+            height: 40px;
+            font-size: 14px;
+        }
+        
+        .slider-prev {
+            left: 10px;
+        }
+        
+        .slider-next {
+            right: 10px;
+        }
+    }
+    </style>
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.dot');
+        const prevBtn = document.querySelector('.slider-prev');
+        const nextBtn = document.querySelector('.slider-next');
+        let currentSlide = 0;
+        
+        function showSlide(n) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+            
+            if (n >= slides.length) currentSlide = 0;
+            if (n < 0) currentSlide = slides.length - 1;
+            
+            slides[currentSlide].classList.add('active');
+            dots[currentSlide].classList.add('active');
+        }
+        
+        function nextSlide() {
+            currentSlide++;
+            showSlide(currentSlide);
+        }
+        
+        function prevSlide() {
+            currentSlide--;
+            showSlide(currentSlide);
+        }
+        
+        nextBtn.addEventListener('click', nextSlide);
+        prevBtn.addEventListener('click', prevSlide);
+        
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                currentSlide = index;
+                showSlide(currentSlide);
+            });
+        });
+        
+        // Auto slide
+        setInterval(nextSlide, 5000);
+    });
+    </script>
 
     <!-- Statistics Section -->
     <section class="stats">
