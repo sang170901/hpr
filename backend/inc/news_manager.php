@@ -49,7 +49,15 @@ class NewsManager {
                 'title' => 'Công Nghệ AI Trong Sản Xuất Vật Liệu Xây Dựng - Tương Lai Đã Đến',
                 'slug' => 'cong-nghe-ai-trong-san-xuat-vat-lieu',
                 'excerpt' => 'Khám phá cách trí tuệ nhân tạo đang cách mạng hóa ngành sản xuất vật liệu xây dựng, từ tối ưu hóa quy trình sản xuất đến phát triển vật liệu thông minh mới.',
-                'content' => 'Nội dung chi tiết của bài viết...',
+                'content' => 'Trí tuệ nhân tạo (AI) đang mang lại những thay đổi cách mạng trong ngành sản xuất vật liệu xây dựng. Từ việc tối ưu hóa quy trình sản xuất đến phát triển các loại vật liệu thông minh mới, AI đang mở ra những cơ hội to lớn cho ngành này.
+
+Các ứng dụng AI trong sản xuất vật liệu bao gồm:
+- Dự đoán và kiểm soát chất lượng sản phẩm
+- Tối ưu hóa công thức và quy trình sản xuất  
+- Phân tích dữ liệu cảm biến để giám sát thiết bị
+- Phát triển vật liệu composite thông minh
+
+Với khả năng xử lý lượng dữ liệu khổng lồ và học hỏi từ kinh nghiệm, AI giúp các nhà sản xuất tạo ra những sản phẩm có chất lượng cao hơn, chi phí thấp hơn và thân thiện với môi trường hơn.',
                 'category' => 'Công Nghệ Mới',
                 'category_slug' => 'cong-nghe-moi',
                 'author' => 'Nguyễn Đức Anh',
@@ -68,7 +76,19 @@ class NewsManager {
                 'title' => 'Gạch Sinh Thái Từ Phế Thải Nông Nghiệp',
                 'slug' => 'gach-sinh-thai-tu-phe-thai-nong-nghiep',
                 'excerpt' => 'Công nghệ mới cho phép sản xuất gạch xây dựng từ rơm rạ và phế thải nông nghiệp, không chỉ giải quyết vấn đề môi trường mà còn tạo ra sản phẩm bền vững.',
-                'content' => 'Nội dung chi tiết của bài viết...',
+                'content' => 'Chúng tôi cung cấp đầy đủ các loại vật liệu xây dựng từ cơ bản đến cao cấp. Với hơn 10 năm kinh nghiệm trong ngành, chúng tôi cam kết mang đến những sản phẩm chất lượng cao nhất với giá cả hợp lý.
+
+Sản phẩm gạch sinh thái được sản xuất từ:
+- Rơm rạ và phế thải nông nghiệp
+- Công nghệ nén hiện đại
+- Chất kết dính thân thiện môi trường
+- Quy trình sản xuất sạch
+
+Ưu điểm vượt trội:
+- Cách âm, cách nhiệt tốt
+- Độ bền cao, chống thấm
+- Giá thành hợp lý
+- Thân thiện với môi trường',
                 'category' => 'Vật Liệu',
                 'category_slug' => 'vat-lieu',
                 'author' => 'Trần Minh Châu',
@@ -87,7 +107,23 @@ class NewsManager {
                 'title' => 'Giá Vật Liệu Xây Dựng Quý 4/2025',
                 'slug' => 'gia-vat-lieu-xay-dung-quy-4-2025',
                 'excerpt' => 'Tổng quan về biến động giá cả các loại vật liệu xây dựng chính trong quý 4, xu hướng và dự báo cho những tháng tới.',
-                'content' => 'Nội dung chi tiết của bài viết...',
+                'content' => 'Ứng dụng công nghệ tiên tiến vào ngành xây dựng giúp tối ưu hóa thời gian và chi phí. Chúng tôi luôn cập nhật những công nghệ mới nhất để phục vụ khách hàng tốt nhất.
+
+Báo cáo giá vật liệu xây dựng quý 4/2025:
+
+Vật liệu chính:
+- Xi măng: Tăng 3-5% so với quý trước
+- Thép xây dựng: Giảm nhẹ 2-3%
+- Gạch ốp lát: Ổn định, biến động nhỏ
+- Cát, sỏi: Tăng 5-7% do khan hiếm
+
+Nguyên nhân biến động:
+- Giá nguyên liệu thô tăng
+- Chi phí vận chuyển cao
+- Nhu cầu thị trường gia tăng
+- Chính sách môi trường mới
+
+Dự báo xu hướng 6 tháng tới: Giá có thể tiếp tục tăng nhẹ 2-4%.',
                 'category' => 'Thị Trường',
                 'category_slug' => 'thi-truong',
                 'author' => 'Lê Văn Nam',
