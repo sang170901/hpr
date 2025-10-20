@@ -507,7 +507,7 @@ try {
             </div>
             
             <div class="news-more">
-                <a href="news.php" class="news-more-btn">Xem tất cả tin tức</a>
+                <a href="news-modern.php" class="news-more-btn">Xem tất cả tin tức</a>
             </div>
         <?php else: ?>
             <div class="news-empty">

@@ -487,7 +487,7 @@ $relatedArticles = array_slice($relatedArticles, 0, 3);
         <nav class="breadcrumb">
             <a href="/vnmt/">Trang chủ</a>
             <i class="fas fa-chevron-right"></i>
-            <a href="/vnmt/news.php">Tin tức</a>
+            <a href="/vnmt/news-modern.php">Tin tức</a>
             <i class="fas fa-chevron-right"></i>
             <span>Công Nghệ AI Trong Sản Xuất Vật Liệu</span>
         </nav>

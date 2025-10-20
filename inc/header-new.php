@@ -452,7 +452,7 @@ if (!defined('TRACKING_DISABLED')) {
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/vnmt/news.php" class="nav-link">
+                        <a href="/vnmt/news-modern.php" class="nav-link">
                             <span class="nav-number">06</span>
                             <span class="nav-text">TIN TỨC</span>
                         </a>

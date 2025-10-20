@@ -18,12 +18,13 @@ $categories = $newsManager->getCategories();
 
 <style>
     :root {
-        --primary-color: #0d9488;
-        --secondary-color: #f0fdfa;
-        --accent-color: #14b8a6;
-        --text-primary: #1e293b;
-        --text-secondary: #64748b;
-        --border-color: #d1fae5;
+        --primary-color: #4da6ff; /* blue water tone */
+        --primary-600: #3d8ef0;
+        --secondary-color: #eef8ff;
+        --accent-color: #60a5fa;
+        --text-primary: #0f172a;
+        --text-secondary: #475569;
+        --border-color: #dbeeff;
         --success-color: #10b981;
         --warning-color: #f59e0b;
     }
@@ -37,7 +38,7 @@ $categories = $newsManager->getCategories();
 
     /* Hero Header */
     .news-hero {
-        background: linear-gradient(135deg, #0d9488 0%, #14b8a6 100%);
+        background: linear-gradient(135deg, rgba(77,166,255,0.12) 0%, rgba(96,165,250,0.08) 100%);
         border-radius: 20px;
         padding: 4rem 2rem;
         text-align: center;
