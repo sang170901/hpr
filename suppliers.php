@@ -4,10 +4,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <!-- Suppliers page CSS -->
-<link rel="stylesheet" href="/vnmt/assets/css/suppliers-clean.css">
+<link rel="stylesheet" href="/vnmt/assets/css/suppliers-clean.css?v=<?php echo time(); ?>">
 
 <?php
-require_once 'backend/inc/db.php';
+require_once 'inc/db_frontend.php';
 
 // Pagination and filter parameters
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
@@ -18,7 +18,7 @@ $letter = isset($_GET['letter']) ? trim($_GET['letter']) : '';
 $category = isset($_GET['category']) ? trim($_GET['category']) : '';
 
 try {
-    $pdo = getPDO();
+    $pdo = getFrontendPDO();
     
     // Get all categories for filter
     $categoriesQuery = "SELECT id, name, slug, icon, color FROM supplier_categories ORDER BY order_index ASC";
@@ -106,6 +106,12 @@ try {
     </div>
 
     <div class="suppliers-container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb">
+            <span class="breadcrumb-item"><a href="/vnmt/">Trang chủ</a></span>
+            <span class="breadcrumb-item active">Nhà cung cấp</span>
+        </nav>
+
         <!-- Search Section -->
         <div class="search-section">
             <form method="GET" action="">
@@ -196,7 +202,7 @@ try {
                                 </p>
                             </div>
                             <div class="supplier-footer">
-                                <a href="supplier.php?slug=<?php echo urlencode($supplier['slug']); ?>" class="view-supplier">
+                                <a href="supplier-detail.php?slug=<?php echo urlencode($supplier['slug']); ?>" class="view-supplier">
                                     Xem chi tiết <i class="fas fa-arrow-right"></i>
                                 </a>
                                 <span class="supplier-date">
@@ -274,7 +280,7 @@ try {
                                 </p>
                             </div>
                             <div class="supplier-footer">
-                                <a href="supplier.php?slug=<?php echo urlencode($supplier['slug']); ?>" class="view-supplier">
+                                <a href="supplier-detail.php?slug=<?php echo urlencode($supplier['slug']); ?>" class="view-supplier">
                                     Xem chi tiết <i class="fas fa-arrow-right"></i>
                                 </a>
                                 <span class="supplier-date">
@@ -314,7 +320,7 @@ try {
                                 </p>
                             </div>
                             <div class="supplier-footer">
-                                <a href="supplier.php?slug=<?php echo urlencode($supplier['slug']); ?>" class="view-supplier">
+                                <a href="supplier-detail.php?slug=<?php echo urlencode($supplier['slug']); ?>" class="view-supplier">
                                     Xem chi tiết <i class="fas fa-arrow-right"></i>
                                 </a>
                                 <span class="supplier-date">
@@ -354,7 +360,7 @@ try {
                                 </p>
                             </div>
                             <div class="supplier-footer">
-                                <a href="supplier.php?slug=<?php echo urlencode($supplier['slug']); ?>" class="view-supplier">
+                                <a href="supplier-detail.php?slug=<?php echo urlencode($supplier['slug']); ?>" class="view-supplier">
                                     Xem chi tiết <i class="fas fa-arrow-right"></i>
                                 </a>
                                 <span class="supplier-date">
@@ -371,7 +377,7 @@ try {
         <div class="cta-section">
             <h3>Bạn là nhà cung cấp vật liệu xây dựng?</h3>
             <p>Hãy tham gia cùng chúng tôi để mở rộng thị trường và kết nối với nhiều khách hàng hơn.</p>
-            <a href="/vnmt/backend/register-supplier.php" class="view-supplier">
+            <a href="/vnmt/supplier-register.php" class="view-supplier">
                 Đăng ký hợp tác ngay
             </a>
         </div>

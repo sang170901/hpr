@@ -1,102 +1,109 @@
 <?php
 /**
- * Initialize the SQLite database schema and seed admin user.
+ * Initialize the MySQL database schema and seed admin user.
  * This file provides init_db(PDO $pdo, array $config) and does NOT echo by default.
  */
 function init_db(PDO $pdo, array $config){
-    // Enable foreign keys (if needed)
-    $pdo->exec('PRAGMA foreign_keys = ON');
+    // MySQL doesn't need PRAGMA, skip this line
+    // Foreign keys are enabled by default in MySQL with InnoDB
 
-    // Create tables
+    // Create tables with MySQL syntax
     $pdo->exec("CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT,
-        email TEXT UNIQUE,
-        password TEXT,
-        role TEXT DEFAULT 'user',
-        status INTEGER DEFAULT 1,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    )");
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(255),
+        email VARCHAR(255) UNIQUE,
+        password VARCHAR(255),
+        role VARCHAR(50) DEFAULT 'user',
+        status TINYINT(1) DEFAULT 1,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
 
-    $pdo->exec("CREATE TABLE IF NOT EXISTS suppliers (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT,
-        slug TEXT,
-        email TEXT,
-        phone TEXT,
-        address TEXT,
-        logo TEXT,
-        description TEXT,
-        status INTEGER DEFAULT 1,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    )");
+    // Check if suppliers table exists before creating it
+    $supplierExists = $pdo->query("SHOW TABLES LIKE 'suppliers'")->fetch();
+    if (!$supplierExists) {
+        $pdo->exec("CREATE TABLE suppliers (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            name VARCHAR(255),
+            slug VARCHAR(255),
+            email VARCHAR(255),
+            phone VARCHAR(20),
+            address TEXT,
+            logo VARCHAR(255),
+            description TEXT,
+            status TINYINT(1) DEFAULT 1,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+    }
 
     $pdo->exec("CREATE TABLE IF NOT EXISTS products (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT,
-        slug TEXT,
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(255),
+        slug VARCHAR(255),
         description TEXT,
-        price REAL,
-        status INTEGER DEFAULT 1,
-        featured INTEGER DEFAULT 0,
+        price DECIMAL(10,2),
+        status TINYINT(1) DEFAULT 1,
+        featured TINYINT(1) DEFAULT 0,
         images TEXT,
-        supplier_id INTEGER,
-        classification TEXT, -- New column for product classification
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    )");
+        supplier_id INT,
+        classification VARCHAR(255), -- New column for product classification
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (supplier_id) REFERENCES suppliers(id) ON DELETE SET NULL
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
 
     $pdo->exec("CREATE TABLE IF NOT EXISTS vouchers (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        code TEXT,
-        discount_type TEXT,
-        discount_value REAL,
-        min_purchase REAL,
-        max_uses INTEGER,
-        used_count INTEGER DEFAULT 0,
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        code VARCHAR(100),
+        discount_type VARCHAR(50),
+        discount_value DECIMAL(10,2),
+        min_purchase DECIMAL(10,2),
+        max_uses INT,
+        used_count INT DEFAULT 0,
         start_date DATETIME,
         end_date DATETIME,
-        supplier_id INTEGER,
-        status INTEGER DEFAULT 1
-    )");
+        supplier_id INT,
+        status TINYINT(1) DEFAULT 1,
+        FOREIGN KEY (supplier_id) REFERENCES suppliers(id) ON DELETE SET NULL
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
 
     $pdo->exec("CREATE TABLE IF NOT EXISTS sliders (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        title TEXT,
-        image TEXT,
-        link TEXT,
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        title VARCHAR(255),
+        image VARCHAR(255),
+        link VARCHAR(255),
         start_date DATETIME,
         end_date DATETIME,
-        status INTEGER DEFAULT 1,
-        display_order INTEGER DEFAULT 0
-    )");
+        status TINYINT(1) DEFAULT 1,
+        display_order INT DEFAULT 0
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
 
     $pdo->exec("CREATE TABLE IF NOT EXISTS scheduled_publishings (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        model_type TEXT,
-        model_id INTEGER,
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        model_type VARCHAR(100),
+        model_id INT,
         publish_at DATETIME,
-        status TEXT DEFAULT 'pending',
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    )");
+        status VARCHAR(50) DEFAULT 'pending',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
 
     $pdo->exec("CREATE TABLE IF NOT EXISTS activity_logs (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER,
-        action TEXT,
-        model_type TEXT,
-        model_id INTEGER,
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        user_id INT,
+        action VARCHAR(255),
+        model_type VARCHAR(100),
+        model_id INT,
         changes TEXT,
-        ip TEXT,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    )");
+        ip VARCHAR(45),
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
 
-    // Seed admin user
+    // Seed admin user - Use INSERT IGNORE for MySQL
     $hash = password_hash($config['admin_password'], PASSWORD_DEFAULT);
-    $stmt = $pdo->prepare("INSERT OR IGNORE INTO users (name, email, password, role, status) VALUES (?, ?, ?, 'admin', 1)");
+    $stmt = $pdo->prepare("INSERT IGNORE INTO users (name, email, password, role, status) VALUES (?, ?, ?, 'admin', 1)");
     $stmt->execute(['Admin', $config['admin_email'], $hash]);
 
-    // Update existing products to include classifications
-    $pdo->exec("UPDATE products SET classification = 'Vật liệu' WHERE id IN (1, 2)");
+    // Update existing products to include classifications (if products exist)
+    $pdo->exec("UPDATE products SET classification = 'Vật liệu' WHERE id IN (1, 2) AND classification IS NULL");
     $pdo->exec("UPDATE products SET classification = 'Thiết Bị' WHERE id = 3");
     $pdo->exec("UPDATE products SET classification = 'Công nghệ' WHERE id = 4");
     $pdo->exec("UPDATE products SET classification = 'Cảnh quan' WHERE id = 5");

@@ -14,19 +14,19 @@ $yesterdayStart = date('Y-m-d 00:00:00', strtotime('-1 day'));
 $yesterdayEnd = date('Y-m-d 23:59:59', strtotime('-1 day'));
 
 // Check if access_logs table exists
-$tableExists = $pdo->query("SELECT name FROM sqlite_master WHERE type='table' AND name='access_logs'")->fetch();
+$tableExists = $pdo->query("SHOW TABLES LIKE 'access_logs'")->fetch();
 
 if (!$tableExists) {
     // Create table if it doesn't exist
     $pdo->exec("CREATE TABLE access_logs (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        page_url TEXT,
-        user_ip TEXT,
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        page_url VARCHAR(500),
+        user_ip VARCHAR(45),
         user_agent TEXT,
-        access_time DATETIME DEFAULT CURRENT_TIMESTAMP,
-        session_id TEXT,
-        referrer TEXT
-    )");
+        access_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        session_id VARCHAR(255),
+        referrer VARCHAR(500)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
 }
 
 // Get actual statistics
