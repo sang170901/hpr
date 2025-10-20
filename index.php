@@ -1,4 +1,8 @@
-<?php include 'inc/header-new.php'; ?>
+<?php 
+// Set proper encoding for Vietnamese
+header('Content-Type: text/html; charset=UTF-8');
+include 'inc/header-new.php'; 
+?>
 <?php include 'inc/slider-demo.php'; ?>
 <?php
 require_once 'backend/inc/db.php';

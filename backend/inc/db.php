@@ -17,6 +17,9 @@ if (!function_exists('getPDO')) {
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
             
+            // Set UTF-8 encoding for Vietnamese characters
+            $pdo->exec("SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci");
+            
             // Check if users table exists, if not initialize DB schema
             $stmt = $pdo->query("SHOW TABLES LIKE 'users'");
             if (!$stmt->fetch()) {

@@ -1,4 +1,6 @@
 <?php 
+// Set proper encoding for Vietnamese
+header('Content-Type: text/html; charset=UTF-8');
 include 'inc/header-new.php'; 
 require_once 'backend/inc/db.php';
 

@@ -85,13 +85,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Get categories for dropdown
+// Get categories for dropdown - use product categories
 try {
     $pdo = getFrontendPDO();
-    $categoriesStmt = $pdo->query("SELECT * FROM supplier_categories WHERE status = 1 ORDER BY order_index ASC, name ASC");
+    $categoriesStmt = $pdo->query("SELECT DISTINCT category as name, category as id FROM products WHERE category IS NOT NULL ORDER BY category ASC");
     $categories = $categoriesStmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (Exception $e) {
-    $categories = [];
+    $categories = [
+        ['id' => 'vật liệu', 'name' => 'Vật liệu'],
+        ['id' => 'thiết bị', 'name' => 'Thiết bị'],
+        ['id' => 'công nghệ', 'name' => 'Công nghệ'],
+        ['id' => 'cảnh quan', 'name' => 'Cảnh quan']
+    ];
 }
 ?>
 
