@@ -488,7 +488,7 @@ try {
                     <?php foreach ($newsList as $news): ?>
                     <div class="news-item">
                         <h3>
-                            <a href="javascript:void(0)" onclick="openNewsModal(<?php echo $news['id']; ?>, '<?php echo addslashes($news['title']); ?>', '<?php echo addslashes($news['content']); ?>', '<?php echo $news['published_date']; ?>')">
+                            <a href="article-detail.php?slug=<?php echo urlencode($news['slug']); ?>">
                                 <?php echo htmlspecialchars($news['title']); ?>
                             </a>
                         </h3>
@@ -498,7 +498,7 @@ try {
                         <p class="news-description">
                             <?php echo htmlspecialchars($news['excerpt']); ?>
                         </p>
-                        <a href="javascript:void(0)" onclick="openNewsModal(<?php echo $news['id']; ?>, '<?php echo addslashes($news['title']); ?>', '<?php echo addslashes($news['content']); ?>', '<?php echo $news['published_date']; ?>')" class="news-read-more">
+                        <a href="article-detail.php?slug=<?php echo urlencode($news['slug']); ?>" class="news-read-more">
                             Đọc thêm
                         </a>
                     </div>
@@ -516,21 +516,6 @@ try {
         <?php endif; ?>
     </div>
 </section>
-
-<!-- News Detail Modal -->
-<div id="newsModal" class="news-modal" style="display: none;">
-    <div class="news-modal-overlay" onclick="closeNewsModal()"></div>
-    <div class="news-modal-content">
-        <div class="news-modal-header">
-            <h2 id="modalTitle">Tiêu đề bài viết</h2>
-            <button class="news-modal-close" onclick="closeNewsModal()">&times;</button>
-        </div>
-        <div class="news-modal-body">
-            <p class="news-modal-date" id="modalDate">Ngày đăng</p>
-            <div class="news-modal-text" id="modalContent">Nội dung bài viết...</div>
-        </div>
-    </div>
-</div>
 
 <script>
 // News Carousel JavaScript
@@ -607,46 +592,6 @@ window.addEventListener('resize', () => {
     const newsGrid = document.getElementById('newsGrid');
     if (newsGrid) {
         newsGrid.style.transform = 'translateX(0)';
-    }
-});
-
-// News Modal Functions
-function openNewsModal(id, title, content, date) {
-    const modal = document.getElementById('newsModal');
-    const modalTitle = document.getElementById('modalTitle');
-    const modalDate = document.getElementById('modalDate');
-    const modalContent = document.getElementById('modalContent');
-    
-    // Thiết lập nội dung modal
-    modalTitle.textContent = title;
-    modalDate.textContent = formatDate(date);
-    modalContent.textContent = content;
-    
-    // Hiển thị modal
-    modal.style.display = 'flex';
-    document.body.style.overflow = 'hidden'; // Ngăn scroll background
-}
-
-function closeNewsModal() {
-    const modal = document.getElementById('newsModal');
-    modal.style.display = 'none';
-    document.body.style.overflow = 'auto'; // Khôi phục scroll background
-}
-
-function formatDate(dateString) {
-    const date = new Date(dateString);
-    const day = date.getDate().toString().padStart(2, '0');
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const year = date.getFullYear();
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    return `${day}/${month}/${year} ${hours}:${minutes}`;
-}
-
-// Đóng modal khi nhấn ESC
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        closeNewsModal();
     }
 });
 </script>
