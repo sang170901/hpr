@@ -107,7 +107,7 @@ if (!empty($search)) {
 
 ?>
 <div class="card">
-    <h2 style="margin-top:0">Users</h2>
+    <h2 class="page-main-title">Users</h2>
     <?php if (!empty($flash['message'])): ?>
         <div class="flash <?php echo $flash['type'] === 'success' ? 'success' : 'error' ?>"><?php echo htmlspecialchars($flash['message']) ?></div>
     <?php endif; ?>

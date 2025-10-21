@@ -15,7 +15,7 @@ if ($q) {
     $stmt = $pdo->prepare('SELECT * FROM activity_logs ORDER BY id DESC LIMIT ? OFFSET ?'); $stmt->execute([$per,$offset]); $logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 ?>
-<div class="card"><h2>Activity Logs</h2>
+<div class="card"><h2 class="page-main-title">Activity Logs</h2>
 <form method="get"><input type="text" name="q" placeholder="Search action or changes" value="<?php echo htmlspecialchars($q) ?>"><button class="small-btn">Tìm</button></form>
 <table class="table"><thead><tr><th>ID</th><th>User</th><th>Action</th><th>Model</th><th>Changes</th><th>IP</th><th>Time</th></tr></thead><tbody>
 <?php foreach($logs as $l): ?><tr>

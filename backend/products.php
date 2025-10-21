@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $website = trim($_POST['website'] ?? '');
         $featured_image = trim($_POST['featured_image'] ?? '');
         $product_function = trim($_POST['product_function'] ?? '');
-        $category = trim($_POST['category'] ?? '');
+        $category_id = !empty($_POST['category_id']) ? (int)$_POST['category_id'] : null;
         $thickness = trim($_POST['thickness'] ?? '');
         $color = trim($_POST['color'] ?? '');
         $warranty = trim($_POST['warranty'] ?? '');
@@ -52,12 +52,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($auto) { $supplier_id = $auto; }
             }
             if ($id) {
-                $stmt = $pdo->prepare('UPDATE products SET name=?, slug=?, description=?, price=?, status=?, featured=?, images=?, supplier_id=?, manufacturer=?, origin=?, material_type=?, application=?, website=?, featured_image=?, product_function=?, category=?, thickness=?, color=?, warranty=?, stock=?, classification=?, brand=? WHERE id=?');
-                $stmt->execute([$name, $slug, $description, $price, $status, $featured, $images, $supplier_id, $manufacturer, $origin, $material_type, $application, $website, $featured_image, $product_function, $category, $thickness, $color, $warranty, $stock, $classification, $brand, $id]);
+                $stmt = $pdo->prepare('UPDATE products SET name=?, slug=?, description=?, price=?, status=?, featured=?, images=?, supplier_id=?, manufacturer=?, origin=?, material_type=?, application=?, website=?, featured_image=?, product_function=?, category_id=?, thickness=?, color=?, warranty=?, stock=?, classification=?, brand=? WHERE id=?');
+                $stmt->execute([$name, $slug, $description, $price, $status, $featured, $images, $supplier_id, $manufacturer, $origin, $material_type, $application, $website, $featured_image, $product_function, $category_id, $thickness, $color, $warranty, $stock, $classification, $brand, $id]);
                 log_activity($_SESSION['user']['id'] ?? null, 'update_product', 'product', $id, json_encode(['name'=>$name,'price'=>$price]));
             } else {
-                $stmt = $pdo->prepare('INSERT INTO products (name, slug, description, price, status, featured, images, supplier_id, manufacturer, origin, material_type, application, website, featured_image, product_function, category, thickness, color, warranty, stock, classification, brand) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
-                $stmt->execute([$name, $slug, $description, $price, $status, $featured, $images, $supplier_id, $manufacturer, $origin, $material_type, $application, $website, $featured_image, $product_function, $category, $thickness, $color, $warranty, $stock, $classification, $brand]);
+                $stmt = $pdo->prepare('INSERT INTO products (name, slug, description, price, status, featured, images, supplier_id, manufacturer, origin, material_type, application, website, featured_image, product_function, category_id, thickness, color, warranty, stock, classification, brand) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+                $stmt->execute([$name, $slug, $description, $price, $status, $featured, $images, $supplier_id, $manufacturer, $origin, $material_type, $application, $website, $featured_image, $product_function, $category_id, $thickness, $color, $warranty, $stock, $classification, $brand]);
                 $newId = $pdo->lastInsertId();
                 log_activity($_SESSION['user']['id'] ?? null, 'create_product', 'product', $newId, json_encode(['name'=>$name,'price'=>$price]));
             }
@@ -116,16 +116,85 @@ if ($action === 'edit' && $id) {
 // Suppliers for select (include logo and slug for UI enhancements)
 $suppliers = $pdo->query('SELECT id,name,logo,slug FROM suppliers ORDER BY name')->fetchAll(PDO::FETCH_ASSOC);
 
-// Search
-$search = trim($_GET['q'] ?? '');
+// Product categories for filter (main categories + subcategories)
+$mainCategories = $pdo->query('SELECT id,name,slug FROM product_categories WHERE parent_id IS NULL ORDER BY order_index')->fetchAll(PDO::FETCH_ASSOC);
+$subCategories = $pdo->query('SELECT id,name,slug,parent_id FROM product_categories WHERE parent_id IS NOT NULL ORDER BY name')->fetchAll(PDO::FETCH_ASSOC);
 
-if (!empty($search)) {
-    $stmt = $pdo->prepare('SELECT p.id,p.name,p.price,p.status,p.created_at,s.name as supplier_name FROM products p LEFT JOIN suppliers s ON p.supplier_id = s.id WHERE p.name LIKE ? OR p.slug LIKE ? ORDER BY p.id DESC');
+// Group subcategories by parent
+$categoriesGrouped = [];
+foreach ($mainCategories as $main) {
+    $categoriesGrouped[$main['id']] = [
+        'main' => $main,
+        'subs' => []
+    ];
+}
+foreach ($subCategories as $sub) {
+    if (isset($categoriesGrouped[$sub['parent_id']])) {
+        $categoriesGrouped[$sub['parent_id']]['subs'][] = $sub;
+    }
+}
+
+// Search and filters
+$search = trim($_GET['q'] ?? '');
+$category_filter = trim($_GET['category_id'] ?? '');
+$supplier_filter = trim($_GET['supplier'] ?? '');
+$status_filter = isset($_GET['status']) && $_GET['status'] !== '' ? $_GET['status'] : null;
+$min_price = isset($_GET['min_price']) && $_GET['min_price'] !== '' ? (float)$_GET['min_price'] : null;
+$max_price = isset($_GET['max_price']) && $_GET['max_price'] !== '' ? (float)$_GET['max_price'] : null;
+
+$where = [];
+$params = [];
+
+if ($search !== '') {
+    $where[] = '(p.name LIKE ? OR p.slug LIKE ?)';
     $like = "%$search%";
-    $stmt->execute([$like, $like]);
+    $params[] = $like;
+    $params[] = $like;
+}
+
+if ($category_filter !== '') {
+    $where[] = '(p.category_id = ? OR p.category_id IN (SELECT id FROM product_categories WHERE parent_id = ?))';
+    $params[] = (int)$category_filter;
+    $params[] = (int)$category_filter;
+}
+
+if ($supplier_filter !== '') {
+    $where[] = 'p.supplier_id = ?';
+    $params[] = (int)$supplier_filter;
+}
+
+if ($status_filter !== null) {
+    $where[] = 'p.status = ?';
+    $params[] = (int)$status_filter;
+}
+
+if ($min_price !== null) {
+    $where[] = 'p.price >= ?';
+    $params[] = $min_price;
+}
+
+if ($max_price !== null) {
+    $where[] = 'p.price <= ?';
+    $params[] = $max_price;
+}
+
+$whereSql = '';
+if (!empty($where)) {
+    $whereSql = 'WHERE ' . implode(' AND ', $where);
+}
+
+$sql = "SELECT p.id,p.name,p.slug,p.price,p.status,p.featured,p.created_at,pc.name as category_name,s.name as supplier_name 
+        FROM products p 
+        LEFT JOIN suppliers s ON p.supplier_id = s.id 
+        LEFT JOIN product_categories pc ON p.category_id = pc.id 
+        $whereSql 
+        ORDER BY p.id DESC";
+if (!empty($params)) {
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($params);
     $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } else {
-    $products = $pdo->query('SELECT p.id,p.name,p.price,p.status,p.created_at,s.name as supplier_name FROM products p LEFT JOIN suppliers s ON p.supplier_id = s.id ORDER BY p.id DESC')->fetchAll(PDO::FETCH_ASSOC);
+    $products = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 }
 
 // Update placeholders, labels, and messages to Vietnamese
@@ -135,14 +204,45 @@ $flash['message'] = $flash['message'] === 'Updated' ? 'Đã cập nhật thành 
 $flash['message'] = $flash['message'] === 'Không thể xóa' ? 'Không thể xóa sản phẩm' : $flash['message'];
 ?>
 <div class="card">
-    <h2 style="margin-top:0">Sản phẩm</h2>
+    <h2 class="page-main-title">Sản phẩm</h2>
     <?php if (!empty($flash['message'])): ?>
         <div class="flash <?php echo $flash['type'] === 'success' ? 'success' : 'error' ?>"><?php echo htmlspecialchars($flash['message']) ?></div>
     <?php endif; ?>
 
     <div style="display:flex;gap:12px;align-items:center;margin-bottom:12px">
         <a class="small-btn primary" href="products.php?action=add">+ Thêm sản phẩm</a>
-        <form method="get" action="products.php" style="margin:0">
+        <!-- Combined filters + search form -->
+        <form method="get" action="products.php" style="display:flex;gap:10px;align-items:center;flex-wrap:nowrap;margin:0">
+            <select name="category_id" class="compact-select" onchange="this.form.submit()">
+                <option value="">Tất cả danh mục</option>
+                <?php foreach ($categoriesGrouped as $group): ?>
+                    <option value="<?php echo $group['main']['id'] ?>" <?php echo ($category_filter == $group['main']['id']) ? 'selected' : '' ?>>
+                        📁 <?php echo htmlspecialchars($group['main']['name']) ?>
+                    </option>
+                    <?php foreach ($group['subs'] as $sub): ?>
+                        <option value="<?php echo $sub['id'] ?>" <?php echo ($category_filter == $sub['id']) ? 'selected' : '' ?>>
+                            &nbsp;&nbsp;&nbsp;└── <?php echo htmlspecialchars($sub['name']) ?>
+                        </option>
+                    <?php endforeach; ?>
+                <?php endforeach; ?>
+            </select>
+
+            <select name="supplier" class="compact-select" onchange="this.form.submit()">
+                <option value="">Tất cả NCC</option>
+                <?php foreach ($suppliers as $s): ?>
+                    <option value="<?php echo $s['id'] ?>" <?php echo ($supplier_filter == $s['id']) ? 'selected' : '' ?>><?php echo htmlspecialchars($s['name']) ?></option>
+                <?php endforeach; ?>
+            </select>
+
+            <select name="status" class="compact-select" onchange="this.form.submit()">
+                <option value="">Tất cả trạng thái</option>
+                <option value="1" <?php echo ($status_filter === '1') ? 'selected' : '' ?>>Hoạt động</option>
+                <option value="0" <?php echo ($status_filter === '0') ? 'selected' : '' ?>>Tạm ngưng</option>
+            </select>
+
+            <input type="text" name="min_price" class="compact-input" placeholder="Giá từ" value="<?php echo htmlspecialchars($min_price ?? '') ?>">
+            <input type="text" name="max_price" class="compact-input" placeholder="đến" value="<?php echo htmlspecialchars($max_price ?? '') ?>">
+
             <input type="text" name="q" placeholder="Tìm theo tên hoặc slug" value="<?php echo htmlspecialchars($search) ?>" style="padding:8px;border-radius:6px;border:1px solid #e6e9ef">
             <button class="small-btn" type="submit">Tìm</button>
         </form>
@@ -170,10 +270,13 @@ $flash['message'] = $flash['message'] === 'Không thể xóa' ? 'Không thể x�
                 <td><?php if (!empty($p['featured_image'])): ?><img src="<?php echo htmlspecialchars($p['featured_image']) ?>" alt="" style="height:40px"><?php else: ?>-<?php endif; ?></td>
                 <td><?php echo number_format($p['price'], 2) ?></td>
                 <td><?php echo htmlspecialchars($p['supplier_name'] ?? '') ?></td>
-                <td><?php echo htmlspecialchars($p['category'] ?? '') ?></td>
+                <td><?php echo htmlspecialchars($p['category_name'] ?? '') ?></td>
                 <td><?php echo $p['status'] ? 'Hoạt động' : 'Không hoạt động' ?> <a class="small-btn" href="products.php?action=toggle&id=<?php echo $p['id'] ?>">Bật/Tắt</a></td>
                 <td><?php echo $p['created_at'] ?></td>
                 <td class="btn-row">
+                    <a class="small-btn" href="../product-detail.php?id=<?php echo $p['id'] ?>" target="_blank" title="Xem chi tiết">
+                        <i class="fas fa-eye"></i> Xem
+                    </a>
                     <a class="small-btn" href="products.php?action=edit&id=<?php echo $p['id'] ?>">Sửa</a>
                     <a class="small-btn warn" href="products.php?action=delete&id=<?php echo $p['id'] ?>" onclick="return confirm('Xóa sản phẩm?')">Xóa</a>
                 </td>
@@ -248,8 +351,22 @@ $flash['message'] = $flash['message'] === 'Không thể xóa' ? 'Không thể x�
             <input type="text" name="product_function" id="product_function" value="<?php echo isset($product['product_function']) ? htmlspecialchars($product['product_function']) : '' ?>">
         </div>
         <div class="form-group">
-            <label for="category">Phân loại</label>
-            <input type="text" name="category" id="category" value="<?php echo isset($product['category']) ? htmlspecialchars($product['category']) : '' ?>">
+            <label for="category_id">Danh mục sản phẩm</label>
+            <select name="category_id" id="category_id" class="form-control">
+                <option value="">-- Chọn danh mục --</option>
+                <?php foreach ($categoriesGrouped as $group): ?>
+                    <optgroup label="📁 <?php echo htmlspecialchars($group['main']['name']) ?>">
+                        <option value="<?php echo $group['main']['id'] ?>" <?php echo (isset($product['category_id']) && $product['category_id'] == $group['main']['id']) ? 'selected' : '' ?>>
+                            <?php echo htmlspecialchars($group['main']['name']) ?>
+                        </option>
+                        <?php foreach ($group['subs'] as $sub): ?>
+                            <option value="<?php echo $sub['id'] ?>" <?php echo (isset($product['category_id']) && $product['category_id'] == $sub['id']) ? 'selected' : '' ?>>
+                                &nbsp;&nbsp;&nbsp;└── <?php echo htmlspecialchars($sub['name']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </optgroup>
+                <?php endforeach; ?>
+            </select>
         </div>
         <div class="form-group">
             <label for="thickness">Độ dày</label>

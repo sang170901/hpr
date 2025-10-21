@@ -4,64 +4,56 @@
     <meta charset="utf-8">
     <title>VNMaterial Admin</title>
     <link rel="stylesheet" href="assets/css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <script>window.appConfig = {};</script>
-    <style>img.logo-sm{height:28px;vertical-align:middle}</style>
 </head>
 <body>
+<?php $request = $_SERVER['REQUEST_URI'] ?? $_SERVER['PHP_SELF'] ?? ''; ?>
 <div class="app">
   <aside class="sidebar">
     <div class="brand">
-      <div class="brand-logo">🏗️</div>
+      <div class="brand-logo"><i class="fas fa-cube"></i></div>
       <div class="brand-text">VNMaterial</div>
     </div>
     <nav>
-      <a href="index.php" class="nav-item">
-        <span class="nav-icon">📊</span>
-        <span class="nav-text">Bảng điều khiển</span>
+  <a href="index.php" class="nav-item <?php echo (strpos($request, 'index.php') !== false) ? 'active' : '' ?>">
+        <span class="nav-icon"><i class="fas fa-tachometer-alt"></i></span>
+        <span class="nav-text">Tổng quan</span>
       </a>
-      <a href="users.php" class="nav-item">
-        <span class="nav-icon">👥</span>
-        <span class="nav-text">Người dùng</span>
-      </a>
-      <a href="products.php" class="nav-item">
-        <span class="nav-icon">📦</span>
-        <span class="nav-text">Sản phẩm</span>
-      </a>
-      <a href="suppliers.php" class="nav-item">
-        <span class="nav-icon">🏢</span>
+  <a href="suppliers.php" class="nav-item <?php echo (strpos($request, 'suppliers.php') !== false) ? 'active' : '' ?>">
+        <span class="nav-icon"><i class="fas fa-truck"></i></span>
         <span class="nav-text">Nhà cung cấp</span>
       </a>
-      <a href="vouchers.php" class="nav-item">
-        <span class="nav-icon">🎫</span>
+  <a href="users.php" class="nav-item <?php echo (strpos($request, 'users.php') !== false) ? 'active' : '' ?>">
+        <span class="nav-icon"><i class="fas fa-users"></i></span>
+        <span class="nav-text">Khách hàng</span>
+      </a>
+  <a href="products.php" class="nav-item <?php echo (strpos($request, 'products.php') !== false) ? 'active' : '' ?>">
+        <span class="nav-icon"><i class="fas fa-box"></i></span>
+        <span class="nav-text">Sản phẩm</span>
+      </a>
+  <a href="vouchers.php" class="nav-item <?php echo (strpos($request, 'vouchers.php') !== false) ? 'active' : '' ?>">
+        <span class="nav-icon"><i class="fas fa-tags"></i></span>
         <span class="nav-text">Mã giảm giá</span>
       </a>
-      <a href="sliders.php" class="nav-item">
-        <span class="nav-icon">🖼️</span>
-        <span class="nav-text">Quản lý Slider</span>
+  <a href="sliders.php" class="nav-item <?php echo (strpos($request, 'sliders.php') !== false) ? 'active' : '' ?>">
+        <span class="nav-icon"><i class="fas fa-images"></i></span>
+        <span class="nav-text">Banner</span>
       </a>
-      <a href="activity_logs.php" class="nav-item">
-        <span class="nav-icon">📋</span>
-        <span class="nav-text">Nhật ký hoạt động</span>
+  <a href="activity_logs.php" class="nav-item <?php echo (strpos($request, 'activity_logs.php') !== false) ? 'active' : '' ?>">
+        <span class="nav-icon"><i class="fas fa-history"></i></span>
+        <span class="nav-text">Nhật ký</span>
       </a>
-      <a href="scheduled_publishing.php" class="nav-item">
-        <span class="nav-icon">⏰</span>
-        <span class="nav-text">Lịch xuất bản</span>
-      </a>
-      <a href="logout.php" class="nav-item logout">
-        <span class="nav-icon">🚪</span>
+  <a href="logout.php" class="nav-item <?php echo (strpos($request, 'logout.php') !== false) ? 'active' : '' ?>">
+        <span class="nav-icon"><i class="fas fa-sign-out-alt"></i></span>
         <span class="nav-text">Đăng xuất</span>
       </a>
     </nav>
   </aside>
   <div class="main">
-    <div class="topbar">
-      <div style="display:flex;gap:12px;align-items:center">
-        <button class="small-btn ghost" id="btn-toggle-sidebar">☰</button>
-        <div style="font-weight:700">Quản trị VNMaterial</div>
+    <div class="main-header">
+      <div style="display:flex;gap:12px;align-items:center;justify-content:center">
+        <div style="font-weight:700;color:#1f2937;font-size:18px"></div>
       </div>
-      <div style="display:flex;gap:12px;align-items:center">
-        <div style="color:var(--muted-2)">Xin chào, Quản trị viên</div>
-      </div>
-    </div>
-    <div class="container">
+    <div class="main-content">

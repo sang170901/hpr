@@ -40,7 +40,7 @@ if ($action==='delete' && $id) { $pdo->prepare('DELETE FROM sliders WHERE id=?')
 require __DIR__ . '/inc/header.php';
 $sliders = $pdo->query('SELECT * FROM sliders ORDER BY display_order ASC')->fetchAll(PDO::FETCH_ASSOC);
 ?>
-<div class="card"><h2>Manage Sliders</h2>
+<div class="card"><h2 class="page-main-title">Manage Sliders</h2>
 <?php if(!empty($flash['message'])): ?><div class="flash <?php echo $flash['type']==='success'?'success':'error' ?>"><?php echo htmlspecialchars($flash['message']) ?></div><?php endif; ?>
 <a class="small-btn primary" href="sliders.php?action=add">+ Add Slider</a>
 <table class="table"><thead><tr><th>ID</th><th>Tiêu đề</th><th>Hình ảnh</th><th>Link</th><th>Thứ tự</th><th>Thời gian</th><th>Trạng thái</th><th>Hành động</th></tr></thead><tbody>

@@ -1,13 +1,9 @@
-		</div> <!-- .container -->
-		<footer class="admin-footer">VNMaterial Admin • Prototype</footer>
+		</div> <!-- .main-content -->
+		<footer class="admin-footer" style="padding:16px 24px;color:#9ca3af;font-size:13px;"></footer>
 	</div> <!-- .main -->
 </div> <!-- .app -->
 <script>
-document.getElementById('btn-toggle-sidebar')?.addEventListener('click', function(){
-	const sb = document.querySelector('.sidebar');
-	if (!sb) return;
-	sb.style.display = (sb.style.display === 'none') ? 'block' : 'none';
-});
+// Add any JavaScript functionality here
 </script>
 </body>
 </html>

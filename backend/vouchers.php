@@ -103,7 +103,7 @@ $flash['message'] = $flash['message'] === 'Deleted' ? 'Đã xóa thành công' :
 
 ?>
 <div class="card">
-    <h2 style="margin-top:0">Quản lý voucher</h2>
+    <h2 class="page-main-title">Quản lý voucher</h2>
     <?php if (!empty($flash['message'])): ?>
         <div class="flash <?php echo $flash['type'] === 'success' ? 'success' : 'error' ?>"><?php echo htmlspecialchars($flash['message']) ?></div>
     <?php endif; ?>
