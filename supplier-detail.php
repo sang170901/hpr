@@ -61,21 +61,36 @@ try {
             padding: 0;
             box-sizing: border-box;
         }
-        
+
+        :root {
+            /* Site primary palette (match `inc/header-new.php`) */
+            --primary-color: #3b82f6;
+            --primary-dark: #2563eb;
+            --primary-light: #60a5fa; /* lighter blue */
+            --accent-color: #7dd3fc; /* light cyan-blue to keep page light-blue */
+            --bg-header: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 30%, #bae6fd 70%, #7dd3fc 100%);
+        }
+
         body {
             font-family: 'Inter', sans-serif;
-            background: #f8fafc;
-            color: #1e293b;
+            background: var(--primary-light); /* Light blue tone for the entire page */
+            color: #1f2937; /* Ensure text remains readable */
             line-height: 1.6;
         }
         
         .hero-section {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 60px 0;
             position: relative;
+            left: 50%;
+            right: 50%;
+            margin-left: -50vw;
+            margin-right: -50vw;
+            width: 100vw;
+            background: linear-gradient(135deg, #60a5fa 0%, #7dd3fc 100%); /* light blue gradient */
+            padding: 120px 0 80px;
             overflow: hidden;
+            min-height: 420px; /* ensure visible hero area */
         }
-        
+
         .hero-section::before {
             content: '';
             position: absolute;
@@ -86,13 +101,30 @@ try {
             background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
             opacity: 0.3;
         }
-        
+
         .hero-content {
-            max-width: 1200px;
+            max-width: 1400px; /* wider content */
             margin: 0 auto;
             padding: 0 20px;
+            text-align: center;
             position: relative;
             z-index: 2;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: rgba(255,255,255,0.95);
+            max-width: 900px; /* allow wider subtitle */
+            margin: 0 auto 2.5rem;
+            font-weight: 400;
         }
         
         .breadcrumb {
@@ -184,24 +216,24 @@ try {
         }
         
         .main-content {
-            max-width: 1200px;
+            max-width: 1400px; /* Increased width */
             margin: -40px auto 0;
-            padding: 0 20px 4rem;
+            padding: 0 40px 4rem; /* Adjusted padding */
             position: relative;
             z-index: 10;
         }
         
         .content-grid {
             display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 3rem;
+            grid-template-columns: 3fr 1fr; /* Adjusted proportions for wider main content */
+            gap: 4rem; /* Increased gap for better spacing */
         }
         
         .content-main {
-            background: white;
+            background: white; /* Keep content readable */
             border-radius: 20px;
             padding: 3rem;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
         }
         
         .content-sidebar {
@@ -216,7 +248,7 @@ try {
             color: #1e293b;
             margin-bottom: 2rem;
             padding-bottom: 1rem;
-            border-bottom: 3px solid #667eea;
+            border-bottom: 3px solid var(--primary-color);
             position: relative;
         }
         
@@ -227,7 +259,7 @@ try {
             left: 0;
             width: 60px;
             height: 3px;
-            background: #764ba2;
+            background: var(--accent-color);
         }
         
         .products-grid {
@@ -259,7 +291,7 @@ try {
         }
         
         .product-category {
-            color: #667eea;
+            color: var(--primary-color);
             font-size: 0.9rem;
             font-weight: 500;
             margin-bottom: 0.8rem;
@@ -303,7 +335,7 @@ try {
         
         .contact-item i {
             width: 20px;
-            color: #667eea;
+            color: var(--primary-color);
             font-size: 1.1rem;
         }
         
@@ -356,7 +388,7 @@ try {
         }
         
         .related-category {
-            color: #667eea;
+            color: var(--primary-color);
             font-size: 0.9rem;
             font-weight: 500;
         }
@@ -368,7 +400,8 @@ try {
         }
         
         .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            /* primary buttons use soft light-blue gradient */
+            background: var(--primary-light); /* Match button tone */
             color: white;
             border: none;
             padding: 1rem 2rem;
@@ -383,16 +416,14 @@ try {
         }
         
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
-            text-decoration: none;
-            color: white;
+            background: var(--primary-color); /* Slightly darker blue on hover */
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
         }
         
         .btn-secondary {
             background: white;
-            color: #667eea;
-            border: 2px solid #667eea;
+            color: var(--primary-light);
+            border: 2px solid var(--primary-light);
             padding: 1rem 2rem;
             border-radius: 12px;
             font-weight: 600;
@@ -405,9 +436,8 @@ try {
         }
         
         .btn-secondary:hover {
-            background: #667eea;
+            background: var(--primary-light);
             color: white;
-            text-decoration: none;
         }
         
         @media (max-width: 968px) {
@@ -441,6 +471,10 @@ try {
     </style>
 </head>
 <body>
+    <?php 
+    require_once 'inc/header-new.php';
+    ?>
+
     <!-- Hero Section -->
     <section class="hero-section">
         <div class="hero-content">
@@ -628,5 +662,9 @@ try {
             </div>
         <?php endif; ?>
     </div>
+
+    <?php 
+    require_once 'inc/footer-new.php';
+    ?>
 </body>
 </html>

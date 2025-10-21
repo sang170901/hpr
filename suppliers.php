@@ -99,10 +99,17 @@ try {
         }
         
         .suppliers-hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 120px 0 80px;
+            /* make background span full viewport width */
             position: relative;
+            left: 50%;
+            right: 50%;
+            margin-left: -50vw;
+            margin-right: -50vw;
+            width: 100vw;
+            background: linear-gradient(135deg, #60a5fa 0%, #7dd3fc 100%); /* light blue gradient */
+            padding: 120px 0 80px;
             overflow: hidden;
+            min-height: 420px; /* ensure visible hero area */
         }
         
         .suppliers-hero::before {
@@ -117,7 +124,7 @@ try {
         }
         
         .hero-content {
-            max-width: 1200px;
+            max-width: 1400px; /* wider content */
             margin: 0 auto;
             padding: 0 20px;
             text-align: center;
@@ -135,46 +142,23 @@ try {
         
         .hero-subtitle {
             font-size: 1.3rem;
-            color: rgba(255,255,255,0.9);
-            max-width: 600px;
+            color: rgba(255,255,255,0.95);
+            max-width: 900px; /* allow wider subtitle */
             margin: 0 auto 2.5rem;
             font-weight: 400;
         }
         
-        .hero-stats {
-            display: flex;
-            justify-content: center;
-            gap: 3rem;
-            flex-wrap: wrap;
-        }
-        
-        .hero-stat {
-            text-align: center;
-            color: white;
-        }
-        
-        .hero-stat-number {
-            font-size: 2.5rem;
-            font-weight: 700;
-            display: block;
-            margin-bottom: 0.5rem;
-        }
-        
-        .hero-stat-label {
-            font-size: 1rem;
-            opacity: 0.9;
-            font-weight: 500;
-        }
+        /* hero stats removed as requested */
         
         .search-section {
             background: white;
             border-radius: 20px;
             padding: 2rem;
             margin: -60px auto 0;
-            max-width: 800px;
+            max-width: 1000px; /* wider search box */
             position: relative;
             z-index: 10;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.08);
             margin-bottom: 4rem;
         }
         
@@ -198,9 +182,9 @@ try {
         
         .search-input:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #60a5fa; /* light blue */
             background: white;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            box-shadow: 0 0 0 4px rgba(96,165,250,0.12);
         }
         
         .category-select {
@@ -215,12 +199,12 @@ try {
         
         .category-select:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #60a5fa; /* light blue */
             background: white;
         }
         
         .search-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #60a5fa 0%, #7dd3fc 100%); /* light blue gradient */
             color: white;
             border: none;
             padding: 1rem 2rem;
@@ -230,33 +214,38 @@ try {
             transition: all 0.3s;
             font-size: 1rem;
         }
-        
+
         .search-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 10px 30px rgba(96,165,250,0.22);
         }
         
         .main-content {
-            max-width: 1200px;
+            max-width: 1400px; /* wider page content */
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 30px;
         }
         
         .suppliers-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem;
+            grid-template-columns: repeat(4, 1fr); /* 4 cards per row on desktop */
+            gap: 1.25rem;
+            margin-bottom: 2.5rem;
+            align-items: stretch; /* ensure grid items stretch to same height */
         }
         
         .supplier-card {
             background: white;
-            border-radius: 20px;
+            border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
-            transition: all 0.4s ease;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+            transition: all 0.28s ease;
             position: relative;
             border: 1px solid #f1f5f9;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100%; /* allow equal height via grid align-items */
         }
         
         .supplier-card:hover {
@@ -265,27 +254,29 @@ try {
         }
         
         .supplier-header {
-            padding: 2rem 2rem 1rem;
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            padding: 1.25rem 1rem 0.75rem;
+            background: linear-gradient(135deg, #f8fafc 0%, #eef8ff 100%);
             position: relative;
+            display:flex;
+            align-items:center;
+            justify-content:center;
         }
         
         .supplier-logo {
-            width: 80px;
-            height: 80px;
-            border-radius: 16px;
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
             object-fit: cover;
-            margin: 0 auto;
             display: block;
-            border: 4px solid white;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border: 3px solid white;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
         }
         
         .supplier-category {
             position: absolute;
             top: 1rem;
             right: 1rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #60a5fa 0%, #7dd3fc 100%); /* light blue */
             color: white;
             padding: 0.5rem 1rem;
             border-radius: 20px;
@@ -296,23 +287,31 @@ try {
         }
         
         .supplier-body {
-            padding: 1.5rem 2rem 2rem;
+            padding: 1rem 1rem 1rem;
+            flex: 1 1 auto; /* allow body to grow and push footer down */
+            display: flex;
+            flex-direction: column;
         }
         
         .supplier-name {
-            font-size: 1.4rem;
+            font-size: 1.05rem;
             font-weight: 700;
             color: #1e293b;
-            margin-bottom: 0.8rem;
+            margin-bottom: 0.35rem;
             text-align: center;
         }
         
         .supplier-description {
             color: #64748b;
-            margin-bottom: 1.5rem;
-            line-height: 1.6;
+            margin-bottom: 0.9rem;
+            line-height: 1.4;
             text-align: center;
-            font-size: 0.95rem;
+            font-size: 0.88rem;
+            /* clamp description to two lines and show ellipsis */
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
         
         .supplier-details {
@@ -330,34 +329,35 @@ try {
         
         .supplier-detail i {
             width: 16px;
-            color: #667eea;
+            color: #60a5fa; /* light blue */
             font-size: 1rem;
         }
         
         .supplier-footer {
-            padding: 0 2rem 2rem;
+            padding: 0.75rem 1rem 1rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-shrink: 0;
         }
         
         .view-supplier {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #60a5fa 0%, #7dd3fc 100%); /* light blue */
             color: white;
-            padding: 0.8rem 1.5rem;
-            border-radius: 12px;
+            padding: 0.55rem 0.9rem;
+            border-radius: 10px;
             text-decoration: none;
             font-weight: 600;
-            font-size: 0.9rem;
-            transition: all 0.3s;
+            font-size: 0.82rem;
+            transition: all 0.22s;
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.4rem;
         }
-        
+
         .view-supplier:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 8px 25px rgba(96,165,250,0.22);
             text-decoration: none;
             color: white;
         }
@@ -391,15 +391,15 @@ try {
         }
         
         .pagination a:hover {
-            background: #667eea;
+            background: #60a5fa; /* light blue */
             color: white;
-            border-color: #667eea;
+            border-color: #60a5fa;
         }
         
         .pagination .current {
-            background: #667eea;
+            background: #60a5fa; /* light blue */
             color: white;
-            border: 1px solid #667eea;
+            border: 1px solid #60a5fa;
         }
         
         .no-results {
@@ -420,36 +420,30 @@ try {
             color: #475569;
         }
         
-        @media (max-width: 768px) {
-            .hero-title {
-                font-size: 2.5rem;
+        @media (max-width: 1200px) {
+            .suppliers-grid {
+                grid-template-columns: repeat(3, 1fr);
             }
-            
-            .hero-stats {
-                gap: 1.5rem;
+        }
+
+        @media (max-width: 900px) {
+            .suppliers-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
-            
-            .search-form {
-                flex-direction: column;
-            }
-            
-            .search-input {
-                min-width: 100%;
-            }
-            
+        }
+
+        @media (max-width: 560px) {
             .suppliers-grid {
                 grid-template-columns: 1fr;
             }
-            
-            .supplier-footer {
-                flex-direction: column;
-                gap: 1rem;
-                align-items: stretch;
+
+            .hero-title {
+                font-size: 2rem;
             }
-            
-            .view-supplier {
-                text-align: center;
-                justify-content: center;
+
+            .supplier-logo {
+                width: 64px;
+                height: 64px;
             }
         }
     </style>
@@ -463,20 +457,7 @@ try {
                 Khám phá mạng lưới đối tác tin cậy với các nhà cung cấp hàng đầu về vật liệu xây dựng, 
                 thiết bị công nghiệp và giải pháp công nghệ tiên tiến
             </p>
-            <div class="hero-stats">
-                <div class="hero-stat">
-                    <span class="hero-stat-number"><?php echo $stats['total_suppliers']; ?>+</span>
-                    <span class="hero-stat-label">Nhà Cung Cấp</span>
-                </div>
-                <div class="hero-stat">
-                    <span class="hero-stat-number"><?php echo $stats['total_categories']; ?></span>
-                    <span class="hero-stat-label">Danh Mục</span>
-                </div>
-                <div class="hero-stat">
-                    <span class="hero-stat-number">98%</span>
-                    <span class="hero-stat-label">Độ Tin Cậy</span>
-                </div>
-            </div>
+            <!-- hero stats removed -->
         </div>
     </section>
 
