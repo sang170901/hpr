@@ -4,10 +4,11 @@ header('Content-Type: text/html; charset=UTF-8');
 
 require_once 'inc/db_frontend.php';
 
-// Get supplier slug from URL
+// Get supplier slug or id from URL
 $slug = isset($_GET['slug']) ? trim($_GET['slug']) : '';
+$id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
-if (empty($slug)) {
+if (empty($slug) && empty($id)) {
     header('Location: suppliers.php');
     exit;
 }
@@ -15,10 +16,20 @@ if (empty($slug)) {
 try {
     $pdo = getFrontendPDO();
     
-    // Get supplier details
-    $supplierQuery = "SELECT * FROM suppliers WHERE slug = :slug AND status = 1";
-    $supplierStmt = $pdo->prepare($supplierQuery);
-    $supplierStmt->execute([':slug' => $slug]);
+    // Get supplier details (by slug or id)
+    if ($slug) {
+        $supplierQuery = "SELECT s.*, c.name as category_name FROM suppliers s 
+                         LEFT JOIN categories c ON s.category_id = c.id 
+                         WHERE s.slug = :slug AND s.status = 1";
+        $supplierStmt = $pdo->prepare($supplierQuery);
+        $supplierStmt->execute([':slug' => $slug]);
+    } else {
+        $supplierQuery = "SELECT s.*, c.name as category_name FROM suppliers s 
+                         LEFT JOIN categories c ON s.category_id = c.id 
+                         WHERE s.id = :id AND s.status = 1";
+        $supplierStmt = $pdo->prepare($supplierQuery);
+        $supplierStmt->execute([':id' => $id]);
+    }
     $supplier = $supplierStmt->fetch(PDO::FETCH_ASSOC);
     
     if (!$supplier) {

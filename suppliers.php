@@ -27,7 +27,7 @@ try {
     }
     
     if (!empty($category)) {
-        $whereClause .= " AND category = :category";
+        $whereClause .= " AND category_id = :category";
         $params[':category'] = $category;
     }
     
@@ -38,8 +38,11 @@ try {
     $totalItems = $countStmt->fetch(PDO::FETCH_ASSOC)['total'];
     $totalPages = ceil($totalItems / $limit);
     
-    // Get suppliers with pagination
-    $suppliersQuery = "SELECT * FROM suppliers $whereClause ORDER BY name ASC LIMIT :limit OFFSET :offset";
+    // Get suppliers with pagination (join với categories)
+    $suppliersQuery = "SELECT s.*, c.name as category_name 
+                      FROM suppliers s 
+                      LEFT JOIN categories c ON s.category_id = c.id 
+                      $whereClause ORDER BY s.name ASC LIMIT :limit OFFSET :offset";
     $suppliersStmt = $pdo->prepare($suppliersQuery);
     foreach ($params as $key => $value) {
         $suppliersStmt->bindValue($key, $value);
@@ -49,15 +52,15 @@ try {
     $suppliersStmt->execute();
     $suppliers = $suppliersStmt->fetchAll(PDO::FETCH_ASSOC);
     
-    // Get categories
-    $categoriesQuery = "SELECT DISTINCT category as name FROM suppliers WHERE category IS NOT NULL AND status = 1 ORDER BY category";
+    // Get categories (lấy từ bảng categories)
+    $categoriesQuery = "SELECT id, name FROM categories ORDER BY name";
     $categoriesStmt = $pdo->query($categoriesQuery);
     $categories = $categoriesStmt->fetchAll(PDO::FETCH_ASSOC);
     
     // Get stats
     $statsQuery = "SELECT 
         COUNT(*) as total_suppliers,
-        COUNT(DISTINCT category) as total_categories,
+        COUNT(DISTINCT category_id) as total_categories,
         AVG(DATEDIFF(NOW(), created_at)) as avg_days
         FROM suppliers WHERE status = 1";
     $statsStmt = $pdo->query($statsQuery);
@@ -93,7 +96,7 @@ try {
         
         body {
             font-family: 'Inter', sans-serif;
-            background: #f8fafc;
+            background: #f0f9ff;
             color: #1e293b;
             line-height: 1.6;
         }
@@ -106,7 +109,7 @@ try {
             margin-left: -50vw;
             margin-right: -50vw;
             width: 100vw;
-            background: linear-gradient(135deg, #60a5fa 0%, #7dd3fc 100%); /* light blue gradient */
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
             padding: 120px 0 80px;
             overflow: hidden;
             min-height: 420px; /* ensure visible hero area */
@@ -119,7 +122,7 @@ try {
             left: 0;
             right: 0;
             bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(21,101,192,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
             opacity: 0.3;
         }
         
@@ -135,14 +138,14 @@ try {
         .hero-title {
             font-size: 3.5rem;
             font-weight: 800;
-            color: white;
+            color: #1565c0;
             margin-bottom: 1.5rem;
-            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            text-shadow: 0 2px 8px rgba(21,101,192,0.2);
         }
         
         .hero-subtitle {
             font-size: 1.3rem;
-            color: rgba(255,255,255,0.95);
+            color: #1976d2;
             max-width: 900px; /* allow wider subtitle */
             margin: 0 auto 2.5rem;
             font-weight: 400;
@@ -173,7 +176,7 @@ try {
             flex: 1;
             min-width: 300px;
             padding: 1rem 1.5rem;
-            border: 2px solid #e2e8f0;
+            border: 2px solid #60a5fa;
             border-radius: 12px;
             font-size: 1rem;
             transition: all 0.3s;
@@ -182,14 +185,14 @@ try {
         
         .search-input:focus {
             outline: none;
-            border-color: #60a5fa; /* light blue */
+            border-color: #64b5f6;
             background: white;
-            box-shadow: 0 0 0 4px rgba(96,165,250,0.12);
+            box-shadow: 0 0 0 4px rgba(100,181,246,0.12);
         }
         
         .category-select {
             padding: 1rem 1.5rem;
-            border: 2px solid #e2e8f0;
+            border: 2px solid #e3f2fd;
             border-radius: 12px;
             font-size: 1rem;
             background: #f8fafc;
@@ -199,12 +202,12 @@ try {
         
         .category-select:focus {
             outline: none;
-            border-color: #60a5fa; /* light blue */
+            border-color: #64b5f6;
             background: white;
         }
         
         .search-btn {
-            background: linear-gradient(135deg, #60a5fa 0%, #7dd3fc 100%); /* light blue gradient */
+            background: linear-gradient(135deg, #42a5f5 0%, #64b5f6 100%);
             color: white;
             border: none;
             padding: 1rem 2rem;
@@ -213,11 +216,12 @@ try {
             cursor: pointer;
             transition: all 0.3s;
             font-size: 1rem;
+            box-shadow: 0 2px 8px rgba(66, 165, 245, 0.3);
         }
 
         .search-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(96,165,250,0.22);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(66, 165, 245, 0.4);
         }
         
         .main-content {
@@ -276,7 +280,7 @@ try {
             position: absolute;
             top: 1rem;
             right: 1rem;
-            background: linear-gradient(135deg, #60a5fa 0%, #7dd3fc 100%); /* light blue */
+            background: linear-gradient(135deg, #42a5f5 0%, #64b5f6 100%);
             color: white;
             padding: 0.5rem 1rem;
             border-radius: 20px;
@@ -284,6 +288,7 @@ try {
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            box-shadow: 0 2px 8px rgba(66, 165, 245, 0.3);
         }
         
         .supplier-body {
@@ -329,7 +334,7 @@ try {
         
         .supplier-detail i {
             width: 16px;
-            color: #60a5fa; /* light blue */
+            color: #42a5f5;
             font-size: 1rem;
         }
         
@@ -342,7 +347,7 @@ try {
         }
         
         .view-supplier {
-            background: linear-gradient(135deg, #60a5fa 0%, #7dd3fc 100%); /* light blue */
+            background: linear-gradient(135deg, #42a5f5 0%, #64b5f6 100%);
             color: white;
             padding: 0.55rem 0.9rem;
             border-radius: 10px;
@@ -353,11 +358,12 @@ try {
             display: inline-flex;
             align-items: center;
             gap: 0.4rem;
+            box-shadow: 0 2px 8px rgba(66, 165, 245, 0.3);
         }
 
         .view-supplier:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(96,165,250,0.22);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(66, 165, 245, 0.4);
             text-decoration: none;
             color: white;
         }
@@ -452,7 +458,7 @@ try {
     <!-- Hero Section -->
     <section class="suppliers-hero">
         <div class="hero-content">
-            <h1 class="hero-title">Nhà Cung Cấp Uy Tín</h1>
+            <h1 class="hero-title">Nhà Cung Cấp</h1>
             <p class="hero-subtitle">
                 Khám phá mạng lưới đối tác tin cậy với các nhà cung cấp hàng đầu về vật liệu xây dựng, 
                 thiết bị công nghiệp và giải pháp công nghệ tiên tiến
@@ -472,9 +478,9 @@ try {
                 <select name="category" class="category-select">
                     <option value="">Tất cả danh mục</option>
                     <?php foreach ($categories as $cat): ?>
-                        <option value="<?php echo htmlspecialchars($cat['name']); ?>" 
-                                <?php echo ($category === $cat['name']) ? 'selected' : ''; ?>>
-                            <?php echo htmlspecialchars(ucfirst($cat['name'])); ?>
+                        <option value="<?php echo htmlspecialchars($cat['id']); ?>" 
+                                <?php echo ($category == $cat['id']) ? 'selected' : ''; ?>>
+                            <?php echo htmlspecialchars($cat['name']); ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
@@ -495,7 +501,17 @@ try {
                     <p style="color: #64748b;">Từ khóa: "<?php echo htmlspecialchars($search); ?>"</p>
                 <?php endif; ?>
                 <?php if ($category): ?>
-                    <p style="color: #64748b;">Danh mục: <?php echo htmlspecialchars($category); ?></p>
+                    <?php 
+                    // Tìm tên category từ ID
+                    $categoryName = '';
+                    foreach ($categories as $cat) {
+                        if ($cat['id'] == $category) {
+                            $categoryName = $cat['name'];
+                            break;
+                        }
+                    }
+                    ?>
+                    <p style="color: #64748b;">Danh mục: <?php echo htmlspecialchars($categoryName); ?></p>
                 <?php endif; ?>
             </div>
         <?php endif; ?>
@@ -505,9 +521,9 @@ try {
             <div class="suppliers-grid">
                 <?php foreach ($suppliers as $supplier): ?>
                     <div class="supplier-card">
-                        <?php if ($supplier['category']): ?>
+                        <?php if (!empty($supplier['category_name'])): ?>
                             <div class="supplier-category">
-                                <?php echo htmlspecialchars($supplier['category']); ?>
+                                <?php echo htmlspecialchars($supplier['category_name']); ?>
                             </div>
                         <?php endif; ?>
                         
@@ -549,7 +565,7 @@ try {
                         </div>
                         
                         <div class="supplier-footer">
-                            <a href="supplier-detail.php?slug=<?php echo urlencode($supplier['slug']); ?>" class="view-supplier">
+                            <a href="supplier-detail.php?id=<?php echo $supplier['id']; ?>" class="view-supplier">
                                 <span>Xem chi tiết</span>
                                 <i class="fas fa-arrow-right"></i>
                             </a>
