@@ -70,13 +70,13 @@ if (!defined('TRACKING_DISABLED')) {
             right: 0;
             height: var(--header-height);
             background: #e0f2fe; /* Fallback color */
-            background: var(--bg-header);
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 20%, #dbeafe 50%, #bfdbfe 80%, #93c5fd 100%);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-light);
+            border-bottom: 2px solid rgba(59, 130, 246, 0.2);
             z-index: 1000;
             transition: var(--transition);
-            box-shadow: var(--shadow-light);
+            box-shadow: 0 4px 20px rgba(14, 165, 233, 0.15);
         }
 
         /* Header animations when scrolling */
@@ -181,20 +181,23 @@ if (!defined('TRACKING_DISABLED')) {
             left: 0;
             right: 0;
             bottom: 0;
-            background: var(--gradient-primary);
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.12) 0%, rgba(6, 182, 212, 0.15) 100%);
             opacity: 0;
             transition: var(--transition);
             z-index: -1;
             border-radius: 12px;
+            border: 2px solid transparent;
         }
 
         .nav-link:hover::before {
-            opacity: 0.08;
+            opacity: 1;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(34, 211, 238, 0.2) 100%);
+            border-color: rgba(56, 189, 248, 0.3);
         }
 
         .nav-link:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-medium);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(14, 165, 233, 0.25);
         }
 
         /* Top bar indicator */
@@ -205,42 +208,59 @@ if (!defined('TRACKING_DISABLED')) {
             left: 50%;
             transform: translateX(-50%);
             width: 0;
-            height: 3px;
-            background: var(--gradient-primary);
+            height: 4px;
+            background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
             transition: var(--transition);
+            border-radius: 0 0 4px 4px;
+            box-shadow: 0 2px 10px rgba(14, 165, 233, 0.5);
         }
 
-        .nav-link:hover::after {
+        .nav-link:hover::after,
+        .nav-link.active::after {
             width: 100%;
         }
 
         .nav-number {
             font-size: 0.85rem;
-            font-weight: 500;
-            color: #60a5fa;
+            font-weight: 700;
+            background: linear-gradient(135deg, #38bdf8 0%, #22d3ee 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             letter-spacing: 2px;
             transition: var(--transition);
         }
 
         .nav-text {
             font-size: 0.9rem;
-            font-weight: 500;
-            color: #60a5fa;
-            letter-spacing: 2px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 2.5px;
             white-space: nowrap;
             transition: var(--transition);
         }
 
-        .nav-link:hover .nav-number {
-            color: #3b82f6;
-            transform: translateY(-2px) scale(1.1);
+        .nav-link:hover .nav-number,
+        .nav-link.active .nav-number {
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            transform: translateY(-2px) scale(1.15);
+            filter: drop-shadow(0 2px 8px rgba(14, 165, 233, 0.5));
         }
 
-        .nav-link:hover .nav-text {
-            color: #3b82f6;
-            font-weight: inherit;
+        .nav-link:hover .nav-text,
+        .nav-link.active .nav-text {
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             transform: translateY(-2px);
-            text-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+            filter: drop-shadow(0 3px 10px rgba(2, 132, 199, 0.6));
         }
 
         /* Action Buttons */
@@ -397,10 +417,9 @@ if (!defined('TRACKING_DISABLED')) {
             outline: none;
         }
 
-        /* Text stroke for nav numbers and texts */
-        .nav-number,
-        .nav-text {
-            -webkit-text-stroke: 0.15px currentColor;
+        /* Active state - enhance visibility */
+        .nav-link.active {
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.12) 0%, rgba(6, 182, 212, 0.15) 100%);
         }
     </style>
 </head>
@@ -549,6 +568,72 @@ if (!defined('TRACKING_DISABLED')) {
             
             // Initial call
             updateScrollProgress();
+
+            // Highlight active menu based on current page
+            const currentPath = window.location.pathname;
+            const currentPage = currentPath.split('/').pop() || 'index.php';
+            
+            // Get all nav links
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            // Category mapping for product pages
+            const categoryMap = {
+                'vật liệu': 'materials.php',
+                'vat lieu': 'materials.php',
+                'thiết bị': 'equipment.php',
+                'thiet bi': 'equipment.php',
+                'công nghệ': 'technology.php',
+                'cong nghe': 'technology.php',
+                'cảnh quan': 'landscape.php',
+                'canh quan': 'landscape.php'
+            };
+            
+            // Function to highlight menu item
+            function highlightMenu(targetPage) {
+                navLinks.forEach(link => {
+                    const linkHref = link.getAttribute('href');
+                    if (linkHref && linkHref.includes(targetPage)) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+            
+            // Check if it's a product detail page
+            if (currentPage === 'product-detail.php') {
+                // Try to get category from URL parameter
+                const urlParams = new URLSearchParams(window.location.search);
+                const category = urlParams.get('category');
+                
+                if (category && categoryMap[category.toLowerCase()]) {
+                    highlightMenu(categoryMap[category.toLowerCase()]);
+                } else {
+                    // Try to get category from page meta or data attribute
+                    const categoryElement = document.querySelector('[data-product-category]');
+                    if (categoryElement) {
+                        const catValue = categoryElement.getAttribute('data-product-category').toLowerCase();
+                        if (categoryMap[catValue]) {
+                            highlightMenu(categoryMap[catValue]);
+                        }
+                    }
+                }
+            }
+            // Check if it's a supplier detail page
+            else if (currentPage === 'supplier-detail.php') {
+                highlightMenu('suppliers.php');
+            }
+            // Check if it's a product listing page (products.php)
+            else if (currentPage === 'products.php') {
+                const urlParams = new URLSearchParams(window.location.search);
+                const category = urlParams.get('category');
+                
+                if (category && categoryMap[category.toLowerCase()]) {
+                    highlightMenu(categoryMap[category.toLowerCase()]);
+                }
+            }
+            // Regular page matching
+            else {
+                highlightMenu(currentPage);
+            }
         });
     </script>
 

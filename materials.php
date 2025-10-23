@@ -249,7 +249,7 @@ try {
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 200px;
+            height: 160px;
             overflow: hidden;
         }
         
@@ -262,13 +262,13 @@ try {
         
         .material-category {
             position: absolute;
-            top: 1rem;
-            right: 1rem;
+            top: 0.75rem;
+            right: 0.75rem;
             background: linear-gradient(135deg, #38bdf8 0%, #22d3ee 100%);
             color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
+            padding: 0.35rem 0.75rem;
+            border-radius: 16px;
+            font-size: 0.7rem;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -276,19 +276,19 @@ try {
         }
         
         .material-body {
-            padding: 1rem 1rem 1rem;
+            padding: 0.85rem 0.85rem 0.75rem;
             flex: 1 1 auto;
             display: flex;
             flex-direction: column;
         }
         
         .material-name {
-            font-size: 1.05rem;
+            font-size: 0.95rem;
             font-weight: 700;
             color: #1e293b;
-            margin-bottom: 0.35rem;
+            margin-bottom: 0.4rem;
             text-align: center;
-            min-height: 2.5rem;
+            min-height: 2.3rem;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
@@ -297,52 +297,54 @@ try {
         
         .material-description {
             color: #64748b;
-            margin-bottom: 0.9rem;
-            line-height: 1.4;
+            margin-bottom: 0.65rem;
+            line-height: 1.35;
             text-align: center;
-            font-size: 0.88rem;
+            font-size: 0.82rem;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
-            min-height: 2.5rem;
+            min-height: 2.2rem;
         }
         
         .material-details {
-            margin-bottom: 0.8rem;
+            margin-bottom: 0.6rem;
         }
         
         .material-detail {
             display: flex;
             align-items: center;
-            gap: 0.8rem;
+            justify-content: center;
+            gap: 0.5rem;
             color: #475569;
-            font-size: 0.9rem;
-            margin-bottom: 0.6rem;
+            font-size: 0.82rem;
+            margin-bottom: 0.4rem;
         }
         
         .material-detail i {
-            width: 16px;
+            width: 14px;
             color: #38bdf8;
-            font-size: 1rem;
+            font-size: 0.9rem;
         }
         
         .material-footer {
-            padding: 0.75rem 1rem 1rem;
+            padding: 0.65rem 0.85rem 0.85rem;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
             flex-shrink: 0;
+            border-top: 1px solid #f1f5f9;
         }
         
         .view-material {
             background: linear-gradient(135deg, #38bdf8 0%, #22d3ee 100%);
             color: white;
-            padding: 0.55rem 0.9rem;
-            border-radius: 10px;
+            padding: 0.5rem 1.2rem;
+            border-radius: 8px;
             text-decoration: none;
             font-weight: 600;
-            font-size: 0.82rem;
+            font-size: 0.8rem;
             transition: all 0.22s;
             display: inline-flex;
             align-items: center;
@@ -362,6 +364,7 @@ try {
             color: #059669;
             font-size: 0.85rem;
             font-weight: 700;
+            display: none;
         }
         
         .pagination {
@@ -527,24 +530,14 @@ try {
                                         <span><?php echo htmlspecialchars($material['brand']); ?></span>
                                     </div>
                                 <?php endif; ?>
-                                
-                                <?php if ($material['price']): ?>
-                                    <div class="material-detail">
-                                        <i class="fas fa-tag"></i>
-                                        <span class="material-price"><?php echo number_format($material['price']); ?>đ</span>
-                                    </div>
-                                <?php endif; ?>
                             </div>
                         </div>
                         
                         <div class="material-footer">
-                            <a href="product.php?id=<?php echo $material['id']; ?>" class="view-material">
+                            <a href="product-detail.php?id=<?php echo $material['id']; ?>" class="view-material">
                                 <span>Xem chi tiết</span>
                                 <i class="fas fa-arrow-right"></i>
                             </a>
-                            <span class="material-price">
-                                <?php echo date('d/m/Y', strtotime($material['created_at'])); ?>
-                            </span>
                         </div>
                     </div>
                 <?php endforeach; ?>

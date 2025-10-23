@@ -88,7 +88,7 @@ try {
             line-height: 1.6;
         }
         
-        .equipment-hero {
+        .materials-hero {
             position: relative;
             left: 50%;
             right: 50%;
@@ -101,7 +101,7 @@ try {
             min-height: 420px;
         }
         
-        .equipment-hero::before {
+        .materials-hero::before {
             content: '';
             position: absolute;
             top: 0;
@@ -215,7 +215,7 @@ try {
             padding: 0 30px;
         }
         
-        .equipment-grid {
+        .materials-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 1.25rem;
@@ -223,7 +223,7 @@ try {
             align-items: stretch;
         }
         
-        .equipment-card {
+        .material-card {
             background: white;
             border-radius: 16px;
             overflow: hidden;
@@ -237,112 +237,114 @@ try {
             height: 100%;
         }
         
-        .equipment-card:hover {
+        .material-card:hover {
             transform: translateY(-8px);
             box-shadow: 0 20px 60px rgba(0,0,0,0.15);
         }
         
-        .equipment-header {
+        .material-header {
             padding: 0;
             background: linear-gradient(135deg, #f8fafc 0%, #f0f9ff 100%);
             position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 200px;
+            height: 160px;
             overflow: hidden;
         }
         
-        .equipment-image {
+        .material-image {
             width: 100%;
             height: 100%;
             object-fit: cover;
             display: block;
         }
         
-        .equipment-category {
+        .material-category {
             position: absolute;
-            top: 1rem;
-            right: 1rem;
+            top: 0.75rem;
+            right: 0.75rem;
             background: linear-gradient(135deg, #38bdf8 0%, #22d3ee 100%);
             color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
+            padding: 0.35rem 0.75rem;
+            border-radius: 16px;
+            font-size: 0.7rem;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             box-shadow: 0 2px 8px rgba(56, 189, 248, 0.25);
         }
         
-        .equipment-body {
-            padding: 1rem 1rem 1rem;
+        .material-body {
+            padding: 0.85rem 0.85rem 0.75rem;
             flex: 1 1 auto;
             display: flex;
             flex-direction: column;
         }
         
-        .equipment-name {
-            font-size: 1.05rem;
+        .material-name {
+            font-size: 0.95rem;
             font-weight: 700;
             color: #1e293b;
-            margin-bottom: 0.35rem;
+            margin-bottom: 0.4rem;
             text-align: center;
-            min-height: 2.5rem;
+            min-height: 2.3rem;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
         
-        .equipment-description {
+        .material-description {
             color: #64748b;
-            margin-bottom: 0.9rem;
-            line-height: 1.4;
+            margin-bottom: 0.65rem;
+            line-height: 1.35;
             text-align: center;
-            font-size: 0.88rem;
+            font-size: 0.82rem;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
-            min-height: 2.5rem;
+            min-height: 2.2rem;
         }
         
-        .equipment-details {
-            margin-bottom: 0.8rem;
-        }
-        
-        .equipment-detail {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            color: #475569;
-            font-size: 0.9rem;
+        .material-details {
             margin-bottom: 0.6rem;
         }
         
-        .equipment-detail i {
-            width: 16px;
-            color: #38bdf8;
-            font-size: 1rem;
+        .material-detail {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            color: #475569;
+            font-size: 0.82rem;
+            margin-bottom: 0.4rem;
         }
         
-        .equipment-footer {
-            padding: 0.75rem 1rem 1rem;
+        .material-detail i {
+            width: 14px;
+            color: #38bdf8;
+            font-size: 0.9rem;
+        }
+        
+        .material-footer {
+            padding: 0.65rem 0.85rem 0.85rem;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
             flex-shrink: 0;
+            border-top: 1px solid #f1f5f9;
         }
         
-        .view-equipment {
+        .view-material {
             background: linear-gradient(135deg, #38bdf8 0%, #22d3ee 100%);
             color: white;
-            padding: 0.55rem 0.9rem;
-            border-radius: 10px;
+            padding: 0.5rem 1.2rem;
+            border-radius: 8px;
             text-decoration: none;
             font-weight: 600;
-            font-size: 0.82rem;
+            font-size: 0.8rem;
             transition: all 0.22s;
             display: inline-flex;
             align-items: center;
@@ -350,7 +352,7 @@ try {
             box-shadow: 0 2px 8px rgba(56, 189, 248, 0.25);
         }
 
-        .view-equipment:hover {
+        .view-material:hover {
             transform: translateY(-1px);
             box-shadow: 0 4px 15px rgba(56, 189, 248, 0.35);
             text-decoration: none;
@@ -358,10 +360,11 @@ try {
             background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
         }
         
-        .equipment-price {
+        .material-price {
             color: #059669;
             font-size: 0.85rem;
             font-weight: 700;
+            display: none;
         }
         
         .pagination {
@@ -417,19 +420,19 @@ try {
         }
         
         @media (max-width: 1200px) {
-            .equipment-grid {
+            .materials-grid {
                 grid-template-columns: repeat(3, 1fr);
             }
         }
 
         @media (max-width: 900px) {
-            .equipment-grid {
+            .materials-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
 
         @media (max-width: 560px) {
-            .equipment-grid {
+            .materials-grid {
                 grid-template-columns: 1fr;
             }
 
@@ -441,12 +444,12 @@ try {
 </head>
 <body>
     <!-- Hero Section -->
-    <section class="equipment-hero">
+    <section class="materials-hero">
         <div class="hero-content">
             <h1 class="hero-title">Thiết Bị Xây Dựng</h1>
             <p class="hero-subtitle">
-                Cung cấp thiết bị và máy móc chuyên dụng cho ngành xây dựng - 
-                Từ máy khoan, máy cưa đến thiết bị an toàn lao động và đo lường chính xác
+                Cung cấp đầy đủ thiết bị xây dựng chuyên nghiệp từ máy móc, dụng cụ đến trang thiết bị an toàn - 
+                Chất lượng đảm bảo, công nghệ hiện đại, hỗ trợ mọi công trình xây dựng
             </p>
         </div>
     </section>
@@ -492,59 +495,49 @@ try {
 
         <!-- Equipment Grid -->
         <?php if (!empty($equipment)): ?>
-            <div class="equipment-grid">
+            <div class="materials-grid">
                 <?php foreach ($equipment as $item): ?>
-                    <div class="equipment-card">
+                    <div class="material-card">
                         <?php if (!empty($item['classification'])): ?>
-                            <div class="equipment-category">
+                            <div class="material-category">
                                 <?php echo htmlspecialchars($item['classification']); ?>
                             </div>
                         <?php endif; ?>
                         
-                        <div class="equipment-header">
+                        <div class="material-header">
                             <?php if (!empty($item['featured_image'])): ?>
                                 <img src="<?php echo htmlspecialchars($item['featured_image']); ?>" 
                                      alt="<?php echo htmlspecialchars($item['name']); ?>" 
-                                     class="equipment-image">
+                                     class="material-image">
                             <?php else: ?>
-                                <div class="equipment-image" style="background: linear-gradient(135deg, #38bdf8 0%, #22d3ee 100%); display: flex; align-items: center; justify-content: center;">
+                                <div class="material-image" style="background: linear-gradient(135deg, #38bdf8 0%, #22d3ee 100%); display: flex; align-items: center; justify-content: center;">
                                     <i class="fas fa-tools" style="color: white; font-size: 3rem; opacity: 0.7;"></i>
                                 </div>
                             <?php endif; ?>
                         </div>
                         
-                        <div class="equipment-body">
-                            <h3 class="equipment-name"><?php echo htmlspecialchars($item['name']); ?></h3>
-                            <p class="equipment-description">
+                        <div class="material-body">
+                            <h3 class="material-name"><?php echo htmlspecialchars($item['name']); ?></h3>
+                            <p class="material-description">
                                 <?php echo htmlspecialchars(substr($item['description'] ?? 'Thiết bị xây dựng chuyên nghiệp', 0, 80)); ?>
                                 <?php if (strlen($item['description'] ?? '') > 80): ?>...<?php endif; ?>
                             </p>
                             
-                            <div class="equipment-details">
+                            <div class="material-details">
                                 <?php if ($item['brand']): ?>
-                                    <div class="equipment-detail">
+                                    <div class="material-detail">
                                         <i class="fas fa-industry"></i>
                                         <span><?php echo htmlspecialchars($item['brand']); ?></span>
-                                    </div>
-                                <?php endif; ?>
-                                
-                                <?php if ($item['price']): ?>
-                                    <div class="equipment-detail">
-                                        <i class="fas fa-tag"></i>
-                                        <span class="equipment-price"><?php echo number_format($item['price']); ?>đ</span>
                                     </div>
                                 <?php endif; ?>
                             </div>
                         </div>
                         
-                        <div class="equipment-footer">
-                            <a href="product.php?id=<?php echo $item['id']; ?>" class="view-equipment">
+                        <div class="material-footer">
+                            <a href="product-detail.php?id=<?php echo $item['id']; ?>" class="view-material">
                                 <span>Xem chi tiết</span>
                                 <i class="fas fa-arrow-right"></i>
                             </a>
-                            <span class="equipment-price">
-                                <?php echo date('d/m/Y', strtotime($item['created_at'])); ?>
-                            </span>
                         </div>
                     </div>
                 <?php endforeach; ?>
