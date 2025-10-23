@@ -18,15 +18,19 @@ $categories = $newsManager->getCategories();
 
 <style>
     :root {
-        --primary-color: #4da6ff; /* blue water tone */
-        --primary-600: #3d8ef0;
-        --secondary-color: #eef8ff;
-        --accent-color: #60a5fa;
+        --primary-color: #38bdf8; /* pastel sky blue */
+        --primary-600: #0ea5e9;
+        --secondary-color: #f0f9ff;
+        --accent-color: #22d3ee;
         --text-primary: #0f172a;
         --text-secondary: #475569;
-        --border-color: #dbeeff;
+        --border-color: #e0f2fe;
         --success-color: #10b981;
         --warning-color: #f59e0b;
+    }
+
+    body {
+        background: #f0f9ff;
     }
 
     .news-page {
@@ -38,14 +42,16 @@ $categories = $newsManager->getCategories();
 
     /* Hero Header */
     .news-hero {
-        background: linear-gradient(135deg, rgba(77,166,255,0.12) 0%, rgba(96,165,250,0.08) 100%);
+        background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
         border-radius: 20px;
         padding: 4rem 2rem;
         text-align: center;
-        color: white;
+        color: #0369a1;
         margin-bottom: 3rem;
         position: relative;
         overflow: hidden;
+        box-shadow: 0 10px 40px rgba(56, 189, 248, 0.2);
+        border: 2px solid #7dd3fc;
     }
 
     .news-hero::before {
@@ -55,24 +61,26 @@ $categories = $newsManager->getCategories();
         left: 0;
         right: 0;
         bottom: 0;
-        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="20" cy="80" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(56,189,248,0.15)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+        opacity: 0.5;
         pointer-events: none;
     }
 
     .news-hero h1 {
-        font-size: 2.8rem;
-        font-weight: 700;
+        font-size: 3rem;
+        font-weight: 800;
         margin-bottom: 1rem;
-        text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        color: #0284c7;
+        text-shadow: 0 2px 4px rgba(2, 132, 199, 0.1);
         position: relative;
         z-index: 1;
     }
 
     .news-hero .subtitle {
         font-size: 1.3rem;
-        opacity: 0.9;
-        font-weight: 300;
+        font-weight: 400;
         line-height: 1.6;
+        color: #0ea5e9;
         position: relative;
         z-index: 1;
     }
@@ -112,14 +120,14 @@ $categories = $newsManager->getCategories();
 
     .category-pill {
         padding: 0.75rem 1.5rem;
-        background: var(--secondary-color);
+        background: white;
         color: var(--text-secondary);
         border-radius: 50px;
         text-decoration: none;
         font-weight: 500;
         font-size: 0.9rem;
         transition: all 0.3s ease;
-        border: 2px solid transparent;
+        border: 2px solid #e0f2fe;
         position: relative;
         overflow: hidden;
     }
@@ -141,10 +149,11 @@ $categories = $newsManager->getCategories();
 
     .category-pill:hover,
     .category-pill.active {
-        background: var(--primary-color);
+        background: linear-gradient(135deg, #38bdf8 0%, #22d3ee 100%);
         color: white;
         transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
+        box-shadow: 0 8px 25px rgba(56, 189, 248, 0.35);
+        border-color: transparent;
     }
 
     .search-section h3 {
@@ -164,18 +173,18 @@ $categories = $newsManager->getCategories();
     .search-input {
         width: 100%;
         padding: 1rem 1rem 1rem 3rem;
-        border: 2px solid var(--border-color);
+        border: 2px solid #7dd3fc;
         border-radius: 12px;
         font-size: 1rem;
         transition: all 0.3s ease;
-        background: var(--secondary-color);
+        background: white;
     }
 
     .search-input:focus {
         outline: none;
         border-color: var(--primary-color);
         background: white;
-        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+        box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.12);
     }
 
     .search-icon {
@@ -222,7 +231,7 @@ $categories = $newsManager->getCategories();
 
     .article-image {
         height: 200px;
-        background: linear-gradient(45deg, #0d9488, #14b8a6);
+        background: linear-gradient(135deg, #38bdf8 0%, #22d3ee 100%);
         position: relative;
         overflow: hidden;
     }
@@ -249,7 +258,7 @@ $categories = $newsManager->getCategories();
     }
 
     .article-category {
-        background: var(--primary-color);
+        background: linear-gradient(135deg, #38bdf8 0%, #22d3ee 100%);
         color: white;
         padding: 0.4rem 1rem;
         border-radius: 20px;
@@ -257,6 +266,7 @@ $categories = $newsManager->getCategories();
         font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 0.5px;
+        box-shadow: 0 2px 8px rgba(56, 189, 248, 0.25);
     }
 
     .article-date {
@@ -297,18 +307,20 @@ $categories = $newsManager->getCategories();
         align-items: center;
         gap: 0.5rem;
         padding: 0.75rem 1.5rem;
-        background: var(--primary-color);
+        background: linear-gradient(135deg, #38bdf8 0%, #22d3ee 100%);
         color: white;
         text-decoration: none;
         border-radius: 10px;
         font-weight: 600;
         transition: all 0.3s ease;
         font-size: 0.9rem;
+        box-shadow: 0 2px 8px rgba(56, 189, 248, 0.25);
     }
 
     .read-more-btn:hover {
-        background: var(--accent-color);
+        background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
         transform: translateX(5px);
+        box-shadow: 0 4px 15px rgba(56, 189, 248, 0.35);
     }
 
     /* Sidebar */
@@ -352,13 +364,14 @@ $categories = $newsManager->getCategories();
         width: 60px;
         height: 60px;
         border-radius: 10px;
-        background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+        background: linear-gradient(135deg, #38bdf8 0%, #22d3ee 100%);
         display: flex;
         align-items: center;
         justify-content: center;
         color: white;
         font-size: 1.2rem;
         flex-shrink: 0;
+        box-shadow: 0 4px 10px rgba(56, 189, 248, 0.25);
     }
 
     .recent-content {
@@ -395,15 +408,17 @@ $categories = $newsManager->getCategories();
 
     .stat-item {
         text-align: center;
-        padding: 1rem;
-        background: var(--secondary-color);
+        padding: 1.5rem;
+        background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
         border-radius: 12px;
+        border: 1px solid #7dd3fc;
     }
 
     .stat-number {
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: var(--primary-color);
+        font-size: 2rem;
+        font-weight: 800;
+        color: #0284c7;
+        margin-bottom: 0.25rem;
     }
 
     .stat-label {

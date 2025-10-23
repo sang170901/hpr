@@ -258,22 +258,21 @@ try {
         }
         
         .supplier-header {
-            padding: 1.25rem 1rem 0.75rem;
-            background: linear-gradient(135deg, #f8fafc 0%, #eef8ff 100%);
+            padding: 0;
+            background: linear-gradient(135deg, #f8fafc 0%, #f0f9ff 100%);
             position: relative;
-            display:flex;
-            align-items:center;
-            justify-content:center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 200px;
+            overflow: hidden;
         }
         
         .supplier-logo {
-            width: 56px;
-            height: 56px;
-            border-radius: 12px;
+            width: 100%;
+            height: 100%;
             object-fit: cover;
             display: block;
-            border: 3px solid white;
-            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
         }
         
         .supplier-category {
@@ -528,9 +527,15 @@ try {
                         <?php endif; ?>
                         
                         <div class="supplier-header">
-                            <img src="<?php echo htmlspecialchars($supplier['logo'] ?: 'https://via.placeholder.com/80x80/667eea/ffffff?text=' . urlencode(substr($supplier['name'], 0, 2))); ?>" 
-                                 alt="<?php echo htmlspecialchars($supplier['name']); ?>" 
-                                 class="supplier-logo">
+                            <?php if (!empty($supplier['logo'])): ?>
+                                <img src="<?php echo htmlspecialchars($supplier['logo']); ?>" 
+                                     alt="<?php echo htmlspecialchars($supplier['name']); ?>" 
+                                     class="supplier-logo">
+                            <?php else: ?>
+                                <div class="supplier-logo" style="background: linear-gradient(135deg, #38bdf8 0%, #22d3ee 100%); display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-building" style="color: white; font-size: 3rem; opacity: 0.7;"></i>
+                                </div>
+                            <?php endif; ?>
                         </div>
                         
                         <div class="supplier-body">

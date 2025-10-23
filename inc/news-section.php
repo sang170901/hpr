@@ -26,10 +26,11 @@ try {
 ?>
 
 <style>
-/* News Section Styles */
+/* Modern News Section Styles */
 .news-section {
-    padding: 60px 20px;
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    padding: 80px 20px;
+    background: #ffffff;
+    position: relative;
 }
 
 .news-container {
@@ -40,75 +41,106 @@ try {
 
 .news-header {
     text-align: center;
-    margin-bottom: 50px;
+    margin-bottom: 60px;
+    position: relative;
+}
+
+.news-header-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 20px;
+    background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 30px rgba(56, 189, 248, 0.2);
+}
+
+.news-header-icon i {
+    font-size: 36px;
+    color: #38bdf8;
 }
 
 .news-header h2 {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: #2c3e50;
-    margin-bottom: 10px;
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin-bottom: 16px;
     position: relative;
     display: inline-block;
 }
 
-.news-header h2::after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80px;
-    height: 4px;
-    background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-    border-radius: 2px;
+.news-header p {
+    font-size: 1.2rem;
+    color: #64748b;
+    max-width: 600px;
+    margin: 0 auto;
 }
 
-/* News Carousel */
-.news-carousel-wrapper {
-    position: relative;
-    overflow: hidden;
-    margin-bottom: 40px;
-    padding: 0 70px; /* Khoảng cách cho nút to hơn */
-}
-
+/* Modern News Grid */
 .news-grid {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     gap: 30px;
-    transition: transform 0.5s ease;
-    width: fit-content;
-}
-
-.news-item {
-    flex: 0 0 calc(50% - 15px); /* Mỗi item chiếm 50% trừ gap */
-    min-width: 450px; /* Đảm bảo có kích thước tối thiểu */
-    max-width: 550px;
+    margin-bottom: 50px;
 }
 
 .news-item {
     background: white;
-    padding: 25px;
-    border-radius: 15px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
-    position: relative;
+    border-radius: 20px;
     overflow: hidden;
-    flex-shrink: 0;
-}
-
-.news-item::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 4px;
-    background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+    box-shadow: 0 8px 30px rgba(56, 189, 248, 0.1);
+    transition: all 0.3s ease;
+    border: 2px solid #f0f9ff;
+    display: flex;
+    flex-direction: column;
 }
 
 .news-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    transform: translateY(-10px);
+    box-shadow: 0 20px 60px rgba(56, 189, 248, 0.25);
+    border-color: #bae6fd;
+}
+
+.news-image {
+    width: 100%;
+    height: 220px;
+    background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.news-image::after {
+    content: '📰';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 4rem;
+    opacity: 0.3;
+}
+
+.news-category {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    background: linear-gradient(135deg, #38bdf8 0%, #22d3ee 100%);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+}
+
+.news-content {
+    padding: 28px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .news-item h3 {
@@ -118,57 +150,74 @@ try {
 }
 
 .news-item h3 a {
-    color: #2c3e50;
+    color: #1e293b;
     text-decoration: none;
     transition: color 0.3s ease;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
-.news-item h3 a:hover {
-    color: #3b82f6;
+.news-item:hover h3 a {
+    color: #38bdf8;
 }
 
 .news-date {
     font-size: 0.9rem;
-    color: #7f8c8d;
-    margin-bottom: 12px;
+    color: #94a3b8;
+    margin-bottom: 16px;
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 8px;
+    font-weight: 500;
 }
 
-.news-date::before {
-    content: '📅';
+.news-date i {
+    color: #38bdf8;
     font-size: 0.85rem;
 }
 
 .news-description {
     font-size: 1rem;
-    color: #555;
-    line-height: 1.6;
-    margin-bottom: 15px;
+    color: #64748b;
+    line-height: 1.7;
+    margin-bottom: 20px;
+    flex: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .news-read-more {
-    display: inline-block;
-    color: #3b82f6;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #38bdf8;
     font-weight: 600;
     text-decoration: none;
     transition: all 0.3s ease;
     font-size: 0.95rem;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    border-radius: 12px;
+    align-self: flex-start;
 }
 
 .news-read-more:hover {
-    color: #8b5cf6;
+    background: linear-gradient(135deg, #38bdf8 0%, #22d3ee 100%);
+    color: white;
     transform: translateX(5px);
+    box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
 }
 
-.news-read-more::after {
-    content: ' →';
+.news-read-more i {
     transition: transform 0.3s ease;
 }
 
-.news-read-more:hover::after {
-    transform: translateX(3px);
+.news-read-more:hover i {
+    transform: translateX(5px);
 }
 
 .news-more {
@@ -177,68 +226,49 @@ try {
 }
 
 .news-more-btn {
-    display: inline-block;
-    padding: 15px 40px;
-    background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 48px;
+    background: linear-gradient(135deg, #38bdf8 0%, #22d3ee 100%);
     color: white;
     text-decoration: none;
-    border-radius: 50px;
+    border-radius: 60px;
     font-weight: 700;
     font-size: 1.1rem;
     transition: all 0.3s ease;
-    box-shadow: 0 5px 20px rgba(59, 130, 246, 0.3);
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    box-shadow: 0 8px 25px rgba(56, 189, 248, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.news-more-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.5s;
+}
+
+.news-more-btn:hover::before {
+    left: 100%;
 }
 
 .news-more-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(59, 130, 246, 0.4);
-    background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(56, 189, 248, 0.4);
+    background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
 }
 
-/* News Navigation Buttons */
-.news-nav-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(255,255,255,0.85));
-    border: 2px solid rgba(59, 130, 246, 0.4);
-    color: #3b82f6;
-    width: 55px;
-    height: 55px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 24px;
-    font-weight: bold;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(15px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 100;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+.news-more-btn i {
+    transition: transform 0.3s ease;
 }
 
-.news-nav-btn:hover {
-    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-    color: white;
-    transform: translateY(-50%) scale(1.15);
-    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.5);
-    border-color: rgba(255, 255, 255, 0.5);
-}
-
-.news-nav-btn.disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
-}
-
-.news-prev {
-    left: 0;
-}
-
-.news-next {
-    right: 0;
+.news-more-btn:hover i {
+    transform: translateX(5px);
 }
 
 .news-empty {
@@ -258,71 +288,72 @@ try {
 
 /* Responsive Design */
 @media (max-width: 1024px) {
-    .news-item {
-        min-width: 350px;
-        max-width: 450px;
+    .news-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
     }
 }
 
 @media (max-width: 768px) {
     .news-section {
-        padding: 40px 15px;
+        padding: 60px 15px;
     }
     
     .news-header h2 {
-        font-size: 2rem;
+        font-size: 2.2rem;
     }
     
-    .news-carousel-wrapper {
-        padding: 0 50px;
-    }
-    
-    .news-item {
-        min-width: 100%;
-        max-width: 100%;
-        flex: 0 0 100%;
-        padding: 20px;
-    }
-    
-    .news-item h3 {
-        font-size: 1.1rem;
-    }
-    
-    .news-more-btn {
-        padding: 12px 30px;
+    .news-header p {
         font-size: 1rem;
     }
     
-    .news-carousel-wrapper {
-        padding: 0 55px;
+    .news-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
     }
     
-    .news-prev {
-        left: 0;
+    .news-content {
+        padding: 24px;
     }
     
-    .news-next {
-        right: 0;
+    .news-image {
+        height: 200px;
     }
     
-    .news-nav-btn {
-        width: 45px;
-        height: 45px;
-        font-size: 18px;
+    .news-item h3 {
+        font-size: 1.15rem;
+    }
+    
+    .news-more-btn {
+        padding: 15px 36px;
+        font-size: 1rem;
     }
 }
 
 @media (max-width: 480px) {
     .news-header h2 {
-        font-size: 1.6rem;
+        font-size: 1.8rem;
+    }
+    
+    .news-header-icon {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .news-header-icon i {
+        font-size: 28px;
     }
     
     .news-item h3 {
-        font-size: 1rem;
+        font-size: 1.05rem;
     }
     
     .news-description {
         font-size: 0.95rem;
+    }
+    
+    .news-content {
+        padding: 20px;
     }
 }
 
@@ -475,39 +506,53 @@ try {
 <section class="news-section">
     <div class="news-container">
         <div class="news-header">
+            <div class="news-header-icon">
+                <i class="fas fa-newspaper"></i>
+            </div>
             <h2>Bản tin VNMaterial</h2>
+            <p>Cập nhật tin tức mới nhất về vật liệu xây dựng, công nghệ và xu hướng thị trường</p>
         </div>
         
         <?php if (!empty($newsList)): ?>
-            <div class="news-carousel-wrapper">
-                <!-- Navigation Buttons -->
-                <button class="news-nav-btn news-prev" onclick="moveNewsCarousel(-1)">‹</button>
-                <button class="news-nav-btn news-next" onclick="moveNewsCarousel(1)">›</button>
-                
-                <div class="news-grid" id="newsGrid">
-                    <?php foreach ($newsList as $news): ?>
-                    <div class="news-item">
+            <div class="news-grid">
+                <?php foreach ($newsList as $news): ?>
+                <div class="news-item">
+                    <div class="news-image">
+                        <?php if (!empty($news['category'])): ?>
+                            <div class="news-category"><?php echo htmlspecialchars($news['category']); ?></div>
+                        <?php endif; ?>
+                    </div>
+                    
+                    <div class="news-content">
                         <h3>
                             <a href="article-detail.php?slug=<?php echo urlencode($news['slug']); ?>">
                                 <?php echo htmlspecialchars($news['title']); ?>
                             </a>
                         </h3>
+                        
                         <p class="news-date">
+                            <i class="far fa-calendar-alt"></i>
                             <?php echo date('d/m/Y', strtotime($news['published_date'])); ?>
                         </p>
+                        
                         <p class="news-description">
                             <?php echo htmlspecialchars($news['excerpt']); ?>
                         </p>
+                        
                         <a href="article-detail.php?slug=<?php echo urlencode($news['slug']); ?>" class="news-read-more">
-                            Đọc thêm
+                            <span>Đọc tiếp</span>
+                            <i class="fas fa-arrow-right"></i>
                         </a>
                     </div>
-                    <?php endforeach; ?>
                 </div>
+                <?php endforeach; ?>
             </div>
             
             <div class="news-more">
-                <a href="news-modern.php" class="news-more-btn">Xem tất cả tin tức</a>
+                <a href="news-modern.php" class="news-more-btn">
+                    <span>Xem tất cả tin tức</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
             </div>
         <?php else: ?>
             <div class="news-empty">
@@ -517,81 +562,3 @@ try {
     </div>
 </section>
 
-<script>
-// News Carousel JavaScript
-let currentNewsPage = 0;
-const itemsPerPage = 2; // Hiển thị 2 bài trên 1 hàng
-
-function moveNewsCarousel(direction) {
-    const newsGrid = document.getElementById('newsGrid');
-    const newsItems = newsGrid.querySelectorAll('.news-item');
-    const totalItems = newsItems.length;
-    const totalPages = Math.ceil(totalItems / itemsPerPage);
-    
-    // Update current page
-    currentNewsPage += direction;
-    
-    // Loop around
-    if (currentNewsPage < 0) {
-        currentNewsPage = totalPages - 1;
-    } else if (currentNewsPage >= totalPages) {
-        currentNewsPage = 0;
-    }
-    
-    // Calculate transform based on item width + gap
-    const firstItem = newsItems[0];
-    const itemWidth = firstItem.offsetWidth;
-    const gap = 30; // Gap between items
-    const offset = currentNewsPage * (itemWidth * 2 + gap * 2); // 2 items + gaps
-    
-    newsGrid.style.transform = `translateX(-${offset}px)`;
-    
-    // Update button states
-    updateNewsButtons(totalPages);
-}
-
-function updateNewsButtons(totalPages) {
-    const prevBtn = document.querySelector('.news-prev');
-    const nextBtn = document.querySelector('.news-next');
-    
-    // Luôn enable nút để có thể cuộn vòng
-    prevBtn.classList.remove('disabled');
-    nextBtn.classList.remove('disabled');
-}
-
-// Auto-scroll carousel
-let newsAutoScroll = setInterval(() => {
-    moveNewsCarousel(1);
-}, 6000); // 6 giây tự động chuyển
-
-// Pause on hover
-document.querySelector('.news-carousel-wrapper')?.addEventListener('mouseenter', () => {
-    clearInterval(newsAutoScroll);
-});
-
-// Resume on mouse leave
-document.querySelector('.news-carousel-wrapper')?.addEventListener('mouseleave', () => {
-    newsAutoScroll = setInterval(() => {
-        moveNewsCarousel(1);
-    }, 6000);
-});
-
-// Initialize
-document.addEventListener('DOMContentLoaded', () => {
-    const newsGrid = document.getElementById('newsGrid');
-    if (newsGrid) {
-        const totalItems = newsGrid.querySelectorAll('.news-item').length;
-        const totalPages = Math.ceil(totalItems / itemsPerPage);
-        updateNewsButtons(totalPages);
-    }
-});
-
-// Recalculate on window resize
-window.addEventListener('resize', () => {
-    currentNewsPage = 0;
-    const newsGrid = document.getElementById('newsGrid');
-    if (newsGrid) {
-        newsGrid.style.transform = 'translateX(0)';
-    }
-});
-</script>

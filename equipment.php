@@ -2,6 +2,9 @@
 // Set proper encoding for Vietnamese
 header('Content-Type: text/html; charset=UTF-8');
 include 'inc/header-new.php'; 
+?>
+
+<?php
 require_once 'inc/db_frontend.php';
 
 // Pagination and filter parameters
@@ -14,12 +17,12 @@ $category = isset($_GET['category']) ? trim($_GET['category']) : '';
 try {
     $pdo = getFrontendPDO();
     
-    // Build query with filters  
-    $whereClause = "WHERE category = 'thiết bị'";
+    // Build query with filters
+    $whereClause = "WHERE category = 'thiết bị' AND status = 1";
     $params = [];
     
     if (!empty($search)) {
-        $whereClause .= " AND (name LIKE :search OR description LIKE :search)";
+        $whereClause .= " AND (name LIKE :search OR description LIKE :search OR brand LIKE :search)";
         $params[':search'] = "%$search%";
     }
     
@@ -47,9 +50,9 @@ try {
     $equipment = $equipmentStmt->fetchAll(PDO::FETCH_ASSOC);
     
     // Get equipment categories for filter
-    $categoryQuery = "SELECT DISTINCT classification FROM products WHERE category = 'thiết bị' AND classification IS NOT NULL ORDER BY classification";
-    $categoryStmt = $pdo->query($categoryQuery);
-    $categories = $categoryStmt->fetchAll(PDO::FETCH_ASSOC);
+    $categoriesQuery = "SELECT DISTINCT classification FROM products WHERE category = 'thiết bị' AND classification IS NOT NULL ORDER BY classification";
+    $categoriesStmt = $pdo->query($categoriesQuery);
+    $categories = $categoriesStmt->fetchAll(PDO::FETCH_ASSOC);
     
 } catch (Exception $e) {
     $equipment = [];
@@ -60,576 +63,535 @@ try {
 }
 ?>
 
-<style>
-    .equipment-hero {
-        /* make background span full viewport width */
-        position: relative;
-        left: 50%;
-        right: 50%;
-        margin-left: -50vw;
-        margin-right: -50vw;
-        width: 100vw;
-        background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-        padding: 60px 0 40px;
-        overflow: hidden;
-        min-height: 200px; /* ensure visible hero area */
-    }
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thiết Bị Xây Dựng - VNMaterial</title>
     
-    .equipment-hero::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(21,101,192,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
-        opacity: 0.3;
-    }
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    .hero-content {
-        max-width: 1400px; /* wider content */
-        margin: 0 auto;
-        padding: 0 20px;
-        text-align: center;
-        position: relative;
-        z-index: 2;
-    }
-    
-    .hero-title {
-        font-size: 2.45rem;
-        font-weight: 800;
-        color: #1565c0;
-        margin-bottom: 1.05rem;
-        text-shadow: 0 2px 8px rgba(21,101,192,0.2);
-    }
-    
-    .hero-subtitle {
-        font-size: 0.91rem;
-        color: #1976d2;
-        max-width: 900px; /* allow wider subtitle */
-        margin: 0 auto 1.75rem;
-        font-weight: 400;
-    }
-    
-    .hero-search {
-        max-width: 600px;
-        margin: 0 auto;
-        position: relative;
-    }
-    
-    .search-form {
-        display: flex;
-        gap: 10px;
-        background: white;
-        border-radius: 50px;
-        padding: 8px;
-        box-shadow: 0 8px 32px rgba(21,101,192,0.15);
-        backdrop-filter: blur(10px);
-    }
-    
-    .search-input {
-        flex: 1;
-        border: none;
-        padding: 15px 20px;
-        border-radius: 50px;
-        font-size: 1rem;
-        background: transparent;
-        outline: none;
-    }
-    
-    .search-btn {
-        background: linear-gradient(135deg, #42a5f5 0%, #64b5f6 100%);
-        color: white;
-        border: none;
-        padding: 15px 30px;
-        border-radius: 50px;
-        cursor: pointer;
-        font-weight: 600;
-        transition: all 0.3s;
-        box-shadow: 0 4px 15px rgba(66,165,245,0.3);
-    }
-    
-    .search-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(66,165,245,0.4);
-    }
-
-    /* Main content container */
-    .main-content {
-        max-width: 1400px;
-        margin: 0 auto;
-        padding: 40px 20px;
-    }
-
-    /* Filter section */
-    .filter-section {
-        background: white;
-        border-radius: 20px;
-        padding: 30px;
-        margin-bottom: 30px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-    }
-
-    .filter-header {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin-bottom: 20px;
-        font-size: 1.2rem;
-        font-weight: 600;
-        color: #1565c0;
-    }
-
-    .filter-controls {
-        display: flex;
-        gap: 15px;
-        align-items: center;
-        flex-wrap: wrap;
-    }
-
-    .search-box, .category-filter {
-        flex: 1;
-        min-width: 200px;
-    }
-
-    .search-box input, .category-filter select {
-        width: 100%;
-        padding: 12px 15px;
-        border: 2px solid #e3f2fd;
-        border-radius: 12px;
-        font-size: 1rem;
-        transition: border-color 0.3s;
-    }
-
-    .search-box input:focus, .category-filter select:focus {
-        border-color: #42a5f5;
-        outline: none;
-    }
-
-    .filter-btn {
-        background: linear-gradient(135deg, #42a5f5 0%, #64b5f6 100%);
-        color: white;
-        border: none;
-        padding: 12px 25px;
-        border-radius: 12px;
-        cursor: pointer;
-        font-weight: 600;
-        transition: transform 0.2s;
-    }
-
-    .filter-btn:hover {
-        transform: translateY(-2px);
-    }
-
-    /* Results header */
-    .results-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 30px;
-        padding: 20px 0;
-    }
-
-    .results-count {
-        font-size: 1.1rem;
-        color: #64748b;
-    }
-
-    /* Equipment grid */
-    .equipment-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-        gap: 30px;
-        margin-bottom: 50px;
-    }
-
-    .equipment-card {
-        background: white;
-        border-radius: 20px;
-        overflow: hidden;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-        transition: all 0.3s ease;
-        border: 1px solid #f1f5f9;
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-    }
-
-    .equipment-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 12px 40px rgba(0,0,0,0.12);
-    }
-
-    .equipment-header {
-        position: relative;
-        height: 220px;
-        overflow: hidden;
-    }
-
-    .equipment-image {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.3s;
-    }
-
-    .equipment-card:hover .equipment-image {
-        transform: scale(1.05);
-    }
-
-    .equipment-category {
-        position: absolute;
-        top: 15px;
-        right: 15px;
-        background: rgba(66, 165, 245, 0.9);
-        color: white;
-        padding: 5px 12px;
-        border-radius: 20px;
-        font-size: 0.85rem;
-        font-weight: 500;
-    }
-
-    .equipment-body {
-        padding: 25px;
-        display: flex;
-        flex-direction: column;
-        flex-grow: 1;
-    }
-
-    .equipment-name {
-        font-size: 1.3rem;
-        font-weight: 600;
-        color: #1e293b;
-        margin-bottom: 12px;
-        line-height: 1.4;
-        min-height: 3.3rem; /* Fixed height for 2 lines */
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-    }
-
-    .equipment-description {
-        color: #64748b;
-        line-height: 1.6;
-        margin-bottom: 20px;
-        font-size: 0.95rem;
-        min-height: 4.8rem; /* Fixed height for 3 lines */
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        flex-grow: 1;
-    }
-
-    .equipment-details {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 15px;
-        margin-bottom: 25px;
-        min-height: 2.5rem; /* Fixed height for details */
-    }
-
-    .equipment-details > div {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 0.9rem;
-        color: #64748b;
-    }
-
-    .equipment-details i {
-        color: #42a5f5;
-        width: 16px;
-    }
-
-    .price {
-        font-weight: 600;
-        color: #059669;
-    }
-
-    .equipment-actions {
-        display: flex;
-        gap: 10px;
-        margin-top: auto; /* Push buttons to bottom */
-    }
-
-    .view-btn, .supplier-btn {
-        flex: 1;
-        padding: 12px;
-        border: none;
-        border-radius: 12px;
-        cursor: pointer;
-        font-weight: 500;
-        text-decoration: none;
-        text-align: center;
-        transition: all 0.2s;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 5px;
-    }
-
-    .view-btn {
-        background: linear-gradient(135deg, #42a5f5 0%, #64b5f6 100%);
-        color: white;
-    }
-
-    .supplier-btn {
-        background: #f8fafc;
-        color: #64748b;
-        border: 1px solid #e2e8f0;
-    }
-
-    .view-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(66,165,245,0.3);
-    }
-
-    .supplier-btn:hover {
-        background: #f1f5f9;
-        color: #42a5f5;
-    }
-
-    /* No results */
-    .no-results {
-        text-align: center;
-        padding: 80px 20px;
-        background: white;
-        border-radius: 20px;
-        margin: 40px 0;
-    }
-
-    .no-results i {
-        font-size: 4rem;
-        color: #e2e8f0;
-        margin-bottom: 20px;
-    }
-
-    .no-results h3 {
-        font-size: 1.5rem;
-        color: #64748b;
-        margin-bottom: 10px;
-    }
-
-    .no-results p {
-        color: #94a3b8;
-        max-width: 400px;
-        margin: 0 auto;
-    }
-
-    /* Pagination */
-    .pagination {
-        display: flex;
-        justify-content: center;
-        gap: 8px;
-        margin-top: 50px;
-    }
-
-    .page-link {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        padding: 12px 16px;
-        border: 1px solid #e2e8f0;
-        color: #64748b;
-        text-decoration: none;
-        border-radius: 10px;
-        transition: all 0.2s;
-        font-weight: 500;
-    }
-
-    .page-link:hover, .page-link.active {
-        background: #42a5f5;
-        color: white;
-        border-color: #42a5f5;
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f0f9ff;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+        
+        .equipment-hero {
+            position: relative;
+            left: 50%;
+            right: 50%;
+            margin-left: -50vw;
+            margin-right: -50vw;
+            width: 100vw;
+            background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+            padding: 120px 0 80px;
+            overflow: hidden;
+            min-height: 420px;
+        }
+        
+        .equipment-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(56,189,248,0.15)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.4;
+        }
+        
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+        
         .hero-title {
-            font-size: 1.75rem;
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #0284c7;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 2px 8px rgba(56,189,248,0.2);
+        }
+        
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: #0ea5e9;
+            max-width: 900px;
+            margin: 0 auto 2.5rem;
+            font-weight: 400;
+        }
+        
+        .search-section {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin: -60px auto 0;
+            max-width: 1000px;
+            position: relative;
+            z-index: 10;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+            margin-bottom: 4rem;
         }
         
         .search-form {
-            flex-direction: column;
-            padding: 15px;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
         }
         
-        .filter-controls {
-            flex-direction: column;
+        .search-input {
+            flex: 1;
+            min-width: 300px;
+            padding: 1rem 1.5rem;
+            border: 2px solid #7dd3fc;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background: #f8fafc;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #38bdf8;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(56,189,248,0.12);
+        }
+        
+        .category-select {
+            padding: 1rem 1.5rem;
+            border: 2px solid #e0f2fe;
+            border-radius: 12px;
+            font-size: 1rem;
+            background: #f8fafc;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .category-select:focus {
+            outline: none;
+            border-color: #38bdf8;
+            background: white;
+        }
+        
+        .search-btn {
+            background: linear-gradient(135deg, #38bdf8 0%, #22d3ee 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+            box-shadow: 0 2px 8px rgba(56, 189, 248, 0.25);
+        }
+
+        .search-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(56, 189, 248, 0.35);
+            background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+        }
+        
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 30px;
         }
         
         .equipment-grid {
-            grid-template-columns: 1fr;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.25rem;
+            margin-bottom: 2.5rem;
+            align-items: stretch;
+        }
+        
+        .equipment-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+            transition: all 0.28s ease;
+            position: relative;
+            border: 1px solid #f1f5f9;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .equipment-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+        
+        .equipment-header {
+            padding: 0;
+            background: linear-gradient(135deg, #f8fafc 0%, #f0f9ff 100%);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .equipment-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .equipment-category {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: linear-gradient(135deg, #38bdf8 0%, #22d3ee 100%);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 8px rgba(56, 189, 248, 0.25);
+        }
+        
+        .equipment-body {
+            padding: 1rem 1rem 1rem;
+            flex: 1 1 auto;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .equipment-name {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0.35rem;
+            text-align: center;
+            min-height: 2.5rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .equipment-description {
+            color: #64748b;
+            margin-bottom: 0.9rem;
+            line-height: 1.4;
+            text-align: center;
+            font-size: 0.88rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            min-height: 2.5rem;
         }
         
         .equipment-details {
-            grid-template-columns: 1fr;
+            margin-bottom: 0.8rem;
         }
         
-        .equipment-actions {
-            flex-direction: column;
+        .equipment-detail {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            color: #475569;
+            font-size: 0.9rem;
+            margin-bottom: 0.6rem;
         }
-    }
-</style>
+        
+        .equipment-detail i {
+            width: 16px;
+            color: #38bdf8;
+            font-size: 1rem;
+        }
+        
+        .equipment-footer {
+            padding: 0.75rem 1rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        
+        .view-equipment {
+            background: linear-gradient(135deg, #38bdf8 0%, #22d3ee 100%);
+            color: white;
+            padding: 0.55rem 0.9rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.82rem;
+            transition: all 0.22s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            box-shadow: 0 2px 8px rgba(56, 189, 248, 0.25);
+        }
 
-<!-- Hero Section -->
-<section class="equipment-hero">
-    <div class="hero-content">
-        <h1 class="hero-title">THIẾT BỊ</h1>
-        <p class="hero-subtitle">
-            Thiết bị xây dựng bao gồm máy móc, dụng cụ và thiết bị chuyên dụng phục vụ cho quá trình xây dựng.<br>
-            Từ máy khoan, máy cưa đến các thiết bị đo lường và an toàn lao động trong xây dựng.
-        </p>
-    </div>
-</section>
+        .view-equipment:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.35);
+            text-decoration: none;
+            color: white;
+            background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+        }
+        
+        .equipment-price {
+            color: #059669;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 3rem 0;
+        }
+        
+        .pagination a, .pagination span {
+            padding: 0.8rem 1.2rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .pagination a {
+            background: white;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .pagination a:hover {
+            background: #38bdf8;
+            color: white;
+            border-color: #38bdf8;
+        }
+        
+        .pagination .current {
+            background: #38bdf8;
+            color: white;
+            border: 1px solid #38bdf8;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #64748b;
+        }
+        
+        .no-results i {
+            font-size: 4rem;
+            color: #cbd5e1;
+            margin-bottom: 1.5rem;
+        }
+        
+        .no-results h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #475569;
+        }
+        
+        @media (max-width: 1200px) {
+            .equipment-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
 
-<!-- Main Content -->
-<div class="main-content">
-    <!-- Filter Section -->
-    <div class="filter-section">
-        <div class="filter-header">
-            <i class="fas fa-filter"></i> Bộ lọc tìm kiếm
+        @media (max-width: 900px) {
+            .equipment-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 560px) {
+            .equipment-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="equipment-hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Thiết Bị Xây Dựng</h1>
+            <p class="hero-subtitle">
+                Cung cấp thiết bị và máy móc chuyên dụng cho ngành xây dựng - 
+                Từ máy khoan, máy cưa đến thiết bị an toàn lao động và đo lường chính xác
+            </p>
         </div>
-        <form method="GET" action="">
-            <div class="filter-controls">
-                <div class="search-box">
-                    <input type="text" 
-                           name="search" 
-                           placeholder="Tìm kiếm thiết bị..." 
-                           value="<?php echo htmlspecialchars($search); ?>">
-                </div>
-                <div class="category-filter">
-                    <select name="category">
-                        <option value="">Tất cả danh mục</option>
-                        <?php foreach ($categories as $cat): ?>
-                            <option value="<?php echo htmlspecialchars($cat['classification']); ?>" 
-                                    <?php echo $category === $cat['classification'] ? 'selected' : ''; ?>>
-                                <?php echo htmlspecialchars($cat['classification']); ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-                <button type="submit" class="filter-btn">
-                    <i class="fas fa-search"></i> Lọc
+    </section>
+
+    <!-- Search Section -->
+    <div class="main-content">
+        <div class="search-section">
+            <form method="GET" class="search-form">
+                <input type="text" name="search" class="search-input" 
+                       placeholder="Tìm kiếm thiết bị (tên, mô tả, thương hiệu)..." 
+                       value="<?php echo htmlspecialchars($search); ?>">
+                
+                <select name="category" class="category-select">
+                    <option value="">Tất cả danh mục</option>
+                    <?php foreach ($categories as $cat): ?>
+                        <option value="<?php echo htmlspecialchars($cat['classification']); ?>" 
+                                <?php echo ($category == $cat['classification']) ? 'selected' : ''; ?>>
+                            <?php echo htmlspecialchars($cat['classification']); ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+                
+                <button type="submit" class="search-btn">
+                    <i class="fas fa-search"></i> Tìm kiếm
                 </button>
+            </form>
+        </div>
+
+        <!-- Results -->
+        <?php if (!empty($search) || !empty($category)): ?>
+            <div style="margin-bottom: 2rem; text-align: center;">
+                <h2 style="color: #1e293b; margin-bottom: 0.5rem;">
+                    Tìm thấy <?php echo $totalItems; ?> thiết bị
+                </h2>
+                <?php if ($search): ?>
+                    <p style="color: #64748b;">Từ khóa: "<?php echo htmlspecialchars($search); ?>"</p>
+                <?php endif; ?>
+                <?php if ($category): ?>
+                    <p style="color: #64748b;">Danh mục: <?php echo htmlspecialchars($category); ?></p>
+                <?php endif; ?>
             </div>
-        </form>
-    </div>
+        <?php endif; ?>
 
-    <!-- Results Header -->
-    <div class="results-header">
-        <div class="results-count">
-            Tìm thấy <?php echo number_format($totalItems); ?> thiết bị
-            <?php if (!empty($search) || !empty($category)): ?>
-                <span style="color: #42a5f5; font-weight: 600;">
-                    (<?php echo !empty($search) ? "tìm kiếm: '$search'" : ''; ?>
-                    <?php echo !empty($category) ? "danh mục: '$category'" : ''; ?>)
-                </span>
-            <?php endif; ?>
-        </div>
-    </div>
-
-    <?php if (empty($equipment)): ?>
-        <div class="no-results">
-            <i class="fas fa-tools"></i>
-            <h3>Không tìm thấy thiết bị nào</h3>
-            <p>Hãy thử thay đổi từ khóa tìm kiếm hoặc danh mục để có kết quả tốt hơn.</p>
-        </div>
-    <?php else: ?>
-        <div class="equipment-grid">
-            <?php foreach ($equipment as $item): ?>
-                <div class="equipment-card">
-                    <div class="equipment-header">
-                        <?php if (!empty($item['featured_image'])): ?>
-                            <img src="<?php echo htmlspecialchars($item['featured_image']); ?>" 
-                                 alt="<?php echo htmlspecialchars($item['name']); ?>" 
-                                 class="equipment-image">
-                        <?php else: ?>
-                            <div class="equipment-image" style="background: linear-gradient(135deg, #42a5f5 0%, #64b5f6 100%); display: flex; align-items: center; justify-content: center;">
-                                <i class="fas fa-tools" style="color: white; font-size: 1.5rem;"></i>
-                            </div>
-                        <?php endif; ?>
-                        
+        <!-- Equipment Grid -->
+        <?php if (!empty($equipment)): ?>
+            <div class="equipment-grid">
+                <?php foreach ($equipment as $item): ?>
+                    <div class="equipment-card">
                         <?php if (!empty($item['classification'])): ?>
                             <div class="equipment-category">
                                 <?php echo htmlspecialchars($item['classification']); ?>
                             </div>
                         <?php endif; ?>
-                    </div>
-                    
-                    <div class="equipment-body">
-                        <h3 class="equipment-name"><?php echo htmlspecialchars($item['name']); ?></h3>
                         
-                        <?php if (!empty($item['description'])): ?>
+                        <div class="equipment-header">
+                            <?php if (!empty($item['featured_image'])): ?>
+                                <img src="<?php echo htmlspecialchars($item['featured_image']); ?>" 
+                                     alt="<?php echo htmlspecialchars($item['name']); ?>" 
+                                     class="equipment-image">
+                            <?php else: ?>
+                                <div class="equipment-image" style="background: linear-gradient(135deg, #38bdf8 0%, #22d3ee 100%); display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-tools" style="color: white; font-size: 3rem; opacity: 0.7;"></i>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                        
+                        <div class="equipment-body">
+                            <h3 class="equipment-name"><?php echo htmlspecialchars($item['name']); ?></h3>
                             <p class="equipment-description">
-                                <?php echo htmlspecialchars(mb_substr($item['description'], 0, 120)) . (mb_strlen($item['description']) > 120 ? '...' : ''); ?>
+                                <?php echo htmlspecialchars(substr($item['description'] ?? 'Thiết bị xây dựng chuyên nghiệp', 0, 80)); ?>
+                                <?php if (strlen($item['description'] ?? '') > 80): ?>...<?php endif; ?>
                             </p>
-                        <?php endif; ?>
-                        
-                        <div class="equipment-details">
-                            <?php if (!empty($item['price'])): ?>
-                                <div class="price">
-                                    <i class="fas fa-tag"></i>
-                                    <?php echo number_format($item['price']); ?>đ
-                                </div>
-                            <?php endif; ?>
                             
-                            <?php if (!empty($item['brand'])): ?>
-                                <div class="brand">
-                                    <i class="fas fa-industry"></i>
-                                    <?php echo htmlspecialchars($item['brand']); ?>
-                                </div>
-                            <?php endif; ?>
+                            <div class="equipment-details">
+                                <?php if ($item['brand']): ?>
+                                    <div class="equipment-detail">
+                                        <i class="fas fa-industry"></i>
+                                        <span><?php echo htmlspecialchars($item['brand']); ?></span>
+                                    </div>
+                                <?php endif; ?>
+                                
+                                <?php if ($item['price']): ?>
+                                    <div class="equipment-detail">
+                                        <i class="fas fa-tag"></i>
+                                        <span class="equipment-price"><?php echo number_format($item['price']); ?>đ</span>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
                         </div>
                         
-                        <div class="equipment-actions">
-                            <a href="product.php?id=<?php echo $item['id']; ?>" class="view-btn">
-                                <i class="fas fa-eye"></i> Xem chi tiết
+                        <div class="equipment-footer">
+                            <a href="product.php?id=<?php echo $item['id']; ?>" class="view-equipment">
+                                <span>Xem chi tiết</span>
+                                <i class="fas fa-arrow-right"></i>
                             </a>
-                            <?php if (!empty($item['supplier_id'])): ?>
-                                <a href="suppliers.php?id=<?php echo $item['supplier_id']; ?>" class="supplier-btn">
-                                    <i class="fas fa-handshake"></i> Nhà cung cấp
-                                </a>
-                            <?php endif; ?>
+                            <span class="equipment-price">
+                                <?php echo date('d/m/Y', strtotime($item['created_at'])); ?>
+                            </span>
                         </div>
                     </div>
-                </div>
-            <?php endforeach; ?>
-        </div>
-    <?php endif; ?>
+                <?php endforeach; ?>
+            </div>
 
-    <!-- Pagination -->
-    <?php if ($totalPages > 1): ?>
-        <div class="pagination">
-            <?php if ($page > 1): ?>
-                <a href="?page=<?php echo $page - 1; ?><?php echo !empty($search) ? '&search=' . urlencode($search) : ''; ?><?php echo !empty($category) ? '&category=' . urlencode($category) : ''; ?>" 
-                   class="page-link">
-                    <i class="fas fa-chevron-left"></i> Trước
-                </a>
+            <!-- Pagination -->
+            <?php if ($totalPages > 1): ?>
+                <div class="pagination">
+                    <?php
+                    $baseUrl = '?';
+                    if ($search) $baseUrl .= 'search=' . urlencode($search) . '&';
+                    if ($category) $baseUrl .= 'category=' . urlencode($category) . '&';
+                    ?>
+                    
+                    <?php if ($page > 1): ?>
+                        <a href="<?php echo $baseUrl; ?>page=<?php echo $page - 1; ?>">
+                            <i class="fas fa-chevron-left"></i> Trước
+                        </a>
+                    <?php endif; ?>
+                    
+                    <?php for ($i = max(1, $page - 2); $i <= min($totalPages, $page + 2); $i++): ?>
+                        <?php if ($i === $page): ?>
+                            <span class="current"><?php echo $i; ?></span>
+                        <?php else: ?>
+                            <a href="<?php echo $baseUrl; ?>page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                        <?php endif; ?>
+                    <?php endfor; ?>
+                    
+                    <?php if ($page < $totalPages): ?>
+                        <a href="<?php echo $baseUrl; ?>page=<?php echo $page + 1; ?>">
+                            Sau <i class="fas fa-chevron-right"></i>
+                        </a>
+                    <?php endif; ?>
+                </div>
             <?php endif; ?>
-            
-            <?php
-            $startPage = max(1, $page - 2);
-            $endPage = min($totalPages, $page + 2);
-            
-            for ($i = $startPage; $i <= $endPage; $i++):
-            ?>
-                <a href="?page=<?php echo $i; ?><?php echo !empty($search) ? '&search=' . urlencode($search) : ''; ?><?php echo !empty($category) ? '&category=' . urlencode($category) : ''; ?>" 
-                   class="page-link <?php echo $i === $page ? 'active' : ''; ?>">
-                    <?php echo $i; ?>
+        <?php else: ?>
+            <div class="no-results">
+                <i class="fas fa-tools"></i>
+                <h3>Không tìm thấy thiết bị</h3>
+                <p>Thử thay đổi từ khóa tìm kiếm hoặc bộ lọc danh mục</p>
+                <a href="equipment.php" style="color: #38bdf8; text-decoration: none; font-weight: 600; margin-top: 1rem; display: inline-block;">
+                    ← Xem tất cả thiết bị
                 </a>
-            <?php endfor; ?>
-            
-            <?php if ($page < $totalPages): ?>
-                <a href="?page=<?php echo $page + 1; ?><?php echo !empty($search) ? '&search=' . urlencode($search) : ''; ?><?php echo !empty($category) ? '&category=' . urlencode($category) : ''; ?>" 
-                   class="page-link">
-                    Sau <i class="fas fa-chevron-right"></i>
-                </a>
-            <?php endif; ?>
-        </div>
-    <?php endif; ?>
-</div>
+            </div>
+        <?php endif; ?>
+    </div>
+</body>
+</html>
 
 <?php include 'inc/footer-new.php'; ?>

@@ -33,8 +33,8 @@ if (!defined('TRACKING_DISABLED')) {
             --primary-color: #3b82f6;
             --primary-dark: #2563eb;
             --primary-light: #60a5fa;
-            --accent-color: #8b5cf6;
-            --accent-dark: #7c3aed;
+            --accent-color: #38bdf8;
+            --accent-dark: #22d3ee;
             --text-primary: #1e293b;
             --text-secondary: #64748b;
             --text-hover: #0f172a;
@@ -45,8 +45,8 @@ if (!defined('TRACKING_DISABLED')) {
             --shadow-medium: 0 4px 6px rgba(0, 0, 0, 0.1);
             --shadow-strong: 0 10px 25px rgba(0, 0, 0, 0.15);
             --border-light: rgba(0, 0, 0, 0.08);
-            --gradient-primary: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-            --gradient-hover: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+            --gradient-primary: linear-gradient(135deg, #38bdf8 0%, #22d3ee 100%);
+            --gradient-hover: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 

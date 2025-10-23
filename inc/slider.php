@@ -204,7 +204,7 @@ $sliders = getActiveSliders();
 .slide-btn {
     display: inline-block;
     padding: 15px 35px;
-    background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+    background: linear-gradient(135deg, #38bdf8 0%, #22d3ee 100%);
     color: white;
     text-decoration: none;
     border-radius: 30px;

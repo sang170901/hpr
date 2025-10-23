@@ -87,7 +87,7 @@ $sliders = [
     margin: 0;
     border-radius: 0; /* Bỏ bo góc */
     box-shadow: 0 15px 60px rgba(0,0,0,0.15); /* Shadow giữ nguyên */
-    background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); /* Gradient giống màu header */
+    background: linear-gradient(135deg, #38bdf8 0%, #22d3ee 100%); /* Gradient màu xanh dương nhạt pastel */
 }
 
 .main-slider::before {

@@ -76,7 +76,7 @@ $relatedArticles = array_slice($relatedArticles, 0, 3);
 }
 
 .breadcrumb a:hover {
-    color: #8b5cf6;
+    color: #38bdf8;
 }
 
 .article-meta {
@@ -89,7 +89,7 @@ $relatedArticles = array_slice($relatedArticles, 0, 3);
 }
 
 .article-category {
-    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    background: linear-gradient(135deg, #38bdf8, #22d3ee);
     color: white;
     padding: 0.4rem 1rem;
     border-radius: 25px;
@@ -128,7 +128,7 @@ $relatedArticles = array_slice($relatedArticles, 0, 3);
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    background: linear-gradient(135deg, #38bdf8, #22d3ee);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -171,7 +171,7 @@ $relatedArticles = array_slice($relatedArticles, 0, 3);
     margin: 2.5rem 0 1rem;
     padding-bottom: 0.5rem;
     border-bottom: 3px solid transparent;
-    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    background: linear-gradient(135deg, #38bdf8, #22d3ee);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -242,7 +242,7 @@ $relatedArticles = array_slice($relatedArticles, 0, 3);
     left: 0;
     width: 4px;
     height: 100%;
-    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    background: linear-gradient(135deg, #38bdf8, #22d3ee);
     border-radius: 2px 0 0 2px;
 }
 
@@ -307,7 +307,7 @@ $relatedArticles = array_slice($relatedArticles, 0, 3);
 }
 
 .tag:hover {
-    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    background: linear-gradient(135deg, #38bdf8, #22d3ee);
     color: white;
     transform: translateY(-1px);
 }
@@ -710,9 +710,9 @@ $relatedArticles = array_slice($relatedArticles, 0, 3);
                     <?php 
                     // Different gradient colors for each card
                     $gradients = [
-                        'linear-gradient(45deg, #3b82f6, #8b5cf6)',
-                        'linear-gradient(45deg, #06b6d4, #3b82f6)', 
-                        'linear-gradient(45deg, #10b981, #06b6d4)'
+                        'linear-gradient(45deg, #38bdf8, #22d3ee)',
+                        'linear-gradient(45deg, #7dd3fc, #0ea5e9)', 
+                        'linear-gradient(45deg, #a5f3fc, #06b6d4)'
                     ];
                     $gradient = $gradients[$index % 3];
                     ?>

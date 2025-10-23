@@ -140,224 +140,640 @@ try {
         </div>
     </section>
 
-    <!-- Search Materials Section -->
-    <section class="search-section">
+    <!-- Modern Search Section -->
+    <section class="modern-search-section">
+        <div class="search-hero">
         <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Tìm kiếm vật tư</h2>
-                <div class="search-arrow">
-                    <i class="fas fa-arrow-right"></i>
+                <div class="search-hero-content">
+                    <div class="search-icon-main">
+                        <i class="fas fa-search"></i>
                 </div>
+                    <h2 class="search-hero-title">Tìm kiếm sản phẩm</h2>
+                    <p class="search-hero-subtitle">Khám phá hàng ngàn sản phẩm vật liệu xây dựng chất lượng cao</p>
+                    
+                    <!-- Modern Search Box -->
+                    <div class="modern-search-container">
+                        <form action="products.php" method="GET" class="modern-search-form">
+                            <div class="search-box-wrapper">
+                                <div class="search-icon-wrapper">
+                                    <i class="fas fa-search"></i>
             </div>
-            <p class="search-subtitle">hoặc bạn đang tìm kiếm....</p>
-            
-            <!-- Live Search Box -->
-            <div class="live-search-container">
-                <form action="products.php" method="GET" class="search-form-main">
-                    <div class="search-input-wrapper">
                         <input type="text" 
                                name="q" 
-                               id="liveSearchInput"
-                               placeholder="Nhập tên sản phẩm để tìm kiếm..." 
-                               class="live-search-input"
+                                       id="modernSearchInput"
+                                       placeholder="Nhập tên sản phẩm, danh mục hoặc thương hiệu..." 
+                                       class="modern-search-input"
                                autocomplete="off">
-                        <button type="submit" class="search-submit-btn">
-                            <i class="fas fa-search"></i>
+                                <button type="submit" class="modern-search-btn">
+                                    <span>Tìm kiếm</span>
+                                    <i class="fas fa-arrow-right"></i>
                         </button>
+                            </div>
+                            <div id="modernSearchResults" class="modern-search-results" style="display: none;"></div>
+                        </form>
                     </div>
-                    <div id="searchResults" class="search-results-dropdown" style="display: none;"></div>
-                </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Categories -->
+        <div class="container">
+            <div class="quick-categories">
+                <h3 class="quick-title">
+                    <i class="fas fa-layer-group"></i>
+                    Danh mục phổ biến
+                </h3>
+                <div class="categories-grid">
+                    <a href="materials.php" class="category-quick-card">
+                        <div class="category-icon">
+                            <i class="fas fa-boxes"></i>
+                        </div>
+                        <div class="category-info">
+                            <h4>Vật Liệu</h4>
+                            <p>Gỗ, thép, bê tông, gạch...</p>
+                        </div>
+                        <div class="category-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+
+                    <a href="equipment.php" class="category-quick-card">
+                        <div class="category-icon">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                        <div class="category-info">
+                            <h4>Thiết Bị</h4>
+                            <p>Máy móc, dụng cụ thi công...</p>
+                        </div>
+                        <div class="category-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+
+                    <a href="landscape.php" class="category-quick-card">
+                        <div class="category-icon">
+                            <i class="fas fa-seedling"></i>
+                        </div>
+                        <div class="category-info">
+                            <h4>Cảnh Quan</h4>
+                            <p>Cây xanh, đá tự nhiên...</p>
+                        </div>
+                        <div class="category-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+
+                    <a href="technology.php" class="category-quick-card">
+                        <div class="category-icon">
+                            <i class="fas fa-microchip"></i>
+                        </div>
+                        <div class="category-info">
+                            <h4>Công Nghệ</h4>
+                            <p>Giải pháp xây dựng hiện đại...</p>
+                        </div>
+                        <div class="category-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                </div>
             </div>
             
-            <!-- Popular Search Tags -->
-            <?php
-            try {
-                $pdo = getPDO();
-                // Lấy danh sách sản phẩm phổ biến
-                $stmt = $pdo->query("SELECT DISTINCT name, category FROM products ORDER BY name LIMIT 8");
-                $popularProducts = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            } catch (Exception $e) {
-                $popularProducts = [];
-            }
-            ?>
-            
-            <div class="search-tags">
-                <?php if (!empty($popularProducts)): ?>
-                    <?php foreach ($popularProducts as $product): ?>
-                        <a href="products.php?q=<?php echo urlencode($product['name']); ?>" class="search-tag">
-                            <?php echo strtoupper(substr($product['name'], 0, 15)) . (strlen($product['name']) > 15 ? '...' : ''); ?>
-                        </a>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <a href="products.php?category=vật liệu" class="search-tag">VẬT LIỆU</a>
-                    <a href="products.php?category=thiết bị" class="search-tag">THIẾT BỊ</a>
-                    <a href="products.php?category=công nghệ" class="search-tag">CÔNG NGHỆ</a>
-                    <a href="products.php?category=cảnh quan" class="search-tag">CẢNH QUAN</a>
-                <?php endif; ?>
-            </div>
-            
-            <div class="search-links">
-                <a href="suppliers.php" class="search-link">
-                    <span>Nhà cung cấp</span>
-                    <span><?php echo number_format($totalSuppliers); ?> đơn vị cung cấp</span>
+            <!-- Quick Links -->
+            <div class="search-quick-links">
+                <a href="suppliers.php" class="quick-link-card">
+                    <div class="quick-link-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <div class="quick-link-content">
+                        <h4>Nhà cung cấp</h4>
+                        <p><?php echo number_format($totalSuppliers); ?> đơn vị uy tín</p>
+                    </div>
+                    <div class="quick-link-badge"><?php echo $totalSuppliers; ?></div>
                 </a>
-                <a href="products.php" class="search-link">
-                    <span>Danh mục sản phẩm</span>
-                    <span><?php echo number_format($totalCategories); ?> danh mục - <?php echo number_format($totalProducts); ?> sản phẩm</span>
+
+                <a href="products.php" class="quick-link-card">
+                    <div class="quick-link-icon">
+                        <i class="fas fa-box-open"></i>
+                    </div>
+                    <div class="quick-link-content">
+                        <h4>Sản phẩm</h4>
+                        <p><?php echo number_format($totalProducts); ?> sản phẩm đa dạng</p>
+                    </div>
+                    <div class="quick-link-badge"><?php echo $totalProducts; ?></div>
                 </a>
             </div>
         </div>
     </section>
     
     <style>
-    .live-search-container {
-        max-width: 600px;
-        margin: 20px auto;
-        position: relative;
+    /* Modern Search Section */
+    .modern-search-section {
+        padding: 0;
+        background: #f0f9ff;
     }
-    
-    .search-form-main {
+
+    .search-hero {
+        background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+        padding: 80px 0;
         position: relative;
-    }
-    
-    .search-input-wrapper {
-        display: flex;
-        border: 2px solid #e2e8f0;
-        border-radius: 50px;
         overflow: hidden;
+    }
+
+    .search-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(56,189,248,0.15)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+        opacity: 0.5;
+    }
+
+    .search-hero-content {
+        text-align: center;
+        position: relative;
+        z-index: 2;
+    }
+
+    .search-icon-main {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 24px;
+        background: linear-gradient(135deg, #38bdf8 0%, #22d3ee 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 10px 30px rgba(56, 189, 248, 0.3);
+        animation: floatIcon 3s ease-in-out infinite;
+    }
+
+    .search-icon-main i {
+        font-size: 32px;
+        color: white;
+    }
+
+    @keyframes floatIcon {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+    }
+
+    .search-hero-title {
+        font-size: 3rem;
+        font-weight: 800;
+        color: #0284c7;
+        margin-bottom: 16px;
+        text-shadow: 0 2px 4px rgba(2, 132, 199, 0.1);
+    }
+
+    .search-hero-subtitle {
+        font-size: 1.2rem;
+        color: #0ea5e9;
+        margin-bottom: 40px;
+        font-weight: 400;
+    }
+
+    /* Modern Search Box */
+    .modern-search-container {
+        max-width: 800px;
+        margin: 0 auto;
+        position: relative;
+    }
+    
+    .modern-search-form {
+        position: relative;
+    }
+    
+    .search-box-wrapper {
+        display: flex;
+        align-items: center;
         background: white;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        border-radius: 60px;
+        padding: 8px;
+        box-shadow: 0 20px 60px rgba(56, 189, 248, 0.2);
+        border: 3px solid white;
         transition: all 0.3s ease;
     }
     
-    .search-input-wrapper:focus-within {
-        border-color: #3b82f6;
-        box-shadow: 0 4px 20px rgba(59, 130, 246, 0.2);
+    .search-box-wrapper:focus-within {
+        box-shadow: 0 25px 80px rgba(56, 189, 248, 0.35);
+        transform: translateY(-2px);
     }
-    
-    .live-search-input {
+
+    .search-icon-wrapper {
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #38bdf8;
+        font-size: 20px;
+    }
+
+    .modern-search-input {
         flex: 1;
-        padding: 15px 20px;
         border: none;
         outline: none;
-        font-size: 16px;
+        font-size: 18px;
+        padding: 12px 20px;
         background: transparent;
+        color: #1e293b;
     }
-    
-    .search-submit-btn {
-        padding: 15px 25px;
-        background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-        border: none;
+
+    .modern-search-input::placeholder {
+        color: #94a3b8;
+    }
+
+    .modern-search-btn {
+        background: linear-gradient(135deg, #38bdf8 0%, #22d3ee 100%);
         color: white;
+        border: none;
+        padding: 16px 36px;
+        border-radius: 50px;
+        font-size: 16px;
+        font-weight: 600;
         cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
+    }
+
+    .modern-search-btn:hover {
+        background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+        box-shadow: 0 6px 25px rgba(56, 189, 248, 0.4);
+        transform: translateX(5px);
+    }
+
+    .modern-search-btn i {
+        transition: transform 0.3s ease;
+    }
+
+    .modern-search-btn:hover i {
+        transform: translateX(5px);
+    }
+
+    /* Quick Categories */
+    .quick-categories {
+        padding: 60px 0;
+    }
+
+    .quick-title {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #1e293b;
+        text-align: center;
+        margin-bottom: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+    }
+
+    .quick-title i {
+        color: #38bdf8;
+        font-size: 1.6rem;
+    }
+
+    .categories-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 24px;
+        margin-bottom: 40px;
+    }
+
+    .category-quick-card {
+        background: white;
+        border-radius: 20px;
+        padding: 32px 24px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        border: 2px solid #e0f2fe;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .category-quick-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(135deg, #38bdf8 0%, #22d3ee 100%);
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+    }
+
+    .category-quick-card:hover::before {
+        transform: scaleX(1);
+    }
+
+    .category-quick-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 60px rgba(56, 189, 248, 0.2);
+        border-color: #38bdf8;
+    }
+
+    .category-icon {
+        width: 70px;
+        height: 70px;
+        background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
         transition: all 0.3s ease;
     }
-    
-    .search-submit-btn:hover {
-        background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+
+    .category-icon i {
+        font-size: 32px;
+        color: #38bdf8;
+        transition: all 0.3s ease;
+    }
+
+    .category-quick-card:hover .category-icon {
+        background: linear-gradient(135deg, #38bdf8 0%, #22d3ee 100%);
+        transform: scale(1.1) rotate(-5deg);
+    }
+
+    .category-quick-card:hover .category-icon i {
+        color: white;
+    }
+
+    .category-info h4 {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 8px;
+        transition: color 0.3s ease;
+    }
+
+    .category-info p {
+        font-size: 0.95rem;
+        color: #64748b;
+        margin: 0;
+    }
+
+    .category-arrow {
+        margin-top: 16px;
+        color: #38bdf8;
+        font-size: 18px;
+        opacity: 0;
+        transform: translateX(-10px);
+        transition: all 0.3s ease;
+    }
+
+    .category-quick-card:hover .category-arrow {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    .category-quick-card:hover .category-info h4 {
+        color: #38bdf8;
+    }
+
+    /* Quick Links */
+    .search-quick-links {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+        padding-bottom: 60px;
+    }
+
+    .quick-link-card {
+        background: white;
+        border-radius: 20px;
+        padding: 32px;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        transition: all 0.3s ease;
+        border: 2px solid #e0f2fe;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .quick-link-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 4px;
+        background: linear-gradient(135deg, #38bdf8 0%, #22d3ee 100%);
+        transform: scaleY(0);
+        transition: transform 0.3s ease;
+    }
+
+    .quick-link-card:hover::before {
+        transform: scaleY(1);
+    }
+
+    .quick-link-card:hover {
+        transform: translateX(10px);
+        box-shadow: 0 15px 40px rgba(56, 189, 248, 0.15);
+        border-color: #38bdf8;
+    }
+
+    .quick-link-icon {
+        width: 70px;
+        height: 70px;
+        background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        transition: all 0.3s ease;
+    }
+
+    .quick-link-icon i {
+        font-size: 28px;
+        color: #38bdf8;
+        transition: all 0.3s ease;
+    }
+
+    .quick-link-card:hover .quick-link-icon {
+        background: linear-gradient(135deg, #38bdf8 0%, #22d3ee 100%);
+        transform: scale(1.1);
+    }
+
+    .quick-link-card:hover .quick-link-icon i {
+        color: white;
+    }
+
+    .quick-link-content {
+        flex: 1;
+    }
+
+    .quick-link-content h4 {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 6px;
+        transition: color 0.3s ease;
     }
     
-    .search-results-dropdown {
+    .quick-link-content p {
+        font-size: 1rem;
+        color: #64748b;
+        margin: 0;
+    }
+
+    .quick-link-card:hover .quick-link-content h4 {
+        color: #38bdf8;
+    }
+
+    .quick-link-badge {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        font-weight: 800;
+        color: #38bdf8;
+        transition: all 0.3s ease;
+    }
+
+    .quick-link-card:hover .quick-link-badge {
+        background: linear-gradient(135deg, #38bdf8 0%, #22d3ee 100%);
+        color: white;
+        transform: scale(1.15);
+    }
+
+    /* Search Results */
+    .modern-search-results {
         position: absolute;
-        top: 100%;
+        top: calc(100% + 10px);
         left: 0;
         right: 0;
         background: white;
-        border: 1px solid #e2e8f0;
-        border-radius: 10px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.1);
         z-index: 1000;
-        max-height: 300px;
+        max-height: 400px;
         overflow-y: auto;
-        margin-top: 5px;
+        border: 2px solid #e0f2fe;
     }
-    
-    .search-result-item {
-        padding: 12px 20px;
-        border-bottom: 1px solid #f1f5f9;
-        cursor: pointer;
-        transition: background 0.2s ease;
-        display: flex;
-        align-items: center;
-        gap: 10px;
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+        .categories-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
     }
-    
-    .search-result-item:hover {
-        background: #f8fafc;
-    }
-    
-    .search-result-item:last-child {
-        border-bottom: none;
-    }
-    
-    .result-name {
-        font-weight: 500;
-        color: #1e293b;
-    }
-    
-    .result-category {
-        font-size: 12px;
-        color: #64748b;
-        background: #f1f5f9;
-        padding: 2px 8px;
-        border-radius: 10px;
+
+    @media (max-width: 768px) {
+        .search-hero-title {
+            font-size: 2rem;
+        }
+
+        .categories-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .search-quick-links {
+            grid-template-columns: 1fr;
+        }
+
+        .modern-search-btn span {
+            display: none;
+        }
+
+        .search-box-wrapper {
+            padding: 6px;
+        }
+
+        .modern-search-input {
+            font-size: 16px;
+        }
     }
     </style>
     
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const searchInput = document.getElementById('liveSearchInput');
-        const searchResults = document.getElementById('searchResults');
-        let searchTimeout;
+        const searchInput = document.getElementById('modernSearchInput');
+        const searchResults = document.getElementById('modernSearchResults');
         
-        searchInput.addEventListener('input', function() {
-            const query = this.value.trim();
+        if (searchInput && searchResults) {
+            let searchTimeout;
             
-            clearTimeout(searchTimeout);
-            
-            if (query.length < 2) {
-                searchResults.style.display = 'none';
-                return;
-            }
-            
-            searchTimeout = setTimeout(() => {
-                fetch(`search_ajax.php?q=${encodeURIComponent(query)}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        displayResults(data);
-                    })
-                    .catch(error => {
-                        console.error('Search error:', error);
-                    });
-            }, 300);
-        });
-        
-        function displayResults(results) {
-            if (results.length === 0) {
-                searchResults.style.display = 'none';
-                return;
-            }
-            
-            let html = '';
-            results.forEach(item => {
-                html += `
-                    <div class="search-result-item" onclick="window.location.href='product.php?id=${item.id}'">
-                        <div class="result-name">${item.name}</div>
-                        <div class="result-category">${item.category || 'Khác'}</div>
-                    </div>
-                `;
+            searchInput.addEventListener('input', function() {
+                const query = this.value.trim();
+                
+                clearTimeout(searchTimeout);
+                
+                if (query.length < 2) {
+                    searchResults.style.display = 'none';
+                    return;
+                }
+                
+                searchTimeout = setTimeout(() => {
+                    fetch(`search_ajax.php?q=${encodeURIComponent(query)}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            displayResults(data);
+                        })
+                        .catch(error => {
+                            console.error('Search error:', error);
+                        });
+                }, 300);
             });
             
-            searchResults.innerHTML = html;
-            searchResults.style.display = 'block';
-        }
-        
-        // Hide results when clicking outside
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('.live-search-container')) {
-                searchResults.style.display = 'none';
+            function displayResults(results) {
+                if (results.length === 0) {
+                    searchResults.style.display = 'none';
+                    return;
+                }
+                
+                let html = '<div style="padding: 12px 20px; background: #f0f9ff; border-bottom: 2px solid #e0f2fe;"><strong style="color: #0284c7;">Kết quả tìm kiếm</strong></div>';
+                results.slice(0, 5).forEach(item => {
+                    html += `
+                        <div style="padding: 16px 20px; border-bottom: 1px solid #f1f5f9; cursor: pointer; transition: background 0.2s; display: flex; align-items: center; gap: 12px;" 
+                             onmouseover="this.style.background='#f8fafc'" 
+                             onmouseout="this.style.background='white'"
+                             onclick="window.location.href='product.php?id=${item.id}'">
+                            <i class="fas fa-box" style="color: #38bdf8; font-size: 18px;"></i>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600; color: #1e293b; margin-bottom: 4px;">${item.name}</div>
+                                <div style="font-size: 12px; color: #64748b;">${item.category || 'Sản phẩm'}</div>
+                            </div>
+                            <i class="fas fa-arrow-right" style="color: #38bdf8; font-size: 14px;"></i>
+                        </div>
+                    `;
+                });
+                html += `<div style="padding: 12px 20px; text-align: center; background: #f8fafc;"><a href="products.php?q=${encodeURIComponent(searchInput.value)}" style="color: #38bdf8; text-decoration: none; font-weight: 600;">Xem tất cả kết quả <i class="fas fa-arrow-right"></i></a></div>`;
+                
+                searchResults.innerHTML = html;
+                searchResults.style.display = 'block';
             }
-        });
+            
+            // Hide results when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.modern-search-container')) {
+                    searchResults.style.display = 'none';
+                }
+            });
+
+            // Hide results when pressing Escape
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    searchResults.style.display = 'none';
+                }
+            });
+        }
     });
     </script>
 

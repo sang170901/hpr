@@ -56,4 +56,5 @@
       <div style="display:flex;gap:12px;align-items:center;justify-content:center">
         <div style="font-weight:700;color:#1f2937;font-size:18px"></div>
       </div>
+    </div>
     <div class="main-content">

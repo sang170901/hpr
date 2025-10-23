@@ -69,6 +69,25 @@ if ($action === 'toggle' && $id) {
     }
 }
 
+// Get supplier data for AJAX (JSON)
+if ($action === 'get' && $id) {
+    header('Content-Type: application/json');
+    try {
+        $stmt = $pdo->prepare('SELECT * FROM suppliers WHERE id = ?');
+        $stmt->execute([$id]);
+        $supplier = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if ($supplier) {
+            echo json_encode(['success' => true, 'supplier' => $supplier]);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Không tìm thấy nhà cung cấp']);
+        }
+    } catch (PDOException $e) {
+        echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+    }
+    exit;
+}
+
 require __DIR__ . '/inc/header.php';
 
 // Show flash from redirect
@@ -177,7 +196,7 @@ if (!empty($params)) {
                 <td><?php echo ($s['status'] ?? 1) ? 'Hoạt động' : 'Không hoạt động' ?> <a class="small-btn" href="suppliers.php?action=toggle&id=<?php echo $s['id'] ?>">Bật/Tắt</a></td>
                 <td><?php echo $s['created_at'] ?? '' ?></td>
                 <td class="btn-row">
-                    <a class="small-btn" href="suppliers.php?action=edit&id=<?php echo $s['id'] ?>">Sửa</a>
+                    <button class="small-btn" onclick="openEditModal(<?php echo $s['id'] ?>)">Sửa</button>
                     <a class="small-btn warn" href="suppliers.php?action=delete&id=<?php echo $s['id'] ?>" onclick="return confirm('Xóa nhà cung cấp?')">Xóa</a>
                 </td>
             </tr>
@@ -186,53 +205,192 @@ if (!empty($params)) {
     </table>
 </div>
 
-<?php if ($action === 'add' || $action === 'edit'): ?>
+<?php if ($action === 'add'): ?>
 <div class="card">
-    <h3 style="margin-top:0"><?php echo $action === 'edit' ? 'Sửa nhà cung cấp' : 'Thêm nhà cung cấp' ?></h3>
+    <h3 style="margin-top:0">Thêm nhà cung cấp</h3>
     <?php if (!empty($flash['message']) && $flash['type'] === 'error'): ?>
         <div class="flash error"><?php echo htmlspecialchars($flash['message']) ?></div>
     <?php endif; ?>
     <form method="post">
         <label>Tên
-            <input type="text" name="name" required value="<?php echo isset($supplier['name']) ? htmlspecialchars($supplier['name']) : '' ?>">
+            <input type="text" name="name" required value="">
         </label>
         <label>Slug
-            <input type="text" name="slug" value="<?php echo isset($supplier['slug']) ? htmlspecialchars($supplier['slug']) : '' ?>">
+            <input type="text" name="slug" value="">
         </label>
         <label>Email
-            <input type="email" name="email" value="<?php echo isset($supplier['email']) ? htmlspecialchars($supplier['email']) : '' ?>">
+            <input type="email" name="email" value="">
         </label>
         <label>Điện thoại
-            <input type="text" name="phone" value="<?php echo isset($supplier['phone']) ? htmlspecialchars($supplier['phone']) : '' ?>">
+            <input type="text" name="phone" value="">
         </label>
         <label>Địa chỉ
-            <input type="text" name="address" value="<?php echo isset($supplier['address']) ? htmlspecialchars($supplier['address']) : '' ?>">
+            <input type="text" name="address" value="">
         </label>
         <label>Logo (URL)
-            <input type="text" name="logo" value="<?php echo isset($supplier['logo']) ? htmlspecialchars($supplier['logo']) : '' ?>">
+            <input type="text" name="logo" value="">
         </label>
         <label>Mô tả
-            <textarea name="description"><?php echo isset($supplier['description']) ? htmlspecialchars($supplier['description']) : '' ?></textarea>
+            <textarea name="description"></textarea>
         </label>
         <label>Danh mục nhà cung cấp
             <select name="category_id" class="form-control">
                 <option value="">-- Chọn danh mục --</option>
                 <?php foreach ($supplierCategories as $cat): ?>
-                    <option value="<?php echo $cat['id'] ?>" <?php echo (isset($supplier['category_id']) && $supplier['category_id'] == $cat['id']) ? 'selected' : '' ?>>
+                    <option value="<?php echo $cat['id'] ?>">
                         <?php echo htmlspecialchars($cat['name']) ?>
                     </option>
                 <?php endforeach; ?>
             </select>
         </label>
         <label>
-            <input type="checkbox" name="status" <?php echo (isset($supplier['status']) && $supplier['status']) ? 'checked' : '' ?>> Hoạt động
+            <input type="checkbox" name="status"> Hoạt động
         </label>
         <div style="margin-top:12px">
-            <button class="primary" type="submit" name="save_supplier">Save</button>
-            <a class="small-btn" href="suppliers.php" style="margin-left:12px">Cancel</a>
+            <button class="primary" type="submit" name="save_supplier">Lưu</button>
+            <a class="small-btn" href="suppliers.php" style="margin-left:12px">Hủy</a>
         </div>
     </form>
 </div>
 <?php endif; ?>
+
+<!-- Modal Sửa Nhà Cung Cấp -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 style="margin:0">Sửa Nhà Cung Cấp</h3>
+            <span class="modal-close" onclick="closeEditModal()">&times;</span>
+        </div>
+        <div class="modal-body">
+            <form method="post" id="editSupplierForm" action="suppliers.php?action=edit&id=">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+                    <div>
+                        <label>Tên <span style="color:red">*</span>
+                            <input type="text" name="name" id="edit_name" required style="width:100%">
+                        </label>
+                    </div>
+                    <div>
+                        <label>Slug
+                            <input type="text" name="slug" id="edit_slug" style="width:100%">
+                        </label>
+                    </div>
+                </div>
+
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px">
+                    <div>
+                        <label>Email
+                            <input type="email" name="email" id="edit_email" style="width:100%">
+                        </label>
+                    </div>
+                    <div>
+                        <label>Điện thoại
+                            <input type="text" name="phone" id="edit_phone" style="width:100%">
+                        </label>
+                    </div>
+                </div>
+
+                <div style="margin-top:16px">
+                    <label>Địa chỉ
+                        <input type="text" name="address" id="edit_address" style="width:100%">
+                    </label>
+                </div>
+
+                <div style="margin-top:16px">
+                    <label>Logo (URL)
+                        <input type="text" name="logo" id="edit_logo" style="width:100%">
+                    </label>
+                </div>
+
+                <div style="margin-top:16px">
+                    <label>Mô tả
+                        <textarea name="description" id="edit_description" rows="4" style="width:100%"></textarea>
+                    </label>
+                </div>
+
+                <div style="margin-top:16px">
+                    <label>Danh mục nhà cung cấp
+                        <select name="category_id" id="edit_category_id" style="width:100%">
+                            <option value="">-- Chọn danh mục --</option>
+                            <?php foreach ($supplierCategories as $cat): ?>
+                                <option value="<?php echo $cat['id'] ?>">
+                                    <?php echo htmlspecialchars($cat['name']) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </label>
+                </div>
+
+                <div style="margin-top:16px">
+                    <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+                        <input type="checkbox" name="status" id="edit_status" value="1">
+                        <span>Hoạt động</span>
+                    </label>
+                </div>
+
+                <div style="margin-top:24px;display:flex;gap:12px;justify-content:flex-end">
+                    <button type="button" class="small-btn" onclick="closeEditModal()">Hủy</button>
+                    <button type="submit" class="small-btn primary" name="save_supplier">💾 Lưu thay đổi</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function openEditModal(supplierId) {
+    // Show modal
+    document.getElementById('editModal').style.display = 'block';
+    document.body.style.overflow = 'hidden';
+    
+    // Set form action
+    document.getElementById('editSupplierForm').action = 'suppliers.php?action=edit&id=' + supplierId;
+    
+    // Fetch supplier data
+    fetch('suppliers.php?action=get&id=' + supplierId)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const s = data.supplier;
+                document.getElementById('edit_name').value = s.name || '';
+                document.getElementById('edit_slug').value = s.slug || '';
+                document.getElementById('edit_email').value = s.email || '';
+                document.getElementById('edit_phone').value = s.phone || '';
+                document.getElementById('edit_address').value = s.address || '';
+                document.getElementById('edit_logo').value = s.logo || '';
+                document.getElementById('edit_description').value = s.description || '';
+                document.getElementById('edit_category_id').value = s.category_id || '';
+                document.getElementById('edit_status').checked = s.status == 1;
+            } else {
+                alert('Không thể tải thông tin nhà cung cấp!');
+                closeEditModal();
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Lỗi khi tải dữ liệu!');
+            closeEditModal();
+        });
+}
+
+function closeEditModal() {
+    document.getElementById('editModal').style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+    const modal = document.getElementById('editModal');
+    if (event.target == modal) {
+        closeEditModal();
+    }
+}
+
+// Close modal with ESC key
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        closeEditModal();
+    }
+});
+</script>
 
 <?php require __DIR__ . '/inc/footer.php'; ?>
