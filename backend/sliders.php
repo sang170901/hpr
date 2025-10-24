@@ -47,6 +47,28 @@ if ($action==='delete' && $id) {
     exit; 
 }
 
+// Toggle status (Bật/Tắt nhanh)
+if ($action === 'toggle' && $id) {
+    try {
+        $stmt = $pdo->prepare('SELECT status FROM sliders WHERE id=?');
+        $stmt->execute([$id]);
+        $slider = $stmt->fetch();
+        if ($slider) {
+            $newStatus = $slider['status'] ? 0 : 1;
+            $pdo->prepare('UPDATE sliders SET status=? WHERE id=?')->execute([$newStatus, $id]);
+            log_activity($_SESSION['user']['id'] ?? null, 'toggle_slider', 'slider', $id, null);
+            $msg = $newStatus ? 'Đã bật slider' : 'Đã tắt slider';
+            header('Location: sliders.php?msg=' . urlencode($msg) . '&t=success'); 
+        } else {
+            header('Location: sliders.php?msg=' . urlencode('Không tìm thấy slider') . '&t=error'); 
+        }
+        exit;
+    } catch (Exception $e) {
+        header('Location: sliders.php?msg=' . urlencode('Lỗi: ' . $e->getMessage()) . '&t=error'); 
+        exit;
+    }
+}
+
 // Get slider data for AJAX (JSON)
 if ($action === 'get' && $id) {
     header('Content-Type: application/json');
@@ -75,10 +97,26 @@ if (isset($_GET['msg'])) {
 }
 
 $sliders = $pdo->query('SELECT * FROM sliders ORDER BY display_order ASC')->fetchAll(PDO::FETCH_ASSOC);
+
+// Tính toán trạng thái hiển thị thực tế
+$today = date('Y-m-d');
+foreach ($sliders as &$slider) {
+    $isActive = $slider['status'] == 1;
+    $isInDateRange = true;
+    
+    if (!empty($slider['start_date']) && $slider['start_date'] > $today) {
+        $isInDateRange = false;
+    }
+    if (!empty($slider['end_date']) && $slider['end_date'] < $today) {
+        $isInDateRange = false;
+    }
+    
+    $slider['is_displaying'] = $isActive && $isInDateRange;
+}
 ?>
 
 <div class="card">
-    <h2 class="page-main-title">Quản lý Banner/Slider</h2>
+    <h2 class="page-main-title">Quản lý Banner/Slider Trang Chủ</h2>
     
     <?php if(!empty($flash['message'])): ?>
         <div class="flash <?php echo $flash['type']==='success'?'success':'error' ?>">
@@ -86,7 +124,45 @@ $sliders = $pdo->query('SELECT * FROM sliders ORDER BY display_order ASC')->fetc
         </div>
     <?php endif; ?>
     
-    <button class="small-btn primary" onclick="openAddModal()">+ Thêm Slider</button>
+    <div style="background: #e0f2fe; border-left: 4px solid #38bdf8; padding: 16px; margin-bottom: 20px; border-radius: 8px;">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+            <i class="fas fa-info-circle" style="color: #0284c7; font-size: 20px;"></i>
+            <strong style="color: #0284c7; font-size: 16px;">Slider hiển thị trên trang chủ (index.php)</strong>
+        </div>
+        <p style="margin: 0; color: #0369a1; line-height: 1.6;">
+            • Chỉ những slider có trạng thái "<span style="color: green; font-weight: 600;">✓ Hoạt động</span>" và trong khoảng thời gian hiển thị mới xuất hiện trên trang chủ<br>
+            • Slider sẽ tự động chuyển đổi theo thứ tự đã cài đặt<br>
+            • Nếu không cài thời gian, slider sẽ luôn hiển thị
+        </p>
+    </div>
+    
+    <?php
+    $totalSliders = count($sliders);
+    $activeSliders = array_filter($sliders, function($s) { return $s['is_displaying']; });
+    $activeCount = count($activeSliders);
+    ?>
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 16px;">
+        <div style="display: flex; gap: 12px;">
+            <button class="small-btn primary" onclick="openAddModal()">
+                <i class="fas fa-plus"></i> Thêm Slider
+            </button>
+            <a href="../index.php" target="_blank" class="small-btn" style="text-decoration: none;">
+                <i class="fas fa-eye"></i> Xem trang chủ
+            </a>
+        </div>
+        
+        <div style="display: flex; gap: 16px; align-items: center;">
+            <div style="padding: 12px 20px; background: #f0fdf4; border-radius: 12px; border: 2px solid #86efac;">
+                <div style="font-size: 12px; color: #059669; margin-bottom: 4px;">Đang hiển thị</div>
+                <div style="font-size: 24px; font-weight: 800; color: #059669;"><?php echo $activeCount; ?></div>
+            </div>
+            <div style="padding: 12px 20px; background: #f8fafc; border-radius: 12px; border: 2px solid #cbd5e1;">
+                <div style="font-size: 12px; color: #64748b; margin-bottom: 4px;">Tổng số</div>
+                <div style="font-size: 24px; font-weight: 800; color: #475569;"><?php echo $totalSliders; ?></div>
+            </div>
+        </div>
+    </div>
     
     <table class="table">
         <thead>
@@ -94,43 +170,90 @@ $sliders = $pdo->query('SELECT * FROM sliders ORDER BY display_order ASC')->fetc
                 <th>ID</th>
                 <th>Tiêu đề</th>
                 <th>Hình ảnh</th>
-                <th>Link</th>
                 <th>Thứ tự</th>
                 <th>Thời gian</th>
                 <th>Trạng thái</th>
+                <th style="background: #f0f9ff;">🏠 Trang chủ</th>
                 <th>Hành động</th>
             </tr>
         </thead>
         <tbody>
         <?php foreach($sliders as $s): ?>
-            <tr>
-<td><?php echo $s['id'] ?></td>
+            <tr style="<?php echo $s['is_displaying'] ? 'background: #f0fdf4;' : '' ?>">
+<td><strong><?php echo $s['id'] ?></strong></td>
 <td>
-    <strong><?php echo htmlspecialchars($s['title']) ?></strong>
-    <?php if(!empty($s['subtitle'])): ?><br><small><?php echo htmlspecialchars($s['subtitle']) ?></small><?php endif; ?>
-</td>
-<td><?php echo $s['image'] ? '<img src="../'.htmlspecialchars($s['image']).'" style="height:50px;border-radius:4px;" onerror="this.style.display=\'none\'">':'' ?></td>
-<td>
+    <strong style="<?php echo $s['is_displaying'] ? 'color: #059669;' : '' ?>">
+        <?php echo htmlspecialchars($s['title']) ?>
+    </strong>
+    <?php if(!empty($s['subtitle'])): ?>
+        <br><small style="color: #64748b;"><?php echo htmlspecialchars($s['subtitle']) ?></small>
+    <?php endif; ?>
     <?php if(!empty($s['link'])): ?>
-        <a href="<?php echo htmlspecialchars($s['link']) ?>" target="_blank"><?php echo htmlspecialchars($s['link_text'] ?? 'Link') ?></a>
-    <?php else: ?>
-        <span style="color:#999;">Không có</span>
+        <br><a href="<?php echo htmlspecialchars($s['link']) ?>" target="_blank" style="font-size: 12px; color: #38bdf8;">
+            <i class="fas fa-external-link-alt"></i> <?php echo htmlspecialchars($s['link_text'] ?? 'Link') ?>
+        </a>
     <?php endif; ?>
 </td>
-<td><?php echo $s['display_order'] ?></td>
 <td>
-    <?php if($s['start_date'] || $s['end_date']): ?>
-        <?php echo $s['start_date'] ? date('d/m/Y', strtotime($s['start_date'])) : '∞' ?>
-        -
-        <?php echo $s['end_date'] ? date('d/m/Y', strtotime($s['end_date'])) : '∞' ?>
+    <?php if($s['image']): ?>
+        <img src="../<?php echo htmlspecialchars($s['image']) ?>" 
+             style="height: 60px; width: 100px; object-fit: cover; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); cursor: pointer;" 
+             onerror="this.style.display='none'"
+             onclick="window.open('../<?php echo htmlspecialchars($s['image']) ?>', '_blank')"
+             title="Click để xem ảnh lớn">
     <?php else: ?>
-        <span style="color:#999;">Luôn hiển thị</span>
+        <span style="color: #999; font-size: 12px;">Chưa có ảnh</span>
     <?php endif; ?>
 </td>
-<td><?php echo $s['status'] ? '<span style="color:green;">✓ Hoạt động</span>':'<span style="color:red;">✗ Tạm dừng</span>' ?></td>
+<td><span style="font-weight: 600; color: #38bdf8; font-size: 16px;"><?php echo $s['display_order'] ?></span></td>
+<td style="font-size: 13px;">
+    <?php if($s['start_date'] || $s['end_date']): ?>
+        <div style="line-height: 1.6;">
+            <div><strong>Từ:</strong> <?php echo $s['start_date'] ? date('d/m/Y', strtotime($s['start_date'])) : '<span style="color:#10b981;">∞ Không giới hạn</span>' ?></div>
+            <div><strong>Đến:</strong> <?php echo $s['end_date'] ? date('d/m/Y', strtotime($s['end_date'])) : '<span style="color:#10b981;">∞ Không giới hạn</span>' ?></div>
+        </div>
+    <?php else: ?>
+        <span style="color:#10b981; font-weight: 600;">∞ Luôn hiển thị</span>
+    <?php endif; ?>
+</td>
+<td>
+    <?php if($s['status']): ?>
+        <span style="color:green; font-weight: 600; padding: 6px 12px; background: #f0fdf4; border-radius: 6px; border: 2px solid #86efac; display: inline-block;">
+            ✓ Hoạt động
+        </span>
+    <?php else: ?>
+        <span style="color:red; font-weight: 600; padding: 6px 12px; background: #fef2f2; border-radius: 6px; border: 2px solid #fca5a5; display: inline-block;">
+            ✗ Tạm dừng
+        </span>
+    <?php endif; ?>
+</td>
+<td style="text-align: center; background: <?php echo $s['is_displaying'] ? '#dcfce7' : '#fef2f2' ?>;">
+    <?php if($s['is_displaying']): ?>
+        <div style="display: inline-flex; align-items: center; gap: 6px; background: #059669; color: white; padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 13px;">
+            <i class="fas fa-check-circle"></i>
+            <span>Đang hiển thị</span>
+        </div>
+    <?php else: ?>
+        <div style="display: inline-flex; align-items: center; gap: 6px; background: #dc2626; color: white; padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 13px;">
+            <i class="fas fa-times-circle"></i>
+            <span>Không hiển thị</span>
+        </div>
+        <?php if($s['status'] == 0): ?>
+            <div style="font-size: 11px; color: #dc2626; margin-top: 4px;">Đã tắt</div>
+        <?php elseif(!empty($s['start_date']) && $s['start_date'] > $today): ?>
+            <div style="font-size: 11px; color: #f59e0b; margin-top: 4px;">Chưa đến ngày</div>
+        <?php elseif(!empty($s['end_date']) && $s['end_date'] < $today): ?>
+            <div style="font-size: 11px; color: #64748b; margin-top: 4px;">Đã hết hạn</div>
+        <?php endif; ?>
+    <?php endif; ?>
+</td>
                 <td class="btn-row">
-                    <button class="small-btn" onclick="openEditModal(<?php echo $s['id'] ?>)">Sửa</button>
-                    <a class="small-btn warn" href="sliders.php?action=delete&id=<?php echo $s['id'] ?>" onclick="return confirm('Xóa slider này?')">Xóa</a>
+                    <button class="small-btn" onclick="openEditModal(<?php echo $s['id'] ?>)">
+                        <i class="fas fa-edit"></i> Sửa
+                    </button>
+                    <a class="small-btn warn" href="sliders.php?action=delete&id=<?php echo $s['id'] ?>" onclick="return confirm('Xóa slider này?')">
+                        <i class="fas fa-trash"></i> Xóa
+                    </a>
                 </td>
             </tr>
         <?php endforeach; ?>

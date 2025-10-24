@@ -3,7 +3,7 @@
 header('Content-Type: text/html; charset=UTF-8');
 include 'inc/header-new.php'; 
 ?>
-<?php include 'inc/slider-demo.php'; ?>
+<?php include 'inc/slider.php'; ?>
 <?php
 require_once 'backend/inc/db.php';
 

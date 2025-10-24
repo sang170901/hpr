@@ -202,7 +202,7 @@ $categories = $newsManager->getCategories();
     .stat-number { font-size: 1.1rem; font-weight:700; color: var(--primary-600); }
 
     /* Responsive adjustments */
-    @media (max-width: 900px) {
+    @media (max-width: 1200px) {
         .content-grid { grid-template-columns: 1fr; }
         .article-card { flex-direction: column; }
         .article-image { width: 100%; height: 180px; min-width: auto; }

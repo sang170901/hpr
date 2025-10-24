@@ -5,9 +5,17 @@ require_once 'backend/inc/news_manager.php';
 // Get article slug from URL
 $slug = isset($_GET['slug']) ? $_GET['slug'] : '';
 
-// Get current article (for demo, we'll use sample data)
+if (empty($slug)) {
+    header('Location: news.php');
+    exit;
+}
+
+// Initialize NewsManager
+$newsManager = new NewsManager();
+
+// Get current article from database
 $currentArticle = null;
-$allNews = NewsManager::getSampleNews();
+$allNews = $newsManager->getNews('', '');
 
 foreach ($allNews as $article) {
     if ($article['slug'] === $slug) {
@@ -16,9 +24,10 @@ foreach ($allNews as $article) {
     }
 }
 
-// If no article found, use first article as default
+// If no article found, redirect to news page
 if (!$currentArticle) {
-    $currentArticle = $allNews[0];
+    header('Location: news.php');
+    exit;
 }
 
 // Get related articles from same category
@@ -26,170 +35,192 @@ $relatedArticles = [];
 foreach ($allNews as $article) {
     if ($article['category'] === $currentArticle['category'] && $article['slug'] !== $currentArticle['slug']) {
         $relatedArticles[] = $article;
+        if (count($relatedArticles) >= 3) {
+            break;
+        }
     }
 }
-
-// Limit to 3 related articles
-$relatedArticles = array_slice($relatedArticles, 0, 3);
 ?>
 
 <style>
-/* Article Detail Styles */
-.article-hero {
-    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #bae6fd 100%);
-    padding: 6rem 0 3rem;
-    position: relative;
-    overflow: hidden;
+:root {
+    --primary: #38bdf8;
+    --primary-dark: #0284c7;
+    --text-dark: #0f172a;
+    --text-gray: #64748b;
+    --bg-light: #f8fafc;
 }
 
-.article-hero::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 200"><path d="M0,50 Q250,100 500,50 T1000,50 L1000,200 L0,200 Z" fill="rgba(255,255,255,0.1)"/></svg>');
-    background-size: cover;
+body {
+    background: var(--bg-light);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* Article Hero - Compact & Modern */
+.article-hero {
+    background: linear-gradient(to bottom, #ffffff 0%, #f8fafc 100%);
+    padding: 2rem 0 1.5rem;
+    border-bottom: 1px solid #e2e8f0;
 }
 
 .article-container {
-    max-width: 640px;
+    max-width: 1400px;
+    width: 95%;
     margin: 0 auto;
-    padding: 0 3rem;
-    position: relative;
+    padding: 0 2rem;
 }
 
+/* Breadcrumb */
 .breadcrumb {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    margin-bottom: 2rem;
-    font-size: 0.9rem;
-    color: #64748b;
+    margin-bottom: 1.5rem;
+    font-size: 0.875rem;
+    color: var(--text-gray);
 }
 
 .breadcrumb a {
-    color: #3b82f6;
+    color: var(--primary);
     text-decoration: none;
-    transition: color 0.3s ease;
+    transition: color 0.2s;
 }
 
 .breadcrumb a:hover {
-    color: #38bdf8;
+    color: var(--primary-dark);
+}
+
+.breadcrumb i {
+    font-size: 0.625rem;
+}
+
+/* Article Header */
+.article-header {
+    max-width: 100%;
+    margin: 0;
 }
 
 .article-meta {
     display: flex;
+    align-items: center;
     flex-wrap: wrap;
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-    font-size: 0.9rem;
-    color: #64748b;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+    font-size: 0.875rem;
+    color: var(--text-gray);
 }
 
 .article-category {
-    background: linear-gradient(135deg, #38bdf8, #22d3ee);
+    background: var(--primary);
     color: white;
-    padding: 0.4rem 1rem;
-    border-radius: 25px;
+    padding: 0.375rem 0.875rem;
+    border-radius: 50px;
     font-weight: 600;
-    font-size: 0.85rem;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.article-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+}
+
+.article-meta-item i {
+    font-size: 0.875rem;
 }
 
 .article-title {
-    font-size: 2.7rem;
+    font-size: 2.25rem;
     font-weight: 800;
-    color: #1e293b;
-    line-height: 1.2;
-    margin-bottom: 1.5rem;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    color: var(--text-dark);
+    line-height: 1.25;
+    margin: 0 0 1rem 0;
+    letter-spacing: -0.025em;
 }
 
 .article-excerpt {
-    font-size: 1.17rem;
-    color: #64748b;
-    line-height: 1.6;
-    margin-bottom: 2rem;
-    font-weight: 400;
+    font-size: 1.125rem;
+    color: var(--text-gray);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
 }
 
+/* Author Info - Compact */
 .author-info {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    padding: 1.5rem;
-    background: rgba(255,255,255,0.9);
-    border-radius: 16px;
-    backdrop-filter: blur(10px);
+    gap: 0.875rem;
+    padding: 1rem 1.25rem;
+    background: #f1f5f9;
+    border-radius: 12px;
+    border-left: 3px solid var(--primary);
 }
 
 .author-avatar {
-    width: 50px;
-    height: 50px;
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #38bdf8, #22d3ee);
+    background: var(--primary);
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
-    font-weight: 600;
-    font-size: 1.2rem;
+    font-weight: 700;
+    font-size: 1rem;
+    flex-shrink: 0;
 }
 
 .author-details h4 {
-    color: #1e293b;
-    margin-bottom: 0.2rem;
+    color: var(--text-dark);
+    margin: 0 0 0.125rem 0;
     font-weight: 600;
+    font-size: 0.9375rem;
 }
 
 .author-details p {
-    color: #64748b;
-    font-size: 0.9rem;
+    color: var(--text-gray);
+    font-size: 0.8125rem;
     margin: 0;
 }
 
 /* Article Content */
 .article-content {
     background: white;
-    margin: -1rem auto 0;
-    border-radius: 20px 20px 0 0;
-    box-shadow: 0 -10px 30px rgba(0,0,0,0.1);
-    position: relative;
-    z-index: 10;
+    max-width: 1400px;
+    width: 95%;
+    margin: 2rem auto;
+    border-radius: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
 .article-body {
-    padding: 2.5rem;
-    max-width: none;
+    padding: 3rem;
+    max-width: 100%;
 }
 
 .article-body h2 {
-    font-size: 1.62rem;
+    font-size: 1.75rem;
     font-weight: 700;
-    color: #1e293b;
-    margin: 2.5rem 0 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 3px solid transparent;
-    background: linear-gradient(135deg, #38bdf8, #22d3ee);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: var(--text-dark);
+    margin: 2.5rem 0 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #e2e8f0;
 }
 
 .article-body h3 {
-    font-size: 1.26rem;
+    font-size: 1.375rem;
     font-weight: 600;
-    color: #1e293b;
+    color: var(--text-dark);
     margin: 2rem 0 1rem;
 }
 
 .article-body p {
-    font-size: 0.99rem;
+    font-size: 1.0625rem;
     line-height: 1.8;
-    color: #374151;
+    color: #334155;
     margin-bottom: 1.5rem;
-    text-align: justify;
 }
 
 .article-body ul,
@@ -206,77 +237,54 @@ $relatedArticles = array_slice($relatedArticles, 0, 3);
 }
 
 .article-body blockquote {
-    border-left: 4px solid #3b82f6;
+    border-left: 4px solid var(--primary);
     background: #f8fafc;
-    padding: 1.5rem 2rem;
+    padding: 1.25rem 1.75rem;
     margin: 2rem 0;
-    border-radius: 0 12px 12px 0;
+    border-radius: 0 8px 8px 0;
     font-style: italic;
-    color: #64748b;
-    position: relative;
-}
-
-.article-body blockquote::before {
-    content: '"';
-    position: absolute;
-    top: -10px;
-    left: 15px;
-    font-size: 3rem;
-    color: #3b82f6;
-    font-family: 'Times New Roman', Georgia, serif;
+    color: var(--text-gray);
+    font-size: 1rem;
 }
 
 .highlight-box {
-    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    background: #f0f9ff;
     border: 1px solid #bae6fd;
-    border-radius: 16px;
-    padding: 2rem;
+    border-radius: 12px;
+    padding: 1.75rem;
     margin: 2rem 0;
-    position: relative;
-}
-
-.highlight-box::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 4px;
-    height: 100%;
-    background: linear-gradient(135deg, #38bdf8, #22d3ee);
-    border-radius: 2px 0 0 2px;
+    border-left: 4px solid var(--primary);
 }
 
 .highlight-box h4 {
-    color: #1e293b;
-    margin-bottom: 1rem;
+    color: var(--text-dark);
+    margin: 0 0 0.875rem 0;
     font-weight: 600;
+    font-size: 1.125rem;
 }
 
 /* Image Styles */
 .article-image {
     width: 100%;
     border-radius: 12px;
-    margin: 2rem 0;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-    transition: transform 0.3s ease;
-}
-
-.article-image:hover {
-    transform: scale(1.02);
+    margin: 2rem 0 0.75rem 0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .image-caption {
     text-align: center;
-    font-size: 0.9rem;
-    color: #64748b;
-    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--text-gray);
+    margin: 0 0 2rem 0;
     font-style: italic;
 }
 
 /* Tags and Social */
 .article-footer {
-    padding: 2rem 3rem 3rem;
+    padding: 2.5rem 3rem 3rem;
     border-top: 1px solid #e2e8f0;
+    background: #fafbfc;
+    border-radius: 0 0 16px 16px;
 }
 
 .article-tags {
@@ -353,28 +361,31 @@ $relatedArticles = array_slice($relatedArticles, 0, 3);
 
 /* Related Articles */
 .related-articles {
-    background: #f8fafc;
-    padding: 3rem 0;
+    background: var(--bg-light);
+    padding: 4rem 0;
+    margin-top: 4rem;
+    border-top: 3px solid #e2e8f0;
 }
 
 .related-container {
-    max-width: 1200px;
+    max-width: 1400px;
+    width: 95%;
     margin: 0 auto;
     padding: 0 2rem;
 }
 
 .related-title {
     text-align: center;
-    font-size: 2rem;
+    font-size: 1.75rem;
     font-weight: 700;
-    color: #1e293b;
-    margin-bottom: 2rem;
+    color: var(--text-dark);
+    margin-bottom: 2.5rem;
 }
 
 .related-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
 }
 
 .related-card {
@@ -393,9 +404,19 @@ $relatedArticles = array_slice($relatedArticles, 0, 3);
     box-shadow: 0 8px 30px rgba(0,0,0,0.15);
 }
 
-.related-image {
-    height: 150px;
-    background: linear-gradient(45deg, #f1f5f9, #e2e8f0);
+.related-image-img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    display: block;
+}
+
+.related-image-fallback {
+    height: 180px;
+    background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .related-content {
@@ -427,55 +448,112 @@ $relatedArticles = array_slice($relatedArticles, 0, 3);
 }
 
 /* Responsive */
+@media (max-width: 1200px) {
+    .article-container,
+    .article-content,
+    .related-container {
+        max-width: 100%;
+        width: 90%;
+    }
+}
+
+@media (max-width: 1024px) {
+    .related-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.25rem;
+    }
+}
+
 @media (max-width: 768px) {
-    .article-title {
-        font-size: 1.8rem;
+    .article-container,
+    .article-content,
+    .related-container {
+        max-width: 100%;
+        width: 95%;
     }
     
-    .article-container,
+    .article-container {
+        padding: 0 1.5rem;
+    }
+    
+    .article-title {
+        font-size: 1.75rem;
+    }
+    
+    .article-excerpt {
+        font-size: 1rem;
+    }
+    
     .article-body,
     .article-footer {
-        padding-left: 1.5rem;
-        padding-right: 1.5rem;
+        padding: 2rem 1.5rem;
     }
     
     .article-meta {
-        flex-direction: column;
-        gap: 1rem;
-    }
-    
-    .author-info {
-        flex-direction: column;
-        text-align: center;
-    }
-    
-    .share-buttons {
-        flex-wrap: wrap;
+        gap: 0.75rem;
     }
     
     .related-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.25rem;
     }
 }
 
 @media (max-width: 480px) {
+    .article-container,
+    .article-content,
+    .related-container {
+        max-width: 100%;
+        width: 100%;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    
+    .article-content {
+        border-radius: 12px;
+        margin: 1.5rem auto;
+    }
+    
     .article-hero {
-        padding: 4rem 0 2rem;
+        padding: 1.5rem 0 1rem;
     }
     
     .article-title {
-        font-size: 1.8rem;
+        font-size: 1.5rem;
     }
     
     .article-excerpt {
-        font-size: 1.1rem;
+        font-size: 0.9375rem;
     }
     
-    .article-container,
     .article-body,
     .article-footer {
-        padding-left: 1rem;
-        padding-right: 1rem;
+        padding: 1.5rem 1rem;
+    }
+    
+    .article-body h2 {
+        font-size: 1.375rem;
+    }
+    
+    .article-body h3 {
+        font-size: 1.125rem;
+    }
+    
+    .article-body p {
+        font-size: 1rem;
+    }
+    
+    .breadcrumb {
+        font-size: 0.75rem;
+    }
+    
+    .author-info {
+        padding: 0.875rem 1rem;
+    }
+    
+    .related-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
     }
 }
 </style>
@@ -485,35 +563,37 @@ $relatedArticles = array_slice($relatedArticles, 0, 3);
     <div class="article-container">
         <!-- Breadcrumb -->
         <nav class="breadcrumb">
-            <a href="/vnmt/">Trang chủ</a>
+            <a href="index.php">Trang chủ</a>
             <i class="fas fa-chevron-right"></i>
-            <a href="/vnmt/news-modern.php">Tin tức</a>
+            <a href="news.php">Tin tức</a>
             <i class="fas fa-chevron-right"></i>
-            <span>Công Nghệ AI Trong Sản Xuất Vật Liệu</span>
+            <span><?php echo htmlspecialchars(mb_substr($currentArticle['title'], 0, 50)); ?><?php echo mb_strlen($currentArticle['title']) > 50 ? '...' : ''; ?></span>
         </nav>
 
-        <!-- Article Meta -->
-        <div class="article-meta">
-            <span class="article-category"><?php echo htmlspecialchars($currentArticle['category']); ?></span>
-            <span><i class="fas fa-calendar"></i> <?php echo date('d/m/Y', strtotime($currentArticle['published_date'])); ?></span>
-            <span><i class="fas fa-clock"></i> <?php echo $currentArticle['reading_time']; ?> phút đọc</span>
-            <span><i class="fas fa-eye"></i> <?php echo number_format($currentArticle['views'] ?? 1234); ?> lượt xem</span>
-        </div>
+        <div class="article-header">
+            <!-- Article Meta -->
+            <div class="article-meta">
+                <span class="article-category"><?php echo htmlspecialchars($currentArticle['category']); ?></span>
+                <span class="article-meta-item"><i class="far fa-calendar"></i> <?php echo date('d/m/Y', strtotime($currentArticle['published_date'])); ?></span>
+                <span class="article-meta-item"><i class="far fa-clock"></i> <?php echo $currentArticle['reading_time']; ?> phút đọc</span>
+                <span class="article-meta-item"><i class="far fa-eye"></i> <?php echo number_format($currentArticle['views'] ?? 0); ?></span>
+            </div>
 
-        <!-- Article Title -->
-        <h1 class="article-title"><?php echo htmlspecialchars($currentArticle['title']); ?></h1>
+            <!-- Article Title -->
+            <h1 class="article-title"><?php echo htmlspecialchars($currentArticle['title']); ?></h1>
 
-        <!-- Article Excerpt -->
-        <p class="article-excerpt">
-            <?php echo htmlspecialchars($currentArticle['excerpt']); ?>
-        </p>
+            <!-- Article Excerpt -->
+            <p class="article-excerpt">
+                <?php echo htmlspecialchars($currentArticle['excerpt']); ?>
+            </p>
 
-        <!-- Author Info -->
-        <div class="author-info">
-            <div class="author-avatar">ND</div>
-            <div class="author-details">
-                <h4>Nguyễn Đức Anh</h4>
-                <p>Chuyên gia Công nghệ Vật liệu • 8 năm kinh nghiệm</p>
+            <!-- Author Info -->
+            <div class="author-info">
+                <div class="author-avatar"><?php echo mb_substr($currentArticle['author'], 0, 1, 'UTF-8'); ?></div>
+                <div class="author-details">
+                    <h4><?php echo htmlspecialchars($currentArticle['author']); ?></h4>
+                    <p><?php echo htmlspecialchars($currentArticle['author_title'] ?? 'Biên tập viên'); ?> • <?php echo htmlspecialchars($currentArticle['author_bio'] ?? 'Chuyên gia ngành xây dựng'); ?></p>
+                </div>
             </div>
         </div>
     </div>
@@ -523,11 +603,19 @@ $relatedArticles = array_slice($relatedArticles, 0, 3);
 <article class="article-content">
     <div class="article-body">
         <!-- Featured Image -->
-        <img src="assets/images/news/ai-construction.jpg" alt="AI trong xây dựng" class="article-image"
+        <?php if (!empty($currentArticle['featured_image'])): ?>
+        <img src="<?php echo htmlspecialchars($currentArticle['featured_image']); ?>" 
+             alt="<?php echo htmlspecialchars($currentArticle['title']); ?>" 
+             class="article-image"
              onerror="this.style.display='none'">
-        <p class="image-caption">Công nghệ AI đang thay đổi cách chúng ta sản xuất vật liệu xây dựng</p>
+        <p class="image-caption"><?php echo htmlspecialchars($currentArticle['title']); ?></p>
+        <?php endif; ?>
 
         <!-- Article Content -->
+        <?php echo $currentArticle['content']; ?>
+
+        <!-- Legacy content for sample articles that don't have detailed content -->
+        <?php if (strlen(strip_tags($currentArticle['content'])) < 200): ?>
         <p>
             <strong>Trí tuệ nhân tạo (AI)</strong> không còn là khái niệm xa lạ trong thời đại số hóa hiện nay. 
             Từ y tế đến giáo dục, từ giao thông đến sản xuất, AI đang từng bước thay đổi cách chúng ta làm việc 
@@ -657,23 +745,22 @@ $relatedArticles = array_slice($relatedArticles, 0, 3);
             <strong>Những doanh nghiệp nào biết nắm bắt và ứng dụng sớm các công nghệ này 
             sẽ có lợi thế cạnh tranh vượt trội trong thời đại công nghệ 4.0.</strong>
         </p>
+        <?php endif; ?>
     </div>
 
     <!-- Article Footer -->
     <div class="article-footer">
         <!-- Tags -->
+        <?php if (!empty($currentArticle['tags'])): ?>
         <div class="article-tags">
             <h4>Thẻ liên quan:</h4>
             <div class="tag-list">
-                <a href="#" class="tag">AI</a>
-                <a href="#" class="tag">Trí tuệ nhân tạo</a>
-                <a href="#" class="tag">Vật liệu xây dựng</a>
-                <a href="#" class="tag">Công nghệ 4.0</a>
-                <a href="#" class="tag">Bền vững</a>
-                <a href="#" class="tag">IoT</a>
-                <a href="#" class="tag">Machine Learning</a>
+                <?php foreach ($currentArticle['tags'] as $tag): ?>
+                    <a href="news.php?search=<?php echo urlencode($tag); ?>" class="tag"><?php echo htmlspecialchars($tag); ?></a>
+                <?php endforeach; ?>
             </div>
         </div>
+        <?php endif; ?>
 
         <!-- Social Share -->
         <div class="social-share">
@@ -707,17 +794,20 @@ $relatedArticles = array_slice($relatedArticles, 0, 3);
                 </p>
             <?php else: ?>
                 <?php foreach ($relatedArticles as $index => $related): ?>
-                    <?php 
-                    // Different gradient colors for each card
-                    $gradients = [
-                        'linear-gradient(45deg, #38bdf8, #22d3ee)',
-                        'linear-gradient(45deg, #7dd3fc, #0ea5e9)', 
-                        'linear-gradient(45deg, #a5f3fc, #06b6d4)'
-                    ];
-                    $gradient = $gradients[$index % 3];
-                    ?>
                     <a href="article-detail.php?slug=<?php echo $related['slug']; ?>" class="related-card">
-                        <div class="related-image" style="background: <?php echo $gradient; ?>;"></div>
+                        <?php if (!empty($related['featured_image'])): ?>
+                            <img src="<?php echo htmlspecialchars($related['featured_image']); ?>" 
+                                 alt="<?php echo htmlspecialchars($related['title']); ?>" 
+                                 class="related-image-img"
+                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                            <div class="related-image-fallback" style="display:none;">
+                                <i class="fas fa-image" style="font-size: 3rem; color: rgba(56,189,248,0.3);"></i>
+                            </div>
+                        <?php else: ?>
+                            <div class="related-image-fallback">
+                                <i class="fas fa-image" style="font-size: 3rem; color: rgba(56,189,248,0.3);"></i>
+                            </div>
+                        <?php endif; ?>
                         <div class="related-content">
                             <div class="related-meta">
                                 <?php echo htmlspecialchars($related['category']); ?> • 

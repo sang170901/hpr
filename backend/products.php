@@ -439,8 +439,138 @@ $flash['message'] = $flash['message'] === 'Không thể xóa' ? 'Không thể x�
             <a class="small-btn" href="products.php" style="margin-left:12px">Hủy</a>
         </div>
     </form>
+        </div>
+    </div>
 </div>
-<?php endif; ?>
+
+<!-- Modal Sửa Sản Phẩm -->
+<div id="editModal" class="modal">
+    <div class="modal-content" style="max-width: 900px; max-height: 90vh;">
+        <div class="modal-header">
+            <h3 style="margin:0">Sửa Sản Phẩm</h3>
+            <span class="modal-close" onclick="closeEditModal()">&times;</span>
+        </div>
+        <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+            <form method="post" id="editProductForm">
+                <input type="hidden" name="id" id="edit_id">
+                
+                <div class="form-group">
+                    <label for="edit_name">Tên sản phẩm</label>
+                    <input type="text" name="name" id="edit_name" placeholder="Nhập tên sản phẩm" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit_slug">Slug</label>
+                    <input type="text" name="slug" id="edit_slug" placeholder="Nhập slug sản phẩm">
+                </div>
+                <div class="form-group">
+                    <label for="edit_description">Mô tả</label>
+                    <textarea name="description" id="edit_description" placeholder="Nhập mô tả sản phẩm"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="edit_price">Giá</label>
+                    <input type="number" name="price" id="edit_price" placeholder="Nhập giá sản phẩm">
+                </div>
+                <div class="form-group">
+                    <label for="edit_supplier_search">Nhà cung cấp</label>
+                    <input type="hidden" name="supplier_id" id="edit_supplier_id">
+                    <input list="edit_supplier_list" id="edit_supplier_search" placeholder="Tìm hoặc gõ tên nhà cung cấp">
+                    <datalist id="edit_supplier_list">
+                        <?php foreach ($suppliers as $s): ?>
+                            <option value="<?php echo htmlspecialchars($s['name']) ?>"></option>
+                        <?php endforeach; ?>
+                    </datalist>
+                </div>
+                <div class="form-group">
+                    <label for="edit_images">Hình (URL, nhiều cái cách nhau bằng dấu phẩy)</label>
+                    <input type="text" name="images" id="edit_images">
+                </div>
+                <div class="form-group">
+                    <label for="edit_featured_image">Hình đại diện (URL)</label>
+                    <input type="text" name="featured_image" id="edit_featured_image">
+                </div>
+                <div class="form-group">
+                    <label for="edit_manufacturer">Nhà sản xuất</label>
+                    <input type="text" name="manufacturer" id="edit_manufacturer">
+                </div>
+                <div class="form-group">
+                    <label for="edit_origin">Nơi sản xuất</label>
+                    <input type="text" name="origin" id="edit_origin">
+                </div>
+                <div class="form-group">
+                    <label for="edit_material_type">Loại vật tư</label>
+                    <input type="text" name="material_type" id="edit_material_type">
+                </div>
+                <div class="form-group">
+                    <label for="edit_application">Ứng dụng</label>
+                    <input type="text" name="application" id="edit_application">
+                </div>
+                <div class="form-group">
+                    <label for="edit_product_function">Chức năng</label>
+                    <input type="text" name="product_function" id="edit_product_function">
+                </div>
+                <div class="form-group">
+                    <label for="edit_category_id">Danh mục sản phẩm</label>
+                    <select name="category_id" id="edit_category_id" class="form-control">
+                        <option value="">-- Chọn danh mục --</option>
+                        <?php foreach ($categoriesGrouped as $group): ?>
+                            <optgroup label="📁 <?php echo htmlspecialchars($group['main']['name']) ?>">
+                                <option value="<?php echo $group['main']['id'] ?>">
+                                    <?php echo htmlspecialchars($group['main']['name']) ?>
+                                </option>
+                                <?php foreach ($group['subs'] as $sub): ?>
+                                    <option value="<?php echo $sub['id'] ?>">
+                                        &nbsp;&nbsp;&nbsp;└── <?php echo htmlspecialchars($sub['name']) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </optgroup>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="edit_thickness">Độ dày</label>
+                    <input type="text" name="thickness" id="edit_thickness">
+                </div>
+                <div class="form-group">
+                    <label for="edit_color">Màu sắc</label>
+                    <input type="text" name="color" id="edit_color">
+                </div>
+                <div class="form-group">
+                    <label for="edit_warranty">Bảo hành</label>
+                    <input type="text" name="warranty" id="edit_warranty">
+                </div>
+                <div class="form-group">
+                    <label for="edit_stock">Tồn kho</label>
+                    <input type="number" name="stock" id="edit_stock">
+                </div>
+                <div class="form-group">
+                    <label for="edit_classification">Phân loại sản phẩm</label>
+                    <select name="classification[]" id="edit_classification" class="form-control" multiple>
+                        <?php foreach ($productClassifications as $classification): ?>
+                            <option value="<?php echo htmlspecialchars($classification); ?>">
+                                <?php echo htmlspecialchars($classification); ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="edit_brand">Thương hiệu</label>
+                    <input type="text" name="brand" id="edit_brand">
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" name="status" id="edit_status"> Hoạt động
+                        &nbsp;&nbsp;
+                        <input type="checkbox" name="featured" id="edit_featured"> Nổi bật
+                    </label>
+                </div>
+                <div style="margin-top:12px">
+                    <button class="primary" type="submit" name="save_product">Lưu thay đổi</button>
+                    <button type="button" class="small-btn" onclick="closeEditModal()">Hủy</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 <?php require __DIR__ . '/inc/footer.php'; ?>
 
@@ -470,4 +600,97 @@ function updateSupplierFields() {
 
 supplierSearch && supplierSearch.addEventListener('change', updateSupplierFields);
 supplierSearch && supplierSearch.addEventListener('keyup', updateSupplierFields);
+
+// Modal functions
+function openAddModal() {
+    document.getElementById('addModal').style.display = 'block';
+}
+
+function closeAddModal() {
+    document.getElementById('addModal').style.display = 'none';
+    document.getElementById('addProductForm').reset();
+}
+
+function openEditModal(id) {
+    // Fetch product data
+    fetch('products.php?action=get&id=' + id)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const product = data.product;
+                
+                // Populate form
+                document.getElementById('edit_id').value = product.id;
+                document.getElementById('edit_name').value = product.name || '';
+                document.getElementById('edit_slug').value = product.slug || '';
+                document.getElementById('edit_description').value = product.description || '';
+                document.getElementById('edit_price').value = product.price || '';
+                document.getElementById('edit_supplier_id').value = product.supplier_id || '';
+                document.getElementById('edit_supplier_search').value = product.supplier_name || '';
+                document.getElementById('edit_images').value = product.images || '';
+                document.getElementById('edit_featured_image').value = product.featured_image || '';
+                document.getElementById('edit_manufacturer').value = product.manufacturer || '';
+                document.getElementById('edit_origin').value = product.origin || '';
+                document.getElementById('edit_material_type').value = product.material_type || '';
+                document.getElementById('edit_application').value = product.application || '';
+                document.getElementById('edit_product_function').value = product.product_function || '';
+                document.getElementById('edit_category_id').value = product.category_id || '';
+                document.getElementById('edit_thickness').value = product.thickness || '';
+                document.getElementById('edit_color').value = product.color || '';
+                document.getElementById('edit_warranty').value = product.warranty || '';
+                document.getElementById('edit_stock').value = product.stock || '';
+                document.getElementById('edit_brand').value = product.brand || '';
+                document.getElementById('edit_status').checked = product.status == 1;
+                document.getElementById('edit_featured').checked = product.featured == 1;
+                
+                // Handle classification (multiple select)
+                const classifications = (product.classification || '').split(',');
+                const editClassification = document.getElementById('edit_classification');
+                for (let option of editClassification.options) {
+                    option.selected = classifications.includes(option.value);
+                }
+                
+                // Show modal
+                document.getElementById('editModal').style.display = 'block';
+            } else {
+                alert('Không thể tải dữ liệu sản phẩm');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Đã xảy ra lỗi khi tải dữ liệu');
+        });
+}
+
+function closeEditModal() {
+    document.getElementById('editModal').style.display = 'none';
+}
+
+// Update supplier fields for edit form
+const editSupplierSearch = document.getElementById('edit_supplier_search');
+const editSupplierIdInput = document.getElementById('edit_supplier_id');
+
+function updateEditSupplierFields() {
+    const name = editSupplierSearch.value.trim();
+    if (suppliers[name]) {
+        editSupplierIdInput.value = suppliers[name].id;
+    } else {
+        editSupplierIdInput.value = '';
+    }
+}
+
+editSupplierSearch && editSupplierSearch.addEventListener('change', updateEditSupplierFields);
+editSupplierSearch && editSupplierSearch.addEventListener('keyup', updateEditSupplierFields);
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+    const addModal = document.getElementById('addModal');
+    const editModal = document.getElementById('editModal');
+    if (event.target == addModal) {
+        closeAddModal();
+    }
+    if (event.target == editModal) {
+        closeEditModal();
+    }
+}
 </script>

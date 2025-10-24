@@ -1,7 +1,7 @@
 <?php
 /**
- * News Section Component
- * Hiển thị 5 tin tức mới nhất từ NewsManager
+ * News Section Component - Carousel Style
+ * Hiển thị tin tức trong carousel với fade effect
  */
 
 // Lấy dữ liệu tin tức từ NewsManager
@@ -11,30 +11,26 @@ try {
     $newsManager = new NewsManager();
     $allNews = $newsManager->getNews();
     
-    // Lấy 5 tin tức mới nhất
-    $newsList = array_slice($allNews, 0, 5);
-    
-    // Debug: Hiển thị thông tin (xóa sau khi fix)
-    // echo "<!-- DEBUG: Found " . count($newsList) . " posts -->";
+    // Lấy nhiều tin tức hơn cho carousel
+    $newsList = array_slice($allNews, 0, 10);
     
 } catch (Exception $e) {
     $newsList = [];
     error_log("Error fetching news: " . $e->getMessage());
-    // Debug
-    echo "<!-- ERROR: " . htmlspecialchars($e->getMessage()) . " -->";
 }
 ?>
 
 <style>
-/* Modern News Section Styles */
+/* News Section - Carousel Style */
 .news-section {
-    padding: 80px 20px;
+    padding: 80px 0;
     background: #ffffff;
     position: relative;
+    overflow: hidden;
 }
 
 .news-container {
-    max-width: 1200px;
+    max-width: 1600px;
     margin: 0 auto;
     position: relative;
 }
@@ -42,7 +38,7 @@ try {
 .news-header {
     text-align: center;
     margin-bottom: 60px;
-    position: relative;
+    padding: 0 20px;
 }
 
 .news-header-icon {
@@ -67,8 +63,6 @@ try {
     font-weight: 800;
     color: #1e293b;
     margin-bottom: 16px;
-    position: relative;
-    display: inline-block;
 }
 
 .news-header p {
@@ -78,37 +72,66 @@ try {
     margin: 0 auto;
 }
 
-/* Modern News Grid */
-.news-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 30px;
-    margin-bottom: 50px;
+/* Carousel Container */
+.news-carousel-wrapper {
+    position: relative;
+    padding: 0 80px;
 }
 
+.news-carousel {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    display: flex;
+    gap: 24px;
+    padding: 20px 40px;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    position: relative;
+}
+
+.news-carousel::-webkit-scrollbar {
+    display: none;
+}
+
+/* News Item */
 .news-item {
+    flex: 0 0 calc((100% - 96px) / 5);
+    min-width: 280px;
+    max-width: 350px;
     background: white;
-    border-radius: 20px;
+    border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 8px 30px rgba(56, 189, 248, 0.1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
     transition: all 0.3s ease;
-    border: 2px solid #f0f9ff;
     display: flex;
     flex-direction: column;
+    cursor: pointer;
+    text-decoration: none;
 }
 
 .news-item:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 60px rgba(56, 189, 248, 0.25);
-    border-color: #bae6fd;
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 12px 40px rgba(56, 189, 248, 0.2);
 }
 
 .news-image {
     width: 100%;
-    height: 220px;
+    height: 200px;
     background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
     position: relative;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.news-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: relative;
+    z-index: 1;
 }
 
 .news-image::after {
@@ -118,71 +141,72 @@ try {
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 4rem;
-    opacity: 0.3;
+    opacity: 0.2;
+    z-index: 0;
+}
+
+.news-image:has(img) ::after {
+    display: none;
 }
 
 .news-category {
     position: absolute;
-    top: 16px;
-    left: 16px;
+    top: 12px;
+    left: 12px;
     background: linear-gradient(135deg, #38bdf8 0%, #22d3ee 100%);
     color: white;
-    padding: 8px 16px;
+    padding: 6px 14px;
     border-radius: 20px;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+    z-index: 2;
 }
 
 .news-content {
-    padding: 28px;
+    padding: 20px;
     flex: 1;
     display: flex;
     flex-direction: column;
 }
 
 .news-item h3 {
-    font-size: 1.3rem;
-    margin-bottom: 12px;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
     line-height: 1.4;
-}
-
-.news-item h3 a {
     color: #1e293b;
-    text-decoration: none;
-    transition: color 0.3s ease;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    transition: color 0.3s;
+    text-decoration: none;
 }
 
-.news-item:hover h3 a {
+.news-item:hover h3 {
     color: #38bdf8;
+    text-decoration: none;
 }
 
 .news-date {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: #94a3b8;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-weight: 500;
+    gap: 6px;
 }
 
 .news-date i {
     color: #38bdf8;
-    font-size: 0.85rem;
 }
 
 .news-description {
-    font-size: 1rem;
+    font-size: 0.9rem;
     color: #64748b;
-    line-height: 1.7;
-    margin-bottom: 20px;
+    line-height: 1.6;
+    margin-bottom: 16px;
     flex: 1;
     display: -webkit-box;
     -webkit-line-clamp: 3;
@@ -197,136 +221,116 @@ try {
     color: #38bdf8;
     font-weight: 600;
     text-decoration: none;
-    transition: all 0.3s ease;
-    font-size: 0.95rem;
-    padding: 12px 24px;
-    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-    border-radius: 12px;
-    align-self: flex-start;
+    font-size: 0.9rem;
+    transition: all 0.3s;
 }
 
 .news-read-more:hover {
-    background: linear-gradient(135deg, #38bdf8 0%, #22d3ee 100%);
+    gap: 12px;
+    color: #0ea5e9;
+}
+
+/* Navigation Buttons */
+.carousel-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    background: white;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    transition: all 0.3s;
+    z-index: 10;
+}
+
+.carousel-nav:hover {
+    background: #38bdf8;
     color: white;
-    transform: translateX(5px);
-    box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
+    transform: translateY(-50%) scale(1.1);
 }
 
-.news-read-more i {
-    transition: transform 0.3s ease;
+.carousel-nav.prev {
+    left: 10px;
 }
 
-.news-read-more:hover i {
-    transform: translateX(5px);
+.carousel-nav.next {
+    right: 10px;
 }
 
+.carousel-nav i {
+    font-size: 20px;
+}
+
+/* View All Button */
 .news-more {
     text-align: center;
-    margin-top: 40px;
+    margin-top: 50px;
 }
 
 .news-more-btn {
     display: inline-flex;
     align-items: center;
     gap: 12px;
-    padding: 18px 48px;
+    padding: 16px 40px;
     background: linear-gradient(135deg, #38bdf8 0%, #22d3ee 100%);
     color: white;
     text-decoration: none;
-    border-radius: 60px;
+    border-radius: 50px;
     font-weight: 700;
-    font-size: 1.1rem;
-    transition: all 0.3s ease;
+    font-size: 1.05rem;
+    transition: all 0.3s;
     box-shadow: 0 8px 25px rgba(56, 189, 248, 0.3);
-    position: relative;
-    overflow: hidden;
-}
-
-.news-more-btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-    transition: left 0.5s;
-}
-
-.news-more-btn:hover::before {
-    left: 100%;
 }
 
 .news-more-btn:hover {
     transform: translateY(-3px);
     box-shadow: 0 12px 40px rgba(56, 189, 248, 0.4);
-    background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
 }
 
-.news-more-btn i {
-    transition: transform 0.3s ease;
+/* Responsive */
+@media (max-width: 1400px) {
+    .news-item {
+        flex: 0 0 calc((100% - 72px) / 4);
+    }
 }
 
-.news-more-btn:hover i {
-    transform: translateX(5px);
-}
-
-.news-empty {
-    text-align: center;
-    padding: 60px 20px;
-    color: #7f8c8d;
-    font-size: 1.1rem;
-}
-
-.news-empty::before {
-    content: '📰';
-    display: block;
-    font-size: 4rem;
-    margin-bottom: 20px;
-    opacity: 0.5;
-}
-
-/* Responsive Design */
 @media (max-width: 1024px) {
-    .news-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 24px;
+    .news-item {
+        flex: 0 0 calc((100% - 48px) / 3);
+    }
+    
+    .news-carousel-wrapper {
+        padding: 0 60px;
     }
 }
 
 @media (max-width: 768px) {
     .news-section {
-        padding: 60px 15px;
+        padding: 60px 0;
     }
     
     .news-header h2 {
         font-size: 2.2rem;
     }
     
-    .news-header p {
-        font-size: 1rem;
+    .news-item {
+        flex: 0 0 calc((100% - 24px) / 2);
+        min-width: 240px;
     }
     
-    .news-grid {
-        grid-template-columns: 1fr;
-        gap: 24px;
+    .news-carousel-wrapper {
+        padding: 0 50px;
     }
     
-    .news-content {
-        padding: 24px;
-    }
-    
-    .news-image {
-        height: 200px;
-    }
-    
-    .news-item h3 {
-        font-size: 1.15rem;
-    }
-    
-    .news-more-btn {
-        padding: 15px 36px;
-        font-size: 1rem;
+    .carousel-nav {
+        width: 40px;
+        height: 40px;
     }
 }
 
@@ -335,170 +339,18 @@ try {
         font-size: 1.8rem;
     }
     
-    .news-header-icon {
-        width: 60px;
-        height: 60px;
+    .news-item {
+        flex: 0 0 85%;
+        min-width: 260px;
     }
     
-    .news-header-icon i {
-        font-size: 28px;
-    }
-    
-    .news-item h3 {
-        font-size: 1.05rem;
-    }
-    
-    .news-description {
-        font-size: 0.95rem;
-    }
-    
-    .news-content {
+    .news-carousel {
+        gap: 16px;
         padding: 20px;
     }
-}
-
-/* News Modal Styles */
-.news-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 9999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    animation: fadeIn 0.3s ease;
-}
-
-.news-modal-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(5px);
-}
-
-.news-modal-content {
-    position: relative;
-    background: white;
-    border-radius: 15px;
-    max-width: 800px;
-    width: 90%;
-    max-height: 80vh;
-    overflow-y: auto;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-    animation: slideUp 0.3s ease;
-}
-
-.news-modal-header {
-    padding: 30px 30px 20px;
-    border-bottom: 2px solid #f1f5f9;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    position: sticky;
-    top: 0;
-    background: white;
-    border-radius: 15px 15px 0 0;
-}
-
-.news-modal-header h2 {
-    margin: 0;
-    color: #2c3e50;
-    font-size: 1.8rem;
-    line-height: 1.3;
-    flex: 1;
-    margin-right: 20px;
-}
-
-.news-modal-close {
-    background: none;
-    border: none;
-    font-size: 2rem;
-    color: #94a3b8;
-    cursor: pointer;
-    padding: 0;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    transition: all 0.3s ease;
-    flex-shrink: 0;
-}
-
-.news-modal-close:hover {
-    background: #f1f5f9;
-    color: #64748b;
-    transform: scale(1.1);
-}
-
-.news-modal-body {
-    padding: 20px 30px 30px;
-}
-
-.news-modal-date {
-    color: #64748b;
-    font-size: 1rem;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.news-modal-date::before {
-    content: '📅';
-    font-size: 1.1rem;
-}
-
-.news-modal-text {
-    color: #374151;
-    font-size: 1.1rem;
-    line-height: 1.8;
-    white-space: pre-line;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-@keyframes slideUp {
-    from { 
-        transform: translateY(50px);
-        opacity: 0;
-    }
-    to { 
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-@media (max-width: 768px) {
-    .news-modal-content {
-        width: 95%;
-        max-height: 90vh;
-    }
     
-    .news-modal-header {
-        padding: 20px 20px 15px;
-    }
-    
-    .news-modal-header h2 {
-        font-size: 1.5rem;
-        margin-right: 15px;
-    }
-    
-    .news-modal-body {
-        padding: 15px 20px 25px;
-    }
-    
-    .news-modal-text {
-        font-size: 1rem;
+    .news-carousel-wrapper {
+        padding: 0 40px;
     }
 }
 </style>
@@ -514,51 +366,109 @@ try {
         </div>
         
         <?php if (!empty($newsList)): ?>
-            <div class="news-grid">
-                <?php foreach ($newsList as $news): ?>
-                <div class="news-item">
-                    <div class="news-image">
-                        <?php if (!empty($news['category'])): ?>
-                            <div class="news-category"><?php echo htmlspecialchars($news['category']); ?></div>
-                        <?php endif; ?>
-                    </div>
-                    
-                    <div class="news-content">
-                        <h3>
-                            <a href="article-detail.php?slug=<?php echo urlencode($news['slug']); ?>">
-                                <?php echo htmlspecialchars($news['title']); ?>
-                            </a>
-                        </h3>
+            <div class="news-carousel-wrapper">
+                <button class="carousel-nav prev" onclick="scrollCarousel('prev')">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                
+                <div class="news-carousel" id="newsCarousel">
+                    <?php foreach ($newsList as $news): ?>
+                    <a href="article-detail.php?slug=<?php echo urlencode($news['slug']); ?>" class="news-item">
+                        <div class="news-image">
+                            <?php if (!empty($news['featured_image'])): ?>
+                                <img src="<?php echo htmlspecialchars($news['featured_image']); ?>" 
+                                     alt="<?php echo htmlspecialchars($news['title']); ?>"
+                                     loading="lazy">
+                            <?php endif; ?>
+                            <?php if (!empty($news['category'])): ?>
+                                <div class="news-category"><?php echo htmlspecialchars($news['category']); ?></div>
+                            <?php endif; ?>
+                        </div>
                         
-                        <p class="news-date">
-                            <i class="far fa-calendar-alt"></i>
-                            <?php echo date('d/m/Y', strtotime($news['published_date'])); ?>
-                        </p>
-                        
-                        <p class="news-description">
-                            <?php echo htmlspecialchars($news['excerpt']); ?>
-                        </p>
-                        
-                        <a href="article-detail.php?slug=<?php echo urlencode($news['slug']); ?>" class="news-read-more">
-                            <span>Đọc tiếp</span>
-                            <i class="fas fa-arrow-right"></i>
-                        </a>
-                    </div>
+                        <div class="news-content">
+                            <h3><?php echo htmlspecialchars($news['title']); ?></h3>
+                            
+                            <p class="news-date">
+                                <i class="far fa-calendar-alt"></i>
+                                <?php echo date('d/m/Y', strtotime($news['published_date'])); ?>
+                            </p>
+                            
+                            <p class="news-description">
+                                <?php echo htmlspecialchars($news['excerpt']); ?>
+                            </p>
+                            
+                            <span class="news-read-more">
+                                <span>Đọc tiếp</span>
+                                <i class="fas fa-arrow-right"></i>
+                            </span>
+                        </div>
+                    </a>
+                    <?php endforeach; ?>
                 </div>
-                <?php endforeach; ?>
+                
+                <button class="carousel-nav next" onclick="scrollCarousel('next')">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
             </div>
             
             <div class="news-more">
-                <a href="news-modern.php" class="news-more-btn">
+                <a href="news.php" class="news-more-btn">
                     <span>Xem tất cả tin tức</span>
                     <i class="fas fa-arrow-right"></i>
                 </a>
             </div>
         <?php else: ?>
-            <div class="news-empty">
-                <p>Chưa có tin tức nào được công bố.</p>
+            <div style="text-align:center;padding:60px 20px;color:#64748b;">
+                <p style="font-size:1.1rem;">Chưa có tin tức nào được công bố.</p>
             </div>
         <?php endif; ?>
     </div>
 </section>
 
+<script>
+function scrollCarousel(direction) {
+    const carousel = document.getElementById('newsCarousel');
+    const scrollAmount = carousel.offsetWidth * 0.6;
+    
+    if (direction === 'next') {
+        carousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    } else {
+        carousel.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+    }
+}
+
+// Auto-scroll support with mouse drag
+let isDown = false;
+let startX;
+let scrollLeft;
+
+const carousel = document.getElementById('newsCarousel');
+
+carousel.addEventListener('mousedown', (e) => {
+    isDown = true;
+    carousel.style.cursor = 'grabbing';
+    startX = e.pageX - carousel.offsetLeft;
+    scrollLeft = carousel.scrollLeft;
+});
+
+carousel.addEventListener('mouseleave', () => {
+    isDown = false;
+    carousel.style.cursor = 'grab';
+});
+
+carousel.addEventListener('mouseup', () => {
+    isDown = false;
+    carousel.style.cursor = 'grab';
+});
+
+carousel.addEventListener('mousemove', (e) => {
+    if (!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - carousel.offsetLeft;
+    const walk = (x - startX) * 2;
+    carousel.scrollLeft = scrollLeft - walk;
+});
+
+// Set cursor style
+carousel.style.cursor = 'grab';
+</script>
