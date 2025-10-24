@@ -154,7 +154,7 @@ if (!empty($params)) {
     <?php endif; ?>
 
     <div style="display:flex;gap:12px;align-items:center;margin-bottom:12px">
-        <a class="small-btn primary" href="suppliers.php?action=add">+ Thêm nhà cung cấp</a>
+        <button class="small-btn primary" onclick="openAddModal()">+ Thêm nhà cung cấp</button>
         <form method="get" action="suppliers.php" style="display:flex;gap:10px;align-items:center;flex-wrap:nowrap;margin:0">
             <select name="category_id" class="compact-select" onchange="this.form.submit()">
                 <option value="">Tất cả danh mục</option>
@@ -205,54 +205,87 @@ if (!empty($params)) {
     </table>
 </div>
 
-<?php if ($action === 'add'): ?>
-<div class="card">
-    <h3 style="margin-top:0">Thêm nhà cung cấp</h3>
-    <?php if (!empty($flash['message']) && $flash['type'] === 'error'): ?>
-        <div class="flash error"><?php echo htmlspecialchars($flash['message']) ?></div>
-    <?php endif; ?>
-    <form method="post">
-        <label>Tên
-            <input type="text" name="name" required value="">
-        </label>
-        <label>Slug
-            <input type="text" name="slug" value="">
-        </label>
-        <label>Email
-            <input type="email" name="email" value="">
-        </label>
-        <label>Điện thoại
-            <input type="text" name="phone" value="">
-        </label>
-        <label>Địa chỉ
-            <input type="text" name="address" value="">
-        </label>
-        <label>Logo (URL)
-            <input type="text" name="logo" value="">
-        </label>
-        <label>Mô tả
-            <textarea name="description"></textarea>
-        </label>
-        <label>Danh mục nhà cung cấp
-            <select name="category_id" class="form-control">
-                <option value="">-- Chọn danh mục --</option>
-                <?php foreach ($supplierCategories as $cat): ?>
-                    <option value="<?php echo $cat['id'] ?>">
-                        <?php echo htmlspecialchars($cat['name']) ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-        </label>
-        <label>
-            <input type="checkbox" name="status"> Hoạt động
-        </label>
-        <div style="margin-top:12px">
-            <button class="primary" type="submit" name="save_supplier">Lưu</button>
-            <a class="small-btn" href="suppliers.php" style="margin-left:12px">Hủy</a>
+<!-- Modal Thêm Nhà Cung Cấp -->
+<div id="addModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 style="margin:0">Thêm Nhà Cung Cấp Mới</h3>
+            <span class="modal-close" onclick="closeAddModal()">&times;</span>
         </div>
-    </form>
+        <div class="modal-body">
+            <form method="post" id="addSupplierForm">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+                    <div>
+                        <label>Tên <span style="color:red">*</span>
+                            <input type="text" name="name" id="add_name" required style="width:100%">
+                        </label>
+                    </div>
+                    <div>
+                        <label>Slug
+                            <input type="text" name="slug" id="add_slug" style="width:100%">
+                        </label>
+                    </div>
+                </div>
+
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px">
+                    <div>
+                        <label>Email
+                            <input type="email" name="email" id="add_email" style="width:100%">
+                        </label>
+                    </div>
+                    <div>
+                        <label>Điện thoại
+                            <input type="text" name="phone" id="add_phone" style="width:100%">
+                        </label>
+                    </div>
+                </div>
+
+                <div style="margin-top:16px">
+                    <label>Địa chỉ
+                        <input type="text" name="address" id="add_address" style="width:100%">
+                    </label>
+                </div>
+
+                <div style="margin-top:16px">
+                    <label>Logo (URL)
+                        <input type="text" name="logo" id="add_logo" style="width:100%">
+                    </label>
+                </div>
+
+                <div style="margin-top:16px">
+                    <label>Mô tả
+                        <textarea name="description" id="add_description" rows="4" style="width:100%"></textarea>
+                    </label>
+                </div>
+
+                <div style="margin-top:16px">
+                    <label>Danh mục nhà cung cấp
+                        <select name="category_id" id="add_category_id" style="width:100%">
+                            <option value="">-- Chọn danh mục --</option>
+                            <?php foreach ($supplierCategories as $cat): ?>
+                                <option value="<?php echo $cat['id'] ?>">
+                                    <?php echo htmlspecialchars($cat['name']) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </label>
+                </div>
+
+                <div style="margin-top:16px">
+                    <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+                        <input type="checkbox" name="status" id="add_status" checked>
+                        <span>Hoạt động</span>
+                    </label>
+                </div>
+
+                <div style="margin-top:24px;display:flex;gap:12px;justify-content:flex-end">
+                    <button type="button" class="small-btn" onclick="closeAddModal()">Hủy</button>
+                    <button type="submit" class="small-btn primary" name="save_supplier">💾 Thêm nhà cung cấp</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
-<?php endif; ?>
 
 <!-- Modal Sửa Nhà Cung Cấp -->
 <div id="editModal" class="modal">
@@ -337,6 +370,23 @@ if (!empty($params)) {
 </div>
 
 <script>
+// Open Add Modal
+function openAddModal() {
+    document.getElementById('addModal').style.display = 'block';
+    document.body.style.overflow = 'hidden';
+    
+    // Reset form
+    document.getElementById('addSupplierForm').reset();
+    document.getElementById('add_status').checked = true;
+}
+
+// Close Add Modal
+function closeAddModal() {
+    document.getElementById('addModal').style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
+
+// Open Edit Modal
 function openEditModal(supplierId) {
     // Show modal
     document.getElementById('editModal').style.display = 'block';
@@ -377,17 +427,23 @@ function closeEditModal() {
     document.body.style.overflow = 'auto';
 }
 
-// Close modal when clicking outside
+// Close modals when clicking outside
 window.onclick = function(event) {
-    const modal = document.getElementById('editModal');
-    if (event.target == modal) {
+    const addModal = document.getElementById('addModal');
+    const editModal = document.getElementById('editModal');
+    
+    if (event.target == addModal) {
+        closeAddModal();
+    }
+    if (event.target == editModal) {
         closeEditModal();
     }
 }
 
-// Close modal with ESC key
+// Close modals with ESC key
 document.addEventListener('keydown', function(event) {
     if (event.key === 'Escape') {
+        closeAddModal();
         closeEditModal();
     }
 });

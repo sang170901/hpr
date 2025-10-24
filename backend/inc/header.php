@@ -41,6 +41,10 @@
         <span class="nav-icon"><i class="fas fa-images"></i></span>
         <span class="nav-text">Banner</span>
       </a>
+  <a href="partners.php" class="nav-item <?php echo (strpos($request, 'partners.php') !== false) ? 'active' : '' ?>">
+        <span class="nav-icon"><i class="fas fa-handshake"></i></span>
+        <span class="nav-text">Đối tác</span>
+      </a>
   <a href="activity_logs.php" class="nav-item <?php echo (strpos($request, 'activity_logs.php') !== false) ? 'active' : '' ?>">
         <span class="nav-icon"><i class="fas fa-history"></i></span>
         <span class="nav-text">Nhật ký</span>

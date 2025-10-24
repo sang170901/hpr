@@ -781,38 +781,40 @@ try {
     <?php include 'inc/news-section.php'; ?>
 
     <!-- Partners Section -->
+    <?php
+    // Lấy danh sách đối tác từ database
+    try {
+        $stmtPartners = $pdo->prepare("SELECT * FROM partners WHERE status = 1 ORDER BY display_order ASC, id ASC");
+        $stmtPartners->execute();
+        $partners = $stmtPartners->fetchAll(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+        $partners = [];
+        error_log("Lỗi khi truy xuất đối tác: " . $e->getMessage());
+    }
+    ?>
+    
+    <?php if (!empty($partners)): ?>
     <section class="partners">
         <div class="container">
             <div class="section-header">
                 <h2 class="section-title">Đối tác</h2>
             </div>
             <div class="partners-grid">
+                <?php foreach ($partners as $partner): ?>
                 <div class="partner-item">
-                    <img src="assets/images/partner-1.svg" alt="Armstrong">
+                    <img src="<?php echo htmlspecialchars($partner['image_path']); ?>" 
+                         alt="<?php echo htmlspecialchars($partner['name']); ?>"
+                         title="<?php echo htmlspecialchars($partner['name']); ?>">
                 </div>
-                <div class="partner-item">
-                    <img src="assets/images/partner-2.svg" alt="Adchem">
-                </div>
-                <div class="partner-item">
-                    <img src="assets/images/partner-3.svg" alt="ABC Play">
-                </div>
-                <div class="partner-item">
-                    <img src="assets/images/partner-4.svg" alt="Acoustar">
-                </div>
-                <div class="partner-item">
-                    <img src="assets/images/partner-5.svg" alt="AICA">
-                </div>
-                <div class="partner-item">
-                    <img src="assets/images/partner-6.svg" alt="ALSAFLOOR">
-                </div>
-                <div class="partner-item">
-                    <img src="assets/images/partner-7.svg" alt="ALMECO">
-                </div>
+                <?php endforeach; ?>
             </div>
+            <?php if (count($partners) > 7): ?>
             <div class="partners-footer">
-                <a href="#" class="btn btn-outline">Xem thêm Đối tác</a>
+                <a href="suppliers.php" class="btn btn-outline">Xem thêm Đối tác</a>
             </div>
+            <?php endif; ?>
         </div>
     </section>
+    <?php endif; ?>
 
 <?php include 'inc/footer-new.php'; ?>

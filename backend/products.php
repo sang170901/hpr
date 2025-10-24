@@ -98,6 +98,31 @@ if ($action === 'toggle' && $id) {
     }
 }
 
+// Get product data for AJAX (JSON)
+if ($action === 'get' && $id) {
+    header('Content-Type: application/json');
+    try {
+        $stmt = $pdo->prepare('SELECT p.*, s.name as supplier_name FROM products p LEFT JOIN suppliers s ON p.supplier_id = s.id WHERE p.id = ?');
+        $stmt->execute([$id]);
+        $product = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if ($product) {
+            // Convert classification string to array
+            if (!empty($product['classification'])) {
+                $product['classification_array'] = explode(',', $product['classification']);
+            } else {
+                $product['classification_array'] = [];
+            }
+            echo json_encode(['success' => true, 'product' => $product]);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Không tìm thấy sản phẩm']);
+        }
+    } catch (PDOException $e) {
+        echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+    }
+    exit;
+}
+
 require __DIR__ . '/inc/header.php';
 
 // Show flash from redirect
@@ -210,7 +235,7 @@ $flash['message'] = $flash['message'] === 'Không thể xóa' ? 'Không thể x�
     <?php endif; ?>
 
     <div style="display:flex;gap:12px;align-items:center;margin-bottom:12px">
-        <a class="small-btn primary" href="products.php?action=add">+ Thêm sản phẩm</a>
+        <button class="small-btn primary" onclick="openAddModal()">+ Thêm sản phẩm</button>
         <!-- Combined filters + search form -->
         <form method="get" action="products.php" style="display:flex;gap:10px;align-items:center;flex-wrap:nowrap;margin:0">
             <select name="category_id" class="compact-select" onchange="this.form.submit()">
@@ -277,7 +302,7 @@ $flash['message'] = $flash['message'] === 'Không thể xóa' ? 'Không thể x�
                     <a class="small-btn" href="../product-detail.php?id=<?php echo $p['id'] ?>" target="_blank" title="Xem chi tiết">
                         <i class="fas fa-eye"></i> Xem
                     </a>
-                    <a class="small-btn" href="products.php?action=edit&id=<?php echo $p['id'] ?>">Sửa</a>
+                    <button class="small-btn" onclick="openEditModal(<?php echo $p['id'] ?>)">Sửa</button>
                     <a class="small-btn warn" href="products.php?action=delete&id=<?php echo $p['id'] ?>" onclick="return confirm('Xóa sản phẩm?')">Xóa</a>
                 </td>
             </tr>
@@ -286,13 +311,17 @@ $flash['message'] = $flash['message'] === 'Không thể xóa' ? 'Không thể x�
     </table>
 </div>
 
-<?php if ($action === 'add' || $action === 'edit'): ?>
-<div class="card">
-    <h3 style="margin-top:0"><?php echo $action === 'edit' ? 'Sửa sản phẩm' : 'Thêm sản phẩm' ?></h3>
-    <?php if (!empty($flash['message']) && $flash['type'] === 'error'): ?>
-        <div class="flash error"><?php echo htmlspecialchars($flash['message']) ?></div>
-    <?php endif; ?>
-    <form method="post">
+<!-- Note: Do products có quá nhiều trường (20+ fields), modal sẽ dùng scroll -->
+
+<!-- Modal Thêm Sản Phẩm -->
+<div id="addModal" class="modal">
+    <div class="modal-content" style="max-width: 900px; max-height: 90vh;">
+        <div class="modal-header">
+            <h3 style="margin:0">Thêm Sản Phẩm Mới</h3>
+            <span class="modal-close" onclick="closeAddModal()">&times;</span>
+        </div>
+        <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+            <form method="post" id="addProductForm">
         <div class="form-group">
             <label for="name">Tên sản phẩm</label>
             <input type="text" name="name" id="name" placeholder="Nhập tên sản phẩm" value="<?php echo htmlspecialchars($product['name'] ?? '') ?>" required>
