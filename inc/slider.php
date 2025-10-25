@@ -175,6 +175,7 @@ $sliders = getActiveSliders();
     transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Chỉ hiển thị content khi hover vào slide */
 .slide:hover .slide-content {
     opacity: 1;
 }

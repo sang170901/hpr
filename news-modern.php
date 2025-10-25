@@ -1,9 +1,7 @@
 <?php include 'inc/header-new.php'; ?>
 <?php
-require_once 'backend/inc/news_manager.php';
-
-// Initialize NewsManager
-$newsManager = new NewsManager();
+require_once 'backend/inc/db.php';
+$pdo = getPDO();
 
 // Get filter parameters
 $category = isset($_GET['category']) ? $_GET['category'] : '';
@@ -11,15 +9,46 @@ $search = isset($_GET['search']) ? $_GET['search'] : '';
 $page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
 $perPage = 9;
 
-// Get news list
-$allNews = $newsManager->getNews($category, $search);
-$total = count($allNews);
-$totalPages = ceil($total / $perPage);
-$offset = ($page - 1) * $perPage;
-$newsList = array_slice($allNews, $offset, $perPage);
+// Build query
+$where = ["status = 'published'"];
+$params = [];
 
-// Get categories for filter
-$categories = $newsManager->getCategories();
+if (!empty($category)) {
+    $where[] = "category = ?";
+    $params[] = $category;
+}
+
+if (!empty($search)) {
+    $where[] = "(title LIKE ? OR content LIKE ? OR excerpt LIKE ?)";
+    $searchTerm = "%{$search}%";
+    $params[] = $searchTerm;
+    $params[] = $searchTerm;
+    $params[] = $searchTerm;
+}
+
+$whereClause = implode(' AND ', $where);
+
+// Get total count
+$countSql = "SELECT COUNT(*) as total FROM posts WHERE {$whereClause}";
+$stmt = $pdo->prepare($countSql);
+$stmt->execute($params);
+$total = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+$totalPages = ceil($total / $perPage);
+
+// Get posts with pagination
+$offset = ($page - 1) * $perPage;
+$sql = "SELECT p.*, 
+        (SELECT COUNT(*) FROM comments WHERE post_id = p.id AND status = 'approved') as comment_count
+        FROM posts p 
+        WHERE {$whereClause} 
+        ORDER BY published_at DESC, created_at DESC 
+        LIMIT {$perPage} OFFSET {$offset}";
+$stmt = $pdo->prepare($sql);
+$stmt->execute($params);
+$newsList = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Get categories
+$categories = $pdo->query("SELECT DISTINCT category FROM posts WHERE status = 'published' AND category IS NOT NULL AND category != '' ORDER BY category")->fetchAll(PDO::FETCH_COLUMN);
 ?>
 
 <style>
@@ -400,25 +429,24 @@ $categories = $newsManager->getCategories();
         </div>
 
         <div class="category-pills">
-            <a href="news.php" class="category-pill <?php echo empty($category) ? 'active' : ''; ?>">
+            <a href="news-modern.php" class="category-pill <?php echo empty($category) ? 'active' : ''; ?>">
                 <i class="fas fa-th"></i>
                 <span>Tất cả</span>
                 <span class="count"><?php echo $total; ?></span>
             </a>
             <?php 
             // Count posts per category
-            $allNewsForCount = $newsManager->getNews('', '');
             $categoryCounts = [];
-            foreach ($allNewsForCount as $news) {
-                $cat = $news['category'];
-                $categoryCounts[$cat] = isset($categoryCounts[$cat]) ? $categoryCounts[$cat] + 1 : 1;
+            $stmt = $pdo->query("SELECT category, COUNT(*) as count FROM posts WHERE status = 'published' AND category IS NOT NULL AND category != '' GROUP BY category");
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $categoryCounts[$row['category']] = $row['count'];
             }
             
             foreach ($categories as $cat): 
                 if (empty($cat)) continue;
                 $count = isset($categoryCounts[$cat]) ? $categoryCounts[$cat] : 0;
             ?>
-            <a href="news.php?category=<?php echo urlencode($cat); ?>" 
+            <a href="news-modern.php?category=<?php echo urlencode($cat); ?>" 
                class="category-pill <?php echo $category === $cat ? 'active' : ''; ?>">
                 <span><?php echo htmlspecialchars($cat); ?></span>
                 <span class="count"><?php echo $count; ?></span>
@@ -444,16 +472,24 @@ $categories = $newsManager->getCategories();
     <?php if (!empty($newsList)): ?>
     <div class="news-grid">
         <?php foreach ($newsList as $news): ?>
-        <a href="article-detail.php?slug=<?php echo htmlspecialchars($news['slug']); ?>" class="news-card">
+        <a href="post.php?slug=<?php echo htmlspecialchars($news['slug']); ?>" class="news-card">
+            <?php if($news['featured_image']): ?>
             <img src="<?php echo htmlspecialchars($news['featured_image']); ?>" 
                  alt="<?php echo htmlspecialchars($news['title']); ?>"
                  class="news-card-image"
-                 onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22200%22%3E%3Crect fill=%22%2338bdf8%22 width=%22400%22 height=%22200%22/%3E%3Ctext fill=%22%23ffffff%22 font-family=%22Arial%22 font-size=%2220%22 text-anchor=%22middle%22 x=%22200%22 y=%22100%22%3E<?php echo htmlspecialchars(substr($news['title'], 0, 30)); ?>%3C/text%3E%3C/svg%3E'">
+                 onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22200%22%3E%3Crect fill=%22%2338bdf8%22 width=%22400%22 height=%22200%22/%3E%3Ctext fill=%22%23ffffff%22 font-family=%22Arial%22 font-size=%2220%22 text-anchor=%22middle%22 x=%22200%22 y=%22100%22%3EBài viết%3C/text%3E%3C/svg%3E'">
+            <?php else: ?>
+            <div class="news-card-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; font-weight: 700;">
+                <?php echo htmlspecialchars(mb_substr($news['title'], 0, 30)); ?>
+            </div>
+            <?php endif; ?>
             
             <div class="news-card-body">
+                <?php if($news['category']): ?>
                 <span class="news-card-category">
                     <?php echo htmlspecialchars($news['category']); ?>
                 </span>
+                <?php endif; ?>
                 
                 <h2 class="news-card-title">
                     <?php echo htmlspecialchars($news['title']); ?>
@@ -466,10 +502,10 @@ $categories = $newsManager->getCategories();
                 <div class="news-card-footer">
                     <div class="news-card-meta">
                         <i class="far fa-calendar"></i>
-                        <span><?php echo date('d/m/Y', strtotime($news['published_date'])); ?></span>
+                        <span><?php echo date('d/m/Y', strtotime($news['published_at'] ?? $news['created_at'])); ?></span>
                         <span>•</span>
-                        <i class="far fa-clock"></i>
-                        <span><?php echo $news['reading_time']; ?> phút đọc</span>
+                        <i class="far fa-comments"></i>
+                        <span><?php echo $news['comment_count'] ?? 0; ?> bình luận</span>
                     </div>
                     
                     <span class="news-card-link">
@@ -530,7 +566,7 @@ $categories = $newsManager->getCategories();
         <h3>Không tìm thấy bài viết</h3>
         <p>Thử tìm kiếm với từ khóa khác hoặc chọn danh mục khác</p>
         <?php if (!empty($search) || !empty($category)): ?>
-        <a href="news.php" class="search-btn" style="margin-top: 1.5rem; display: inline-block; text-decoration: none;">
+        <a href="news-modern.php" class="search-btn" style="margin-top: 1.5rem; display: inline-block; text-decoration: none;">
             <i class="fas fa-redo"></i> Xem tất cả bài viết
         </a>
         <?php endif; ?>

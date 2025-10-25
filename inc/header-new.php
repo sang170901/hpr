@@ -1,9 +1,23 @@
 <?php 
+// Start session
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 // Track visits for analytics
 if (!defined('TRACKING_DISABLED')) {
     require_once __DIR__ . '/../backend/inc/track_visit.php';
     trackVisit($_SERVER['REQUEST_URI'] ?? '/');
 }
+
+// Check if user is logged in
+$isLoggedIn = isset($_SESSION['user_id']);
+$userData = $isLoggedIn ? [
+    'full_name' => $_SESSION['full_name'] ?? '',
+    'email' => $_SESSION['email'] ?? '',
+    'avatar' => $_SESSION['avatar'] ?? '',
+    'username' => $_SESSION['username'] ?? ''
+] : null;
 ?>
 <!doctype html>
 <html lang="vi">
@@ -319,6 +333,141 @@ if (!defined('TRACKING_DISABLED')) {
             position: relative;
             z-index: 1;
         }
+        
+        /* User Dropdown */
+        .user-menu {
+            position: relative;
+        }
+        
+        .user-avatar-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 2px solid rgba(56, 189, 248, 0.3);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .user-avatar-btn:hover {
+            transform: scale(1.1);
+            border-color: #38bdf8;
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+        }
+        
+        .user-dropdown {
+            position: absolute;
+            top: calc(100% + 12px);
+            right: 0;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            min-width: 240px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: var(--transition);
+            z-index: 1002;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .user-menu:hover .user-dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .user-dropdown-header {
+            padding: 16px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .user-dropdown-name {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+        
+        .user-dropdown-email {
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+        
+        .user-dropdown-menu {
+            padding: 8px;
+        }
+        
+        .user-dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            color: #334155;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+        
+        .user-dropdown-item:hover {
+            background: #f1f5f9;
+            color: #38bdf8;
+        }
+        
+        .user-dropdown-item i {
+            width: 20px;
+            text-align: center;
+        }
+        
+        .user-dropdown-divider {
+            height: 1px;
+            background: #e2e8f0;
+            margin: 8px 0;
+        }
+        
+        .btn-login {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border: none;
+            border-radius: 12px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-login::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--gradient-hover);
+            opacity: 0;
+            transition: var(--transition);
+            border-radius: 12px;
+        }
+        
+        .btn-login:hover::before {
+            opacity: 1;
+        }
+        
+        .btn-login:hover {
+            color: white;
+            transform: translateY(-3px) scale(1.08);
+            box-shadow: var(--shadow-medium);
+        }
+        
+        .btn-login i {
+            position: relative;
+            z-index: 1;
+        }
 
         /* Mobile Responsive */
         @media (max-width: 1024px) {
@@ -484,9 +633,47 @@ if (!defined('TRACKING_DISABLED')) {
                 <button class="action-btn" aria-label="Tìm kiếm">
                     <i class="fas fa-search"></i>
                 </button>
-                <button class="action-btn" aria-label="Tài khoản">
-                    <i class="fas fa-user"></i>
-                </button>
+                
+                <?php if ($isLoggedIn): ?>
+                    <!-- User Menu (Logged In) -->
+                    <div class="user-menu">
+                        <img src="<?php echo htmlspecialchars($userData['avatar']); ?>" 
+                             alt="<?php echo htmlspecialchars($userData['full_name']); ?>"
+                             class="user-avatar-btn">
+                        
+                        <div class="user-dropdown">
+                            <div class="user-dropdown-header">
+                                <div class="user-dropdown-name">
+                                    <?php echo htmlspecialchars($userData['full_name']); ?>
+                                </div>
+                                <div class="user-dropdown-email">
+                                    @<?php echo htmlspecialchars($userData['username']); ?>
+                                </div>
+                            </div>
+                            
+                            <div class="user-dropdown-menu">
+                                <a href="/vnmt/account.php" class="user-dropdown-item">
+                                    <i class="fas fa-user"></i>
+                                    <span>Tài khoản của tôi</span>
+                                </a>
+                                <div class="user-dropdown-divider"></div>
+                                <a href="/vnmt/logout.php" class="user-dropdown-item">
+                                    <i class="fas fa-sign-out-alt"></i>
+                                    <span>Đăng xuất</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                <?php else: ?>
+                    <!-- Login Button (Not Logged In) -->
+                    <a href="/vnmt/login.php?redirect=<?php echo urlencode($_SERVER['REQUEST_URI']); ?>" 
+                       class="btn-login"
+                       title="Đăng nhập"
+                       aria-label="Đăng nhập">
+                        <i class="fas fa-user"></i>
+                    </a>
+                <?php endif; ?>
+                
                 <button class="action-btn">EN</button>
             </div>
         </div>

@@ -33,6 +33,14 @@
         <span class="nav-icon"><i class="fas fa-box"></i></span>
         <span class="nav-text">Sản phẩm</span>
       </a>
+  <a href="posts.php" class="nav-item <?php echo (strpos($request, 'posts.php') !== false || strpos($request, 'post_form.php') !== false) ? 'active' : '' ?>">
+        <span class="nav-icon"><i class="fas fa-newspaper"></i></span>
+        <span class="nav-text">Bài viết</span>
+      </a>
+  <a href="comments.php" class="nav-item <?php echo (strpos($request, 'comments.php') !== false) ? 'active' : '' ?>">
+        <span class="nav-icon"><i class="fas fa-comments"></i></span>
+        <span class="nav-text">Bình luận</span>
+      </a>
   <a href="vouchers.php" class="nav-item <?php echo (strpos($request, 'vouchers.php') !== false) ? 'active' : '' ?>">
         <span class="nav-icon"><i class="fas fa-tags"></i></span>
         <span class="nav-text">Mã giảm giá</span>

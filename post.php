@@ -1,243 +1,439 @@
-<?php 
-include 'inc/header-new.php';
+<?php
+header('Content-Type: text/html; charset=UTF-8');
+require_once 'backend/inc/db.php';
 
-// Get post ID from URL
-$post_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+$slug = $_GET['slug'] ?? '';
+$pdo = getPDO();
 
-if ($post_id > 0) {
-    try {
-        require_once 'backend/inc/news_manager.php';
-        
-        // Get all news from NewsManager
-        $newsManager = new NewsManager();
-        $allNews = $newsManager->getNews();
-        
-        // Find the specific post by ID
-        $post = null;
-        foreach ($allNews as $news) {
-            if ($news['id'] == $post_id) {
-                $post = $news;
-                break;
-            }
-        }
-        
-        if (!$post) {
-            echo "<h1>Bài viết không tồn tại</h1>";
-            exit;
-        }
-    } catch (Exception $e) {
-        echo "<h1>Lỗi: " . htmlspecialchars($e->getMessage()) . "</h1>";
-        exit;
-    }
-} else {
-    echo "<h1>ID bài viết không hợp lệ</h1>";
+// Lấy bài viết
+$stmt = $pdo->prepare('SELECT * FROM posts WHERE slug = ? AND status = "published"');
+$stmt->execute([$slug]);
+$post = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$post) {
+    header('Location: news-modern.php');
     exit;
 }
+
+// Tăng lượt xem
+$pdo->prepare('UPDATE posts SET views = views + 1 WHERE id = ?')->execute([$post['id']]);
+
+// Xử lý submit comment
+$commentSubmitted = false;
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_comment'])) {
+    $content = trim($_POST['content'] ?? '');
+    $userId = $isLoggedIn ? $_SESSION['user_id'] : null;
+    
+    // Nếu đã đăng nhập, lấy thông tin từ session
+    if ($isLoggedIn) {
+        $name = $_SESSION['full_name'];
+        $email = $_SESSION['email'];
+        $website = '';
+    } else {
+        $name = trim($_POST['name'] ?? '');
+        $email = trim($_POST['email'] ?? '');
+        $website = trim($_POST['website'] ?? '');
+    }
+    
+    if (!empty($name) && !empty($email) && !empty($content) && filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $stmt = $pdo->prepare('INSERT INTO comments (post_id, user_id, author_name, author_email, content, status) VALUES (?, ?, ?, ?, ?, ?)');
+        $stmt->execute([
+            $post['id'],
+            $userId,
+            $name,
+            $email,
+            $content,
+            'pending' // Mặc định chờ duyệt
+        ]);
+        $commentSubmitted = true;
+    }
+}
+
+// Lấy comments đã duyệt (join với users để lấy avatar)
+$stmt = $pdo->prepare('
+    SELECT c.*, u.avatar, u.username 
+    FROM comments c
+    LEFT JOIN users u ON c.user_id = u.id
+    WHERE c.post_id = ? AND c.status = "approved" 
+    ORDER BY c.created_at DESC
+');
+$stmt->execute([$post['id']]);
+$comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+include 'inc/header-new.php';
 ?>
 
 <style>
 .post-detail {
     max-width: 900px;
-    margin: 0 auto;
-    padding: 0;
-    background: transparent;
-    box-shadow: none;
-    border-radius: 0;
+    margin: 40px auto;
+    padding: 0 20px;
 }
 
-.post-hero {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    padding: 80px 40px 60px;
-    margin-bottom: 0;
-    border-radius: 20px;
-    position: relative;
-    overflow: hidden;
-}
-
-.post-hero::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.9), rgba(118, 75, 162, 0.9));
-    backdrop-filter: blur(10px);
-}
-
-.post-content-wrapper {
-    position: relative;
-    z-index: 2;
+.post-header {
+    margin-bottom: 40px;
 }
 
 .post-title {
-    font-size: 3rem;
-    color: white;
-    margin-bottom: 30px;
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin-bottom: 16px;
     line-height: 1.2;
-    font-weight: 700;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.3);
 }
 
 .post-meta {
-    color: rgba(255, 255, 255, 0.9);
-    margin-bottom: 0;
-    padding-bottom: 0;
-    border-bottom: none;
     display: flex;
-    flex-wrap: wrap;
-    gap: 30px;
-    font-size: 1.1rem;
+    gap: 24px;
+    color: #64748b;
+    font-size: 14px;
+    margin-bottom: 24px;
 }
 
-.post-date, .post-category {
+.post-meta-item {
     display: flex;
     align-items: center;
-    gap: 10px;
-    background: rgba(255, 255, 255, 0.2);
-    padding: 10px 20px;
-    border-radius: 25px;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    gap: 8px;
 }
 
-.post-date::before {
-    content: '📅';
-    font-size: 1.3rem;
-}
-
-.post-category {
-    color: rgba(255, 255, 255, 0.95);
-    font-weight: 600;
-}
-
-.post-category::before {
-    content: '🏷️';
-    font-size: 1.2rem;
-}
-
-.post-body {
-    background: white;
-    padding: 60px 40px;
-    border-radius: 20px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
-    margin-top: -30px;
-    position: relative;
-    z-index: 10;
+.post-featured-image {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 32px;
 }
 
 .post-content {
-    color: #2c3e50;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     line-height: 1.8;
-    white-space: pre-line;
+    color: #334155;
+    margin-bottom: 48px;
+}
+
+.post-content h1, .post-content h2, .post-content h3 {
+    margin-top: 32px;
+    margin-bottom: 16px;
+    color: #1e293b;
+}
+
+.post-content ul, .post-content ol {
+    margin: 16px 0;
+    padding-left: 32px;
+}
+
+.post-content li {
+    margin: 8px 0;
+}
+
+.post-content img {
+    max-width: 100%;
+    border-radius: 8px;
+    margin: 24px 0;
+}
+
+/* Comments Section */
+.comments-section {
+    margin-top: 64px;
+    padding-top: 40px;
+    border-top: 2px solid #e2e8f0;
+}
+
+.comments-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 24px;
+}
+
+.comment-form {
+    background: #f8fafc;
+    padding: 32px;
+    border-radius: 12px;
+    margin-bottom: 40px;
+}
+
+.comment-form-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #1e293b;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #475569;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.submit-btn {
+    background: linear-gradient(135deg, #38bdf8 0%, #22d3ee 100%);
+    color: white;
+    padding: 12px 32px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(56, 189, 248, 0.3);
+}
+
+.success-message {
+    background: #dcfce7;
+    border: 2px solid #86efac;
+    color: #059669;
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 24px;
+}
+
+.comments-list {
+    margin-top: 32px;
+}
+
+.comment-item {
+    background: white;
+    padding: 24px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #e2e8f0;
+}
+
+.comment-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.comment-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #38bdf8 0%, #22d3ee 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.comment-author {
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.comment-date {
+    color: #94a3b8;
+    font-size: 13px;
+}
+
+.comment-content {
+    color: #475569;
+    line-height: 1.6;
 }
 
 .back-link {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 40px;
-    color: #667eea;
+    gap: 8px;
+    color: #38bdf8;
     text-decoration: none;
     font-weight: 600;
-    font-size: 1.1rem;
-    transition: all 0.3s ease;
-    padding: 12px 25px;
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
-    border-radius: 25px;
-    border: 2px solid rgba(102, 126, 234, 0.2);
+    margin-bottom: 24px;
+    transition: all 0.3s;
 }
 
 .back-link:hover {
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
-}
-
-.back-link::before {
-    content: '←';
-    font-size: 1.2rem;
-    font-weight: bold;
-    transition: transform 0.3s ease;
-}
-
-.back-link:hover::before {
-    transform: translateX(-3px);
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .post-hero {
-        padding: 60px 20px 40px;
-        border-radius: 15px;
-    }
-    
-    .post-title {
-        font-size: 2.2rem;
-    }
-    
-    .post-meta {
-        gap: 15px;
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    
-    .post-body {
-        padding: 40px 25px;
-        margin-top: -20px;
-        border-radius: 15px;
-    }
-    
-    .post-content {
-        font-size: 1.1rem;
-    }
-    
-    .back-link {
-        margin-bottom: 30px;
-        font-size: 1rem;
-        padding: 10px 20px;
-    }
-}
-
-@media (max-width: 480px) {
-    .post-hero {
-        padding: 40px 15px 30px;
-    }
-    
-    .post-title {
-        font-size: 1.8rem;
-    }
-    
-    .post-body {
-        padding: 30px 20px;
-    }
+    color: #0ea5e9;
+    transform: translateX(-4px);
 }
 </style>
 
 <div class="post-detail">
-    <div class="post-hero">
-        <div class="post-content-wrapper">
-            <a href="index.php" class="back-link">Quay lại trang chủ</a>
-            
+    <a href="news-modern.php" class="back-link">
+        <i class="fas fa-arrow-left"></i> Quay lại
+    </a>
+    
+    <article>
+        <div class="post-header">
             <h1 class="post-title"><?php echo htmlspecialchars($post['title']); ?></h1>
             
             <div class="post-meta">
-                <div class="post-date">
-                    <?php echo date('d/m/Y H:i', strtotime($post['published_date'])); ?>
+                <div class="post-meta-item">
+                    <i class="fas fa-calendar"></i>
+                    <?php echo date('d/m/Y', strtotime($post['published_at'])); ?>
                 </div>
-                <div class="post-category">
+                <div class="post-meta-item">
+                    <i class="fas fa-eye"></i>
+                    <?php echo number_format($post['views']); ?> lượt xem
+                </div>
+                <?php if($post['category']): ?>
+                <div class="post-meta-item">
+                    <i class="fas fa-folder"></i>
                     <?php echo htmlspecialchars($post['category']); ?>
                 </div>
+                <?php endif; ?>
             </div>
+            
+            <?php if($post['featured_image']): ?>
+            <img src="<?php echo htmlspecialchars($post['featured_image']); ?>" 
+                 alt="<?php echo htmlspecialchars($post['title']); ?>"
+                 class="post-featured-image">
+            <?php endif; ?>
         </div>
-    </div>
-    
-    <div class="post-body">
+        
         <div class="post-content">
-            <?php echo nl2br(htmlspecialchars($post['content'])); ?>
+            <?php echo $post['content']; ?>
         </div>
+    </article>
+    
+    <!-- Comments Section -->
+    <div class="comments-section">
+        <h2 class="comments-title">
+            <i class="fas fa-comments"></i> Bình luận (<?php echo count($comments); ?>)
+        </h2>
+        
+        <!-- Comment Form -->
+        <div class="comment-form">
+            <h3 class="comment-form-title">Để lại bình luận</h3>
+            
+            <?php if($commentSubmitted): ?>
+            <div class="success-message">
+                <strong>✓ Cảm ơn bạn đã bình luận!</strong><br>
+                Bình luận của bạn đang chờ duyệt và sẽ được hiển thị sau khi admin xác nhận.
+            </div>
+            <?php endif; ?>
+            
+            <?php if ($isLoggedIn): ?>
+                <!-- Logged in user -->
+                <div style="background: #e0f2fe; padding: 16px; border-radius: 8px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px;">
+                    <img src="<?php echo htmlspecialchars($userData['avatar']); ?>" 
+                         alt="<?php echo htmlspecialchars($userData['full_name']); ?>"
+                         style="width: 40px; height: 40px; border-radius: 50%;">
+                    <div>
+                        <div style="font-weight: 600; color: #0369a1;">
+                            Đăng bình luận với tên <?php echo htmlspecialchars($userData['full_name']); ?>
+                        </div>
+                        <div style="font-size: 13px; color: #64748b;">
+                            @<?php echo htmlspecialchars($userData['username']); ?>
+                        </div>
+                    </div>
+                </div>
+                
+                <form method="post" action="">
+                    <div class="form-group">
+                        <label>Nội dung <span style="color:red">*</span></label>
+                        <textarea name="content" required placeholder="Viết bình luận của bạn..."></textarea>
+                    </div>
+                    
+                    <button type="submit" name="submit_comment" class="submit-btn">
+                        <i class="fas fa-paper-plane"></i> Gửi bình luận
+                    </button>
+                </form>
+            <?php else: ?>
+                <!-- Not logged in -->
+                <div style="background: #fef3c7; padding: 16px; border-radius: 8px; margin-bottom: 20px;">
+                    <strong>💡 Tip:</strong> 
+                    <a href="/vnmt/login.php?redirect=<?php echo urlencode($_SERVER['REQUEST_URI']); ?>" style="color: #0284c7; font-weight: 600;">Đăng nhập</a> 
+                    để bình luận nhanh hơn, không cần nhập thông tin mỗi lần!
+                </div>
+                
+                <form method="post" action="">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Họ tên <span style="color:red">*</span></label>
+                            <input type="text" name="name" required placeholder="Nguyễn Văn A">
+                        </div>
+                        <div class="form-group">
+                            <label>Email <span style="color:red">*</span></label>
+                            <input type="email" name="email" required placeholder="email@example.com">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Nội dung <span style="color:red">*</span></label>
+                        <textarea name="content" required placeholder="Viết bình luận của bạn..."></textarea>
+                    </div>
+                    
+                    <button type="submit" name="submit_comment" class="submit-btn">
+                        <i class="fas fa-paper-plane"></i> Gửi bình luận
+                    </button>
+                </form>
+            <?php endif; ?>
+        </div>
+        
+        <!-- Comments List -->
+        <?php if(count($comments) > 0): ?>
+        <div class="comments-list">
+            <?php foreach($comments as $comment): ?>
+            <div class="comment-item">
+                <div class="comment-header">
+                    <?php if ($comment['avatar']): ?>
+                        <img src="<?php echo htmlspecialchars($comment['avatar']); ?>" 
+                             alt="<?php echo htmlspecialchars($comment['author_name']); ?>"
+                             class="comment-avatar"
+                             style="object-fit: cover;">
+                    <?php else: ?>
+                        <div class="comment-avatar">
+                            <?php echo strtoupper(mb_substr($comment['author_name'], 0, 1)); ?>
+                        </div>
+                    <?php endif; ?>
+                    <div>
+                        <div class="comment-author">
+                            <?php echo htmlspecialchars($comment['author_name']); ?>
+                            <?php if ($comment['username']): ?>
+                                <span style="font-weight: 400; color: #64748b; font-size: 13px;">
+                                    @<?php echo htmlspecialchars($comment['username']); ?>
+                                </span>
+                            <?php endif; ?>
+                        </div>
+                        <div class="comment-date"><?php echo date('d/m/Y H:i', strtotime($comment['created_at'])); ?></div>
+                    </div>
+                </div>
+                <div class="comment-content">
+                    <?php echo nl2br(htmlspecialchars($comment['content'])); ?>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
+        <?php else: ?>
+        <p style="text-align: center; color: #94a3b8; padding: 40px;">
+            Chưa có bình luận nào. Hãy là người đầu tiên bình luận!
+        </p>
+        <?php endif; ?>
     </div>
 </div>
 

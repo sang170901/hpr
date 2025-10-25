@@ -438,7 +438,12 @@ function openEditModal(sliderId) {
     document.getElementById('editSliderForm').action = 'sliders.php?action=edit&id=' + sliderId;
     
     fetch('sliders.php?action=get&id=' + sliderId)
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
         .then(data => {
             if (data.success) {
                 const s = data.slider;
@@ -449,17 +454,29 @@ function openEditModal(sliderId) {
                 document.getElementById('edit_link').value = s.link || '';
                 document.getElementById('edit_link_text').value = s.link_text || '';
                 document.getElementById('edit_display_order').value = s.display_order || 0;
-                document.getElementById('edit_start_date').value = s.start_date || '';
-                document.getElementById('edit_end_date').value = s.end_date || '';
+                
+                // Chuyển đổi datetime sang date format (YYYY-MM-DD)
+                if (s.start_date && s.start_date !== '0000-00-00 00:00:00' && s.start_date !== 'N/A') {
+                    document.getElementById('edit_start_date').value = s.start_date.split(' ')[0];
+                } else {
+                    document.getElementById('edit_start_date').value = '';
+                }
+                
+                if (s.end_date && s.end_date !== '0000-00-00 00:00:00' && s.end_date !== 'N/A') {
+                    document.getElementById('edit_end_date').value = s.end_date.split(' ')[0];
+                } else {
+                    document.getElementById('edit_end_date').value = '';
+                }
+                
                 document.getElementById('edit_status').checked = s.status == 1;
             } else {
-                alert('Không thể tải thông tin slider!');
+                alert('Không thể tải thông tin slider: ' + (data.message || 'Lỗi không xác định'));
                 closeEditModal();
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Lỗi khi tải dữ liệu!');
+            alert('Lỗi khi tải dữ liệu: ' + error.message);
             closeEditModal();
         });
 }
