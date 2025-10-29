@@ -70,9 +70,9 @@ try {
         margin-right: -50vw;
         width: 100vw;
         background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-        padding: 60px 0 40px;
+        padding: 100px 0 80px;
         overflow: hidden;
-        min-height: 200px; /* ensure visible hero area */
+        min-height: 420px; /* ensure visible hero area */
     }
     
     .materials-hero::before {
@@ -89,25 +89,25 @@ try {
     .hero-content {
         max-width: 1400px; /* wider content */
         margin: 0 auto;
-        padding: 0 20px;
+        padding: 0 0px;
         text-align: center;
         position: relative;
         z-index: 2;
     }
     
     .hero-title {
-        font-size: 2.45rem;
+        font-size: 3.5rem;
         font-weight: 800;
         color: #1565c0;
-        margin-bottom: 1.05rem;
+        margin-bottom: 1.5rem;
         text-shadow: 0 2px 8px rgba(21,101,192,0.2);
     }
     
     .hero-subtitle {
-        font-size: 0.91rem;
+        font-size: 1.3rem;
         color: #1976d2;
         max-width: 900px; /* allow wider subtitle */
-        margin: 0 auto 1.75rem;
+        margin: 0 auto 2.5rem;
         font-weight: 400;
     }
     
@@ -252,7 +252,9 @@ try {
         border: 1px solid #f1f5f9;
         display: flex;
         flex-direction: column;
-        height: 100%;
+        height: 400px; /* Điều chỉnh chiều cao */
+        width: 300px; /* Điều chỉnh chiều rộng */
+        margin: 0 auto; /* Căn giữa */
     }
 
     .material-card:hover {
@@ -351,7 +353,7 @@ try {
     .material-actions {
         display: flex;
         gap: 10px;
-        margin-top: auto; /* Push buttons to bottom */
+        margin-top: auto; /* Đẩy nút xuống đáy thẻ */
     }
 
     .view-btn, .supplier-btn {
@@ -477,9 +479,7 @@ try {
     <div class="hero-content">
         <h1 class="hero-title">VẬT LIỆU XÂY DỰNG</h1>
         <p class="hero-subtitle">
-            Vật liệu xây dựng bao gồm gỗ, thép, bê tông, gạch, đá và các vật liệu khác được sử dụng trong xây dựng.<br>
-            Chúng được sử dụng để xây dựng móng, tường, mái, sàn và các kết cấu quan trọng khác của công trình.
-        </p>
+            Vật liệu xây dựng bao gồm gỗ, thép, bê tông, gạch, đá và các vật liệu khác được sử dụng trong xây dựng.<br>        </p>
     </div>
 </section>
 

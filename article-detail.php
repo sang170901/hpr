@@ -37,20 +37,22 @@ $relatedArticles = array_slice($relatedArticles, 0, 3);
 /* Article Detail Styles */
 .article-hero {
     background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #bae6fd 100%);
-    padding: 6rem 0 3rem;
+    padding: 4rem 0 2rem; /* Giảm khoảng cách để sát với header */
     position: relative;
     overflow: hidden;
+    text-align: center;
 }
 
-.article-hero::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 200"><path d="M0,50 Q250,100 500,50 T1000,50 L1000,200 L0,200 Z" fill="rgba(255,255,255,0.1)"/></svg>');
-    background-size: cover;
+.article-hero .hero-title {
+    font-size: 2.75rem; /* Đồng bộ kích thước chữ */
+    font-weight: bold;
+    color: #1565c0;
+}
+
+.article-hero .hero-subtitle {
+    font-size: 1.25rem; /* Đồng bộ kích thước chữ */
+    color: #1976d2;
+    margin-top: 1rem;
 }
 
 .article-container {

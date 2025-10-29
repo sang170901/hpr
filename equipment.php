@@ -69,10 +69,10 @@ try {
         margin-left: -50vw;
         margin-right: -50vw;
         width: 100vw;
-        background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-        padding: 60px 0 40px;
+        background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #bae6fd 100%);
+        padding: 6rem 0 3rem;
         overflow: hidden;
-        min-height: 200px; /* ensure visible hero area */
+        text-align: center;
     }
     
     .equipment-hero::before {
@@ -96,16 +96,17 @@ try {
     }
     
     .hero-title {
-        font-size: 2.45rem;
-        font-weight: 800;
+        font-size: 2.5rem;
+        font-weight: bold;
         color: #1565c0;
         margin-bottom: 1.05rem;
         text-shadow: 0 2px 8px rgba(21,101,192,0.2);
     }
     
     .hero-subtitle {
-        font-size: 0.91rem;
+        font-size: 1rem;
         color: #1976d2;
+        margin-top: 1rem;
         max-width: 900px; /* allow wider subtitle */
         margin: 0 auto 1.75rem;
         font-weight: 400;

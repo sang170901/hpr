@@ -1,6 +1,1911 @@
-/* Additional responsive styles and improvements */
+/* ========================================
+   VNMaterial - Comprehensive Mobile Responsive Styles
+   Created: October 2025
+   Mobile-First Approach for Perfect Display on All Devices
+======================================== */
 
-/* Enhanced mobile navigation */
+/* ==========================================
+   TABLET & SMALL DESKTOP (max-width: 1024px)
+========================================== */
+@media (max-width: 1024px) {
+    .container {
+        padding: 0 1.2rem;
+    }
+    
+    /* Header adjustments */
+    .header-container {
+        padding: 0 1.2rem;
+    }
+    
+    .nav-list {
+        gap: 2rem;
+    }
+    
+    .nav-text {
+        font-size: 0.88rem;
+        letter-spacing: 2px;
+    }
+    
+    .nav-number {
+        font-size: 0.8rem;
+    }
+    
+    /* Grids */
+    .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+    }
+    
+    .mission-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+    
+    .news-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+    
+    /* Sections */
+    .hero {
+        padding: 8rem 0 4rem;
+    }
+    
+    .hero-title {
+        font-size: 3rem;
+    }
+    
+    .section-title {
+        font-size: 2.2rem;
+    }
+}
+
+/* ==========================================
+   TABLET PORTRAIT (max-width: 768px)
+========================================== */
+@media (max-width: 768px) {
+    :root {
+        --header-height: 70px;
+    }
+    
+    body {
+        padding-top: 70px;
+        font-size: 15px;
+    }
+    
+    .container {
+        padding: 0 0.75rem;
+    }
+    
+    /* Slider full width - no padding */
+    .main-slider,
+    section.main-slider {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100vw !important;
+        max-width: 100% !important;
+        overflow-x: hidden;
+    }
+    
+    /* Category Filter - Gần full màn hình */
+    .category-filter {
+        margin: -40px 0.5rem 1.5rem !important;
+        padding: 1rem !important;
+        border-radius: 12px !important;
+        width: calc(100% - 1rem) !important;
+        max-width: none !important;
+    }
+    
+    /* Materials Grid */
+    .materials-grid,
+    .equipment-grid,
+    .technology-grid,
+    .landscape-grid,
+    .suppliers-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 1rem !important;
+    }
+    
+    .main-content {
+        padding: 0 0.5rem !important;
+    }
+    
+    /* Hero sections - Full width */
+    .materials-hero,
+    .equipment-hero,
+    .technology-hero,
+    .landscape-hero,
+    .suppliers-hero {
+        padding: 100px 0 70px !important;
+        min-height: 350px !important;
+    }
+    
+    .hero-content {
+        padding: 0 1rem !important;
+    }
+    
+    .hero-title {
+        font-size: 2.5rem !important;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.1rem !important;
+    }
+    
+    /* Cards - Responsive */
+    .material-card,
+    .equipment-card,
+    .technology-card,
+    .landscape-card,
+    .supplier-card {
+        border-radius: 14px !important;
+    }
+    
+    .material-header,
+    .equipment-header,
+    .technology-header,
+    .landscape-header,
+    .supplier-header {
+        height: 140px !important;
+    }
+    
+    .material-title,
+    .equipment-title,
+    .technology-title,
+    .landscape-title,
+    .supplier-name {
+        font-size: 1rem !important;
+    }
+    
+    .material-description,
+    .equipment-description,
+    .technology-description,
+    .landscape-description,
+    .supplier-description {
+        font-size: 0.85rem !important;
+        line-height: 1.5 !important;
+    }
+    
+    /* Pagination */
+    .pagination {
+        gap: 0.5rem !important;
+        padding: 1.5rem 0 !important;
+    }
+    
+    .pagination-btn {
+        padding: 0.6rem 1rem !important;
+        font-size: 0.85rem !important;
+    }
+    
+    .filter-header {
+        flex-direction: column;
+        align-items: stretch !important;
+        gap: 0.75rem !important;
+    }
+    
+    .filter-title {
+        font-size: 0.8rem !important;
+    }
+    
+    .search-box {
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+    
+    .search-input {
+        font-size: 0.875rem !important;
+        padding: 0.75rem 1rem !important;
+    }
+    
+    .category-pills {
+        gap: 0.5rem !important;
+        justify-content: flex-start;
+    }
+    
+    .category-pill {
+        font-size: 0.8rem !important;
+        padding: 0.5rem 1rem !important;
+        flex: 0 0 auto;
+    }
+    
+    .category-pill .count {
+        font-size: 0.7rem !important;
+    }
+    
+    /* Typography - Giảm 20% so với desktop */
+    h1 { font-size: 1.8rem; }
+    h2 { font-size: 1.6rem; }
+    h3 { font-size: 1.25rem; }
+    h4 { font-size: 1.1rem; }
+    
+    p {
+        font-size: 0.9rem;
+    }
+    
+    /* Header */
+    .header-container {
+        padding: 0 0.75rem;
+    }
+    
+    .logo {
+        height: 50px;
+    }
+    
+    .nav-list {
+        gap: 1.5rem;
+    }
+    
+    .nav-link {
+        padding: 0.6rem 1rem;
+    }
+    
+    .nav-text {
+        font-size: 0.825rem;
+        letter-spacing: 1.8px;
+    }
+    
+    .nav-number {
+        font-size: 0.77rem;
+    }
+    
+    .action-btn, .btn-login {
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        min-height: 40px;
+        font-size: 0.85rem;
+    }
+    
+    .lang-toggle-btn {
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        min-height: 40px;
+        font-size: 0.8rem;
+    }
+    
+    .user-avatar-btn {
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        min-height: 40px;
+    }
+    
+    /* Hero Section */
+    .hero {
+        padding: 6rem 0 3rem;
+    }
+    
+    .hero-title {
+        font-size: 2.5rem;
+        line-height: 1.2;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.1rem;
+    }
+    
+    .hero-description {
+        font-size: 1rem;
+    }
+    
+    /* Buttons */
+    .btn {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.95rem;
+    }
+    
+    .btn-primary, .btn-outline {
+        padding: 0.7rem 1.3rem;
+    }
+    
+    /* Stats Grid - 3 cột trên mobile */
+    .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.8rem;
+    }
+    
+    .stat-item {
+        padding: 1.2rem 0.5rem;
+    }
+    
+    .stat-number {
+        font-size: 1.8rem;
+    }
+    
+    .stat-label {
+        font-size: 0.75rem;
+    }
+    
+    .stat-icon img {
+        width: 35px;
+        height: 35px;
+    }
+    
+    /* Mission Grid */
+    .mission-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+    
+    .mission-card {
+        padding: 1.8rem;
+    }
+    
+    .mission-icon img {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .mission-title {
+        font-size: 1.3rem;
+    }
+    
+    .mission-description {
+        font-size: 0.95rem;
+    }
+    
+    /* News Grid */
+    .news-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .news-item {
+        padding: 1.5rem;
+    }
+    
+    .news-title {
+        font-size: 1.2rem;
+    }
+    
+    .news-excerpt {
+        font-size: 0.9rem;
+    }
+    
+    /* Partners Grid */
+    .partners-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+    }
+    
+    .partner-item {
+        height: 100px;
+    }
+    
+    /* Search Section */
+    .search-links {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .search-link {
+        padding: 1.5rem;
+    }
+    
+    .search-tags {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    /* Footer */
+    .footer {
+        padding: 40px 0 0;
+        margin-top: 60px;
+    }
+    
+    .footer-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
+    }
+    
+    .footer-bottom {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+    
+    /* Sections Spacing */
+    section {
+        padding: 3rem 0;
+    }
+    
+    .section-header {
+        margin-bottom: 2rem;
+    }
+    
+    .section-title {
+        font-size: 2rem;
+    }
+    
+    /* Search Popup */
+    .search-popup {
+        padding: 30px 20px;
+        width: 85%;
+    }
+    
+    .search-popup-title {
+        font-size: 1.5rem;
+    }
+    
+    .search-input {
+        font-size: 1rem;
+        padding: 16px 56px 16px 48px;
+    }
+}
+
+/* ==========================================
+   LARGE MOBILE (max-width: 640px)
+========================================== */
+@media (max-width: 640px) {
+    .container {
+        padding: 0 0.5rem;
+    }
+    
+    /* Slider full width */
+    .main-slider,
+    section.main-slider {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100vw !important;
+        max-width: 100% !important;
+    }
+    
+    /* Category Filter - Gần full màn hình */
+    .category-filter {
+        margin: -35px 0.375rem 1.25rem !important;
+        padding: 0.875rem !important;
+        width: calc(100% - 0.75rem) !important;
+        max-width: none !important;
+    }
+    
+    .filter-header {
+        margin-bottom: 0.875rem !important;
+        gap: 0.65rem !important;
+    }
+    
+    .search-input {
+        font-size: 0.85rem !important;
+        padding: 0.7rem 0.9rem !important;
+    }
+    
+    .category-pill {
+        font-size: 0.75rem !important;
+        padding: 0.45rem 0.9rem !important;
+    }
+    
+    .category-pill .count {
+        font-size: 0.68rem !important;
+        padding: 0.1rem 0.4rem !important;
+    }
+    
+    /* Grids - 2 cột */
+    .materials-grid,
+    .equipment-grid,
+    .technology-grid,
+    .landscape-grid,
+    .suppliers-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.9rem !important;
+    }
+    
+    /* Hero sections */
+    .materials-hero,
+    .equipment-hero,
+    .technology-hero,
+    .landscape-hero,
+    .suppliers-hero {
+        padding: 90px 0 60px !important;
+        min-height: 320px !important;
+    }
+    
+    .hero-title {
+        font-size: 2.2rem !important;
+    }
+    
+    .hero-subtitle {
+        font-size: 1rem !important;
+    }
+    
+    /* Typography - Giảm thêm 20% */
+    h1 { font-size: 1.6rem; }
+    h2 { font-size: 1.4rem; }
+    h3 { font-size: 1.15rem; }
+    
+    /* Header */
+    :root {
+        --header-height: 60px;
+    }
+    
+    body {
+        padding-top: 60px;
+        font-size: 14px;
+    }
+    
+    .header-container {
+        padding: 0 0.5rem;
+    }
+    
+    .logo {
+        height: 46px;
+    }
+    
+    .nav-list {
+        gap: 1.2rem;
+    }
+    
+    .nav-link {
+        padding: 0.55rem 0.85rem;
+    }
+    
+    .nav-text {
+        font-size: 0.78rem;
+        letter-spacing: 1.5px;
+    }
+    
+    .nav-number {
+        font-size: 0.7rem;
+    }
+    
+    .action-btn, .btn-login, .lang-toggle-btn, .user-avatar-btn {
+        width: 38px;
+        height: 38px;
+        min-width: 38px;
+        min-height: 38px;
+        font-size: 0.8rem;
+    }
+    
+    .header-actions {
+        gap: 0.6rem;
+    }
+    
+    /* Hero Section */
+    .hero {
+        padding: 5rem 0 2.5rem;
+    }
+    
+    .hero-title {
+        font-size: 2.2rem;
+        line-height: 1.15;
+        margin-bottom: 0.8rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1rem;
+        margin-bottom: 0.8rem;
+    }
+    
+    .hero-description {
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+    
+    /* Buttons */
+    .btn {
+        padding: 0.7rem 1.3rem;
+        font-size: 0.9rem;
+    }
+    
+    .btn-primary, .btn-outline {
+        padding: 0.65rem 1.2rem;
+        font-size: 0.88rem;
+    }
+    
+    /* Stats - 3 cột */
+    .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.7rem;
+    }
+    
+    .stat-item {
+        padding: 1rem 0.4rem;
+    }
+    
+    .stat-number {
+        font-size: 1.6rem;
+    }
+    
+    .stat-label {
+        font-size: 0.7rem;
+    }
+    
+    .stat-icon img {
+        width: 32px;
+        height: 32px;
+    }
+    
+    /* Mission Cards */
+    .mission-card {
+        padding: 1.6rem;
+    }
+    
+    .mission-icon img {
+        width: 55px;
+        height: 55px;
+    }
+    
+    .mission-number {
+        font-size: 2rem;
+    }
+    
+    .mission-title {
+        font-size: 1.2rem;
+    }
+    
+    .mission-description {
+        font-size: 0.9rem;
+        line-height: 1.6;
+    }
+    
+    /* News Items */
+    .news-item {
+        padding: 1.3rem;
+    }
+    
+    .news-title {
+        font-size: 1.15rem;
+    }
+    
+    .news-excerpt {
+        font-size: 0.88rem;
+    }
+    
+    .news-meta {
+        font-size: 0.8rem;
+    }
+    
+    /* Partners */
+    .partners-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.8rem;
+    }
+    
+    .partner-item {
+        height: 90px;
+        padding: 0.8rem;
+    }
+    
+    /* Footer */
+    .footer {
+        padding: 35px 0 0;
+        margin-top: 50px;
+    }
+    
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+    
+    .footer-col {
+        gap: 12px;
+    }
+    
+    .footer-logo {
+        font-size: 1.3rem;
+    }
+    
+    .footer-title {
+        font-size: 0.85rem;
+        margin-bottom: 10px;
+    }
+    
+    .footer-desc {
+        font-size: 0.85rem;
+    }
+    
+    .footer-contact a,
+    .footer-links a {
+        font-size: 0.85rem;
+    }
+    
+    .social-links {
+        gap: 10px;
+    }
+    
+    .social-link {
+        width: 38px;
+        height: 38px;
+        font-size: 0.9rem;
+    }
+    
+    .footer-badge {
+        padding: 10px 14px;
+    }
+    
+    .footer-badge span {
+        font-size: 0.85rem;
+    }
+    
+    .footer-badge small {
+        font-size: 0.7rem;
+    }
+    
+    .footer-bottom {
+        padding: 20px 0;
+    }
+    
+    .copyright,
+    .footer-legal a {
+        font-size: 0.8rem;
+    }
+    
+    /* Sections */
+    section {
+        padding: 2.5rem 0;
+    }
+    
+    .section-title {
+        font-size: 1.8rem;
+        margin-bottom: 0.8rem;
+    }
+    
+    .section-subtitle {
+        font-size: 0.9rem;
+    }
+    
+    /* Chat Widget */
+    .chat-widget {
+        bottom: 14px;
+        right: 14px;
+    }
+    
+    .chat-button {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .chat-button i {
+        font-size: 19px;
+    }
+    
+    .chat-button-text {
+        font-size: 7.5px;
+    }
+    
+    .chat-popup {
+        width: calc(100vw - 28px);
+        right: -7px;
+    }
+    
+    /* Search Popup */
+    .search-overlay {
+        padding-top: 100px;
+    }
+    
+    .search-popup {
+        width: 92%;
+        padding: 28px 18px;
+    }
+    
+    .search-popup-title {
+        font-size: 1.4rem;
+    }
+    
+    .search-popup-desc {
+        font-size: 0.9rem;
+        margin-bottom: 26px;
+    }
+    
+    .search-input {
+        padding: 15px 54px 15px 46px;
+        font-size: 0.95rem;
+    }
+    
+    .search-icon {
+        font-size: 1.1rem;
+        left: 18px;
+    }
+    
+    .search-submit {
+        width: 44px;
+        height: 44px;
+        font-size: 0.95rem;
+    }
+    
+    .suggestion-tag {
+        padding: 7px 14px;
+        font-size: 0.85rem;
+    }
+}
+
+/* ==========================================
+   STANDARD MOBILE (max-width: 480px)
+========================================== */
+@media (max-width: 480px) {
+    :root {
+        --header-height: 56px;
+    }
+    
+    body {
+        padding-top: 56px;
+        font-size: 13px;
+    }
+    
+    .container {
+        padding: 0 0.375rem;
+    }
+    
+    /* Slider full width */
+    .main-slider,
+    section.main-slider {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100vw !important;
+        max-width: 100% !important;
+    }
+    
+    /* Category Filter - Gần full màn hình */
+    .category-filter {
+        margin: -30px 0.25rem 1rem !important;
+        padding: 0.75rem !important;
+        width: calc(100% - 0.5rem) !important;
+        max-width: none !important;
+        border-radius: 10px !important;
+    }
+    
+    .filter-title {
+        font-size: 0.75rem !important;
+    }
+    
+    .search-input {
+        font-size: 0.8rem !important;
+        padding: 0.65rem 0.85rem !important;
+        padding-right: 3rem !important;
+    }
+    
+    .search-btn {
+        width: 36px !important;
+        height: 36px !important;
+        font-size: 0.9rem !important;
+    }
+    
+    .category-pill {
+        font-size: 0.7rem !important;
+        padding: 0.4rem 0.8rem !important;
+    }
+    
+    .category-pill .count {
+        font-size: 0.65rem !important;
+    }
+    
+    /* All Grids - 1 cột trên mobile nhỏ */
+    .materials-grid,
+    .equipment-grid,
+    .technology-grid,
+    .landscape-grid,
+    .suppliers-grid {
+        grid-template-columns: 1fr !important;
+        gap: 0.9rem !important;
+    }
+    
+    .main-content {
+        padding: 0 0.375rem !important;
+    }
+    
+    /* Hero sections - Compact */
+    .materials-hero,
+    .equipment-hero,
+    .technology-hero,
+    .landscape-hero,
+    .suppliers-hero {
+        padding: 80px 0 50px !important;
+        min-height: 280px !important;
+    }
+    
+    .hero-title {
+        font-size: 1.9rem !important;
+    }
+    
+    .hero-subtitle {
+        font-size: 0.95rem !important;
+    }
+    
+    /* Product/Supplier Cards */
+    .material-card,
+    .equipment-card,
+    .technology-card,
+    .landscape-card,
+    .supplier-card {
+        margin: 0 !important;
+        border-radius: 12px !important;
+    }
+    
+    .material-header,
+    .equipment-header,
+    .technology-header,
+    .landscape-header,
+    .supplier-header {
+        height: 160px !important;
+    }
+    
+    .material-title,
+    .equipment-title,
+    .technology-title,
+    .landscape-title,
+    .supplier-name {
+        font-size: 0.95rem !important;
+    }
+    
+    .material-description,
+    .equipment-description,
+    .technology-description,
+    .landscape-description,
+    .supplier-description {
+        font-size: 0.82rem !important;
+        line-height: 1.5 !important;
+    }
+    
+    /* Pagination */
+    .pagination {
+        gap: 0.4rem !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+    }
+    
+    .pagination-btn {
+        padding: 0.5rem 0.85rem !important;
+        font-size: 0.8rem !important;
+        min-width: 38px !important;
+    }
+    
+    /* Typography - Compact cho mobile */
+    h1 { font-size: 1.45rem; }
+    h2 { font-size: 1.3rem; }
+    h3 { font-size: 1.05rem; }
+    h4 { font-size: 0.95rem; }
+    
+    p {
+        font-size: 0.85rem;
+        line-height: 1.5;
+    }
+    
+    /* Header */
+    .header-container {
+        padding: 0 0.375rem;
+    }
+    
+    .logo {
+        height: 42px;
+    }
+    
+    .nav-list {
+        gap: 1rem;
+    }
+    
+    .nav-link {
+        padding: 0.5rem 0.75rem;
+    }
+    
+    .nav-text {
+        font-size: 0.77rem;
+        letter-spacing: 1.2px;
+    }
+    
+    .nav-number {
+        display: none;
+    }
+    
+    .action-btn, .btn-login, .lang-toggle-btn, .user-avatar-btn {
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+        min-height: 36px;
+        font-size: 0.75rem;
+    }
+    
+    .header-actions {
+        gap: 0.5rem;
+        height: 36px;
+    }
+    
+    /* Hero Section */
+    .hero {
+        padding: 4rem 0 2rem;
+    }
+    
+    .hero-title {
+        font-size: 1.9rem;
+        line-height: 1.1;
+        margin-bottom: 0.7rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 0.95rem;
+        margin-bottom: 0.7rem;
+    }
+    
+    .hero-description {
+        font-size: 0.85rem;
+        line-height: 1.5;
+        margin-bottom: 1.2rem;
+    }
+    
+    /* Buttons */
+    .btn {
+        padding: 0.65rem 1.2rem;
+        font-size: 0.85rem;
+    }
+    
+    .btn-primary, .btn-outline {
+        padding: 0.6rem 1.1rem;
+        font-size: 0.85rem;
+    }
+    
+    /* Stats - 3 cột */
+    .stats {
+        padding: 2rem 0;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.6rem;
+    }
+    
+    .stat-item {
+        padding: 0.9rem 0.3rem;
+    }
+    
+    .stat-number {
+        font-size: 1.5rem;
+    }
+    
+    .stat-label {
+        font-size: 0.65rem;
+    }
+    
+    .stat-icon img {
+        width: 30px;
+        height: 30px;
+    }
+    
+    /* Mission Cards */
+    .mission-grid {
+        gap: 1.2rem;
+        margin-top: 1.5rem;
+    }
+    
+    .mission-card {
+        padding: 1.5rem;
+    }
+    
+    .mission-icon img {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .mission-number {
+        font-size: 1.8rem;
+    }
+    
+    .mission-title {
+        font-size: 1.1rem;
+        margin-bottom: 0.6rem;
+    }
+    
+    .mission-description {
+        font-size: 0.85rem;
+        line-height: 1.55;
+    }
+    
+    /* News */
+    .news-grid {
+        gap: 1.2rem;
+    }
+    
+    .news-item {
+        padding: 1.2rem;
+    }
+    
+    .news-image {
+        height: 180px;
+        border-radius: 10px;
+    }
+    
+    .news-title {
+        font-size: 1.05rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .news-excerpt {
+        font-size: 0.85rem;
+        line-height: 1.5;
+    }
+    
+    .news-meta {
+        font-size: 0.75rem;
+    }
+    
+    /* Partners */
+    .partners-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.7rem;
+    }
+    
+    .partner-item {
+        height: 80px;
+        padding: 0.7rem;
+    }
+    
+    .partner-item img {
+        max-height: 50px;
+    }
+    
+    /* Search Links */
+    .search-link {
+        padding: 1.3rem;
+    }
+    
+    .search-link h3 {
+        font-size: 1rem;
+    }
+    
+    .search-link p {
+        font-size: 0.8rem;
+    }
+    
+    /* Footer */
+    .footer {
+        padding: 30px 0 0;
+        margin-top: 40px;
+    }
+    
+    .footer-grid {
+        gap: 22px;
+    }
+    
+    .footer-col {
+        gap: 10px;
+    }
+    
+    .footer-logo {
+        font-size: 1.2rem;
+        margin-bottom: 6px;
+    }
+    
+    .footer-title {
+        font-size: 0.8rem;
+        margin-bottom: 8px;
+    }
+    
+    .footer-desc {
+        font-size: 0.8rem;
+        line-height: 1.5;
+    }
+    
+    .footer-contact a,
+    .footer-links a {
+        font-size: 0.8rem;
+    }
+    
+    .footer-contact {
+        gap: 6px;
+        margin-top: 6px;
+    }
+    
+    .footer-links {
+        gap: 6px;
+    }
+    
+    .social-links {
+        gap: 8px;
+    }
+    
+    .social-link {
+        width: 36px;
+        height: 36px;
+        font-size: 0.85rem;
+        border-radius: 8px;
+    }
+    
+    .footer-badge {
+        padding: 9px 12px;
+        margin-top: 10px;
+    }
+    
+    .footer-badge span {
+        font-size: 0.8rem;
+    }
+    
+    .footer-badge small {
+        font-size: 0.68rem;
+    }
+    
+    .footer-bottom {
+        padding: 18px 0;
+    }
+    
+    .copyright {
+        font-size: 0.75rem;
+    }
+    
+    .footer-legal {
+        gap: 15px;
+    }
+    
+    .footer-legal a {
+        font-size: 0.75rem;
+    }
+    
+    /* Sections */
+    section {
+        padding: 2rem 0;
+    }
+    
+    .section-header {
+        margin-bottom: 1.5rem;
+    }
+    
+    .section-title {
+        font-size: 1.6rem;
+        margin-bottom: 0.6rem;
+    }
+    
+    .section-subtitle {
+        font-size: 0.85rem;
+        line-height: 1.5;
+    }
+    
+    /* Chat Widget */
+    .chat-widget {
+        bottom: 12px;
+        right: 12px;
+    }
+    
+    .chat-button {
+        width: 48px;
+        height: 48px;
+    }
+    
+    .chat-button i {
+        font-size: 18px;
+    }
+    
+    .chat-button-text {
+        font-size: 7px;
+    }
+    
+    .chat-pulse {
+        width: 12px;
+        height: 12px;
+    }
+    
+    .chat-popup {
+        width: calc(100vw - 24px);
+        right: -6px;
+        bottom: 62px;
+    }
+    
+    .chat-popup-header {
+        padding: 15px;
+    }
+    
+    .chat-popup-title h4 {
+        font-size: 0.9rem;
+    }
+    
+    .chat-popup-title p {
+        font-size: 0.7rem;
+    }
+    
+    .chat-popup-body {
+        padding: 12px;
+        gap: 8px;
+    }
+    
+    .chat-option {
+        padding: 12px;
+        gap: 12px;
+    }
+    
+    .chat-option-icon {
+        width: 38px;
+        height: 38px;
+        font-size: 16px;
+    }
+    
+    .chat-option-name {
+        font-size: 0.85rem;
+    }
+    
+    .chat-option-desc {
+        font-size: 0.7rem;
+    }
+    
+    .chat-popup-footer {
+        padding: 9px 15px;
+    }
+    
+    .chat-popup-footer small {
+        font-size: 0.6rem;
+    }
+    
+    /* Search Popup */
+    .search-overlay {
+        padding-top: 80px;
+    }
+    
+    .search-popup {
+        width: 94%;
+        padding: 24px 16px;
+    }
+    
+    .search-popup-close {
+        width: 36px;
+        height: 36px;
+        top: 16px;
+        right: 16px;
+        font-size: 1.1rem;
+    }
+    
+    .search-popup-title {
+        font-size: 1.3rem;
+        margin-bottom: 6px;
+        gap: 10px;
+    }
+    
+    .search-popup-desc {
+        font-size: 0.85rem;
+        margin-bottom: 24px;
+    }
+    
+    .search-input-wrapper {
+        margin-bottom: 26px;
+    }
+    
+    .search-input {
+        padding: 14px 50px 14px 44px;
+        font-size: 0.9rem;
+        border-radius: 14px;
+    }
+    
+    .search-icon {
+        font-size: 1rem;
+        left: 16px;
+    }
+    
+    .search-submit {
+        width: 42px;
+        height: 42px;
+        font-size: 0.9rem;
+        right: 6px;
+        border-radius: 10px;
+    }
+    
+    .search-suggestions {
+        padding-top: 20px;
+    }
+    
+    .suggestions-title {
+        font-size: 0.75rem;
+        margin-bottom: 10px;
+    }
+    
+    .suggestions-tags {
+        gap: 8px;
+    }
+    
+    .suggestion-tag {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        border-radius: 16px;
+    }
+}
+
+/* ==========================================
+   SMALL MOBILE (max-width: 375px)
+========================================== */
+@media (max-width: 375px) {
+    :root {
+        --header-height: 54px;
+    }
+    
+    body {
+        padding-top: 54px;
+        font-size: 12.5px;
+    }
+    
+    .container {
+        padding: 0 0.3rem;
+    }
+    
+    /* Slider full width */
+    .main-slider,
+    section.main-slider {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100vw !important;
+        max-width: 100% !important;
+    }
+    
+    /* Category Filter - Gần full màn hình */
+    .category-filter {
+        margin: -28px 0.2rem 0.9rem !important;
+        padding: 0.7rem !important;
+        width: calc(100% - 0.4rem) !important;
+        max-width: none !important;
+    }
+    
+    .filter-title {
+        font-size: 0.7rem !important;
+    }
+    
+    .search-input {
+        font-size: 0.78rem !important;
+        padding: 0.6rem 0.8rem !important;
+    }
+    
+    .search-btn {
+        width: 34px !important;
+        height: 34px !important;
+    }
+    
+    .category-pill {
+        font-size: 0.68rem !important;
+        padding: 0.38rem 0.75rem !important;
+    }
+    
+    /* Hero sections - Very compact */
+    .materials-hero,
+    .equipment-hero,
+    .technology-hero,
+    .landscape-hero,
+    .suppliers-hero {
+        padding: 75px 0 45px !important;
+        min-height: 260px !important;
+    }
+    
+    .hero-title {
+        font-size: 1.75rem !important;
+    }
+    
+    .hero-subtitle {
+        font-size: 0.9rem !important;
+    }
+    
+    /* Typography - Rất compact */
+    h1 { font-size: 1.35rem; }
+    h2 { font-size: 1.2rem; }
+    h3 { font-size: 1rem; }
+    
+    /* Header */
+    .header-container {
+        padding: 0 0.3rem;
+    }
+    
+    .logo {
+        height: 38px;
+    }
+    
+    .nav-list {
+        gap: 0.8rem;
+    }
+    
+    .nav-link {
+        padding: 0.45rem 0.65rem;
+    }
+    
+    .nav-text {
+        font-size: 0.72rem;
+        letter-spacing: 1px;
+    }
+    
+    .action-btn, .btn-login, .lang-toggle-btn, .user-avatar-btn {
+        width: 34px;
+        height: 34px;
+        min-width: 34px;
+        min-height: 34px;
+        font-size: 0.7rem;
+    }
+    
+    .header-actions {
+        gap: 0.4rem;
+        height: 34px;
+    }
+    
+    /* Hero */
+    .hero-title {
+        font-size: 1.75rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 0.9rem;
+    }
+    
+    .hero-description {
+        font-size: 0.8rem;
+    }
+    
+    /* Buttons */
+    .btn {
+        padding: 0.6rem 1.1rem;
+        font-size: 0.8rem;
+    }
+    
+    /* Stats - 3 cột */
+    .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.5rem;
+    }
+    
+    .stat-item {
+        padding: 0.8rem 0.25rem;
+    }
+    
+    .stat-number {
+        font-size: 1.4rem;
+    }
+    
+    .stat-label {
+        font-size: 0.6rem;
+    }
+    
+    .stat-icon img {
+        width: 28px;
+        height: 28px;
+    }
+    
+    /* Mission */
+    .mission-card {
+        padding: 1.3rem;
+    }
+    
+    .mission-icon img {
+        width: 46px;
+        height: 46px;
+    }
+    
+    .mission-number {
+        font-size: 1.6rem;
+    }
+    
+    .mission-title {
+        font-size: 1.05rem;
+    }
+    
+    .mission-description {
+        font-size: 0.8rem;
+    }
+    
+    /* News */
+    .news-item {
+        padding: 1.1rem;
+    }
+    
+    .news-image {
+        height: 160px;
+    }
+    
+    .news-title {
+        font-size: 1rem;
+    }
+    
+    .news-excerpt {
+        font-size: 0.8rem;
+    }
+    
+    /* Footer */
+    .footer-logo {
+        font-size: 1.1rem;
+    }
+    
+    .footer-title,
+    .footer-desc,
+    .footer-contact a,
+    .footer-links a {
+        font-size: 0.75rem;
+    }
+    
+    .social-link {
+        width: 34px;
+        height: 34px;
+    }
+}
+
+/* ==========================================
+   EXTRA SMALL MOBILE (max-width: 320px)
+========================================== */
+@media (max-width: 320px) {
+    :root {
+        --header-height: 50px;
+    }
+    
+    body {
+        padding-top: 50px;
+        font-size: 11.5px;
+    }
+    
+    .container {
+        padding: 0 0.25rem;
+    }
+    
+    /* Slider full width */
+    .main-slider,
+    section.main-slider {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100vw !important;
+        max-width: 100% !important;
+    }
+    
+    /* Category Filter - Gần full màn hình */
+    .category-filter {
+        margin: -25px 0.15rem 0.8rem !important;
+        padding: 0.65rem !important;
+        width: calc(100% - 0.3rem) !important;
+        max-width: none !important;
+        border-radius: 8px !important;
+    }
+    
+    .filter-title {
+        font-size: 0.68rem !important;
+    }
+    
+    .search-input {
+        font-size: 0.75rem !important;
+        padding: 0.55rem 0.75rem !important;
+    }
+    
+    .search-btn {
+        width: 32px !important;
+        height: 32px !important;
+        font-size: 0.85rem !important;
+    }
+    
+    .category-pill {
+        font-size: 0.65rem !important;
+        padding: 0.35rem 0.7rem !important;
+    }
+    
+    .category-pill .count {
+        font-size: 0.6rem !important;
+    }
+    
+    /* Hero sections - Ultra compact */
+    .materials-hero,
+    .equipment-hero,
+    .technology-hero,
+    .landscape-hero,
+    .suppliers-hero {
+        padding: 70px 0 40px !important;
+        min-height: 240px !important;
+    }
+    
+    .hero-title {
+        font-size: 1.6rem !important;
+    }
+    
+    .hero-subtitle {
+        font-size: 0.85rem !important;
+    }
+    
+    /* Typography - Ultra compact */
+    h1 { font-size: 1.25rem; }
+    h2 { font-size: 1.1rem; }
+    h3 { font-size: 0.95rem; }
+    
+    /* Header */
+    .header-container {
+        padding: 0 0.25rem;
+    }
+    
+    .logo {
+        height: 34px;
+    }
+    
+    .nav-list {
+        gap: 0.6rem;
+    }
+    
+    .nav-link {
+        padding: 0.4rem 0.55rem;
+    }
+    
+    .nav-text {
+        font-size: 0.68rem;
+        letter-spacing: 0.8px;
+    }
+    
+    .action-btn, .btn-login, .lang-toggle-btn, .user-avatar-btn {
+        width: 32px;
+        height: 32px;
+        min-width: 32px;
+        min-height: 32px;
+        font-size: 0.65rem;
+    }
+    
+    .header-actions {
+        gap: 0.35rem;
+        height: 32px;
+    }
+    
+    /* Hero */
+    .hero {
+        padding: 3.5rem 0 1.8rem;
+    }
+    
+    .hero-title {
+        font-size: 1.6rem;
+        margin-bottom: 0.6rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 0.85rem;
+    }
+    
+    .hero-description {
+        font-size: 0.75rem;
+    }
+    
+    /* Buttons */
+    .btn {
+        padding: 0.55rem 1rem;
+        font-size: 0.75rem;
+    }
+    
+    /* Stats - 3 cột */
+    .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.4rem;
+    }
+    
+    .stat-item {
+        padding: 0.7rem 0.2rem;
+    }
+    
+    .stat-number {
+        font-size: 1.3rem;
+    }
+    
+    .stat-label {
+        font-size: 0.55rem;
+    }
+    
+    .stat-icon img {
+        width: 26px;
+        height: 26px;
+    }
+    
+    /* Mission */
+    .mission-grid {
+        gap: 1rem;
+    }
+    
+    .mission-card {
+        padding: 1.2rem;
+    }
+    
+    .mission-icon img {
+        width: 42px;
+        height: 42px;
+    }
+    
+    .mission-number {
+        font-size: 1.5rem;
+    }
+    
+    .mission-title {
+        font-size: 1rem;
+    }
+    
+    .mission-description {
+        font-size: 0.75rem;
+    }
+    
+    /* News */
+    .news-grid {
+        gap: 1rem;
+    }
+    
+    .news-item {
+        padding: 1rem;
+    }
+    
+    .news-image {
+        height: 140px;
+    }
+    
+    .news-title {
+        font-size: 0.95rem;
+    }
+    
+    .news-excerpt {
+        font-size: 0.75rem;
+    }
+    
+    .news-meta {
+        font-size: 0.7rem;
+    }
+    
+    /* Partners */
+    .partners-grid {
+        grid-template-columns: 1fr;
+        gap: 0.6rem;
+    }
+    
+    .partner-item {
+        height: 70px;
+        padding: 0.6rem;
+    }
+    
+    .partner-item img {
+        max-height: 40px;
+    }
+    
+    /* Footer */
+    .footer {
+        padding: 25px 0 0;
+        margin-top: 35px;
+    }
+    
+    .footer-grid {
+        gap: 20px;
+    }
+    
+    .footer-logo {
+        font-size: 1rem;
+    }
+    
+    .footer-title,
+    .footer-desc,
+    .footer-contact a,
+    .footer-links a {
+        font-size: 0.7rem;
+    }
+    
+    .social-links {
+        gap: 6px;
+    }
+    
+    .social-link {
+        width: 32px;
+        height: 32px;
+        font-size: 0.75rem;
+    }
+    
+    .footer-badge {
+        padding: 8px 10px;
+    }
+    
+    .footer-badge span {
+        font-size: 0.75rem;
+    }
+    
+    .footer-badge small {
+        font-size: 0.6rem;
+    }
+    
+    /* Sections */
+    section {
+        padding: 1.8rem 0;
+    }
+    
+    .section-title {
+        font-size: 1.4rem;
+    }
+    
+    .section-subtitle {
+        font-size: 0.8rem;
+    }
+    
+    /* Chat Widget */
+    .chat-button {
+        width: 44px;
+        height: 44px;
+    }
+    
+    .chat-button i {
+        font-size: 16px;
+    }
+    
+    .chat-button-text {
+        font-size: 6.5px;
+    }
+}
+
+/* ==========================================
+   ENHANCED ANIMATIONS FOR MOBILE
+========================================== */
 @media (max-width: 768px) {
     .nav-menu.active {
         animation: slideDown 0.3s ease-out;
@@ -17,25 +1922,29 @@
         }
     }
     
-    .nav-menu li {
-        margin: 0.5rem 0;
+    /* Smooth transitions */
+    * {
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     }
     
-    .hero-title {
-        font-size: 2.5rem;
-        line-height: 1.2;
-    }
-    
-    .hero-subtitle {
-        font-size: 1.1rem;
-    }
-    
-    .hero-description {
-        font-size: 1rem;
+    /* Touch-friendly hover states */
+    .btn:active,
+    .nav-link:active,
+    .action-btn:active {
+        transform: scale(0.95);
     }
 }
 
-/* Improved accessibility */
+/* ==========================================
+   ACCESSIBILITY IMPROVEMENTS
+========================================== */
+/* Enhanced focus styles for mobile */
+*:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Skip link for accessibility */
 .skip-link {
     position: absolute;
     top: -40px;
@@ -52,18 +1961,47 @@
     top: 6px;
 }
 
-/* Enhanced focus styles */
-*:focus {
-    outline: 2px solid var(--primary-color);
-    outline-offset: 2px;
+/* Screen reader only class */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 }
 
-/* Print styles */
+/* ==========================================
+   REDUCED MOTION SUPPORT
+========================================== */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    html {
+        scroll-behavior: auto;
+    }
+}
+
+/* ==========================================
+   PRINT STYLES
+========================================== */
 @media print {
     .header,
     .nav-toggle,
     .social-links,
-    .news-navigation {
+    .chat-widget,
+    .search-overlay,
+    .action-btn,
+    .btn-login {
         display: none !important;
     }
     
@@ -82,34 +2020,34 @@
     }
 }
 
-/* Dark mode support (optional) */
-@media (prefers-color-scheme: dark) {
-    :root {
-        --text-primary: #f1f5f9;
-        --text-secondary: #cbd5e1;
-        --bg-primary: #0f172a;
-        --bg-secondary: #1e293b;
-        --bg-tertiary: #334155;
-        --border-color: #475569;
-    }
-}
-
-/* Reduced motion for accessibility */
-@media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
+/* ==========================================
+   LANDSCAPE ORIENTATION SUPPORT
+========================================== */
+@media (max-width: 768px) and (orientation: landscape) {
+    .hero {
+        padding: 4rem 0 2rem;
     }
     
-    html {
-        scroll-behavior: auto;
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .mission-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .news-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
-/* High contrast mode support */
+/* ==========================================
+   HIGH CONTRAST MODE SUPPORT
+========================================== */
 @media (prefers-contrast: high) {
     .btn-primary {
         border: 2px solid;
@@ -123,7 +2061,1026 @@
     }
 }
 
-/* Enhanced performance optimizations */
+/* ==========================================
+   PRODUCTS PAGE RESPONSIVE
+========================================== */
+@media (max-width: 1024px) {
+    .products-hero,
+    .suppliers-hero {
+        padding: 80px 0 50px;
+        min-height: 260px;
+    }
+    
+    .hero-content {
+        padding: 0 1.2rem;
+    }
+    
+    .hero-title {
+        font-size: 2.6rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.05rem;
+    }
+    
+    .main-layout {
+        padding: 0 1.2rem;
+    }
+    
+    .products-grid,
+    .suppliers-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .products-hero,
+    .suppliers-hero {
+        padding: 70px 0 40px;
+        min-height: 200px;
+    }
+    
+    .hero-content {
+        padding: 0 0.75rem;
+    }
+    
+    .hero-title {
+        font-size: 2rem;
+        margin-bottom: 0.7rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+    
+    .main-layout {
+        flex-direction: column;
+        padding: 0 0.75rem;
+    }
+    
+    .sidebar {
+        width: 100%;
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+    }
+    
+    .products-content,
+    .suppliers-content {
+        width: 100%;
+    }
+    
+    .products-grid,
+    .suppliers-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+    
+    .product-card,
+    .supplier-card {
+        padding: 1rem;
+    }
+    
+    .product-image,
+    .supplier-logo {
+        height: 160px;
+    }
+    
+    .product-title,
+    .supplier-name {
+        font-size: 0.95rem;
+    }
+    
+    .product-description,
+    .supplier-description {
+        font-size: 0.8rem;
+    }
+    
+    .product-price {
+        font-size: 1rem;
+    }
+    
+    /* Search and Filter */
+    .search-filter-bar {
+        flex-direction: column;
+        gap: 0.7rem;
+        padding: 0;
+    }
+    
+    .search-box,
+    .filter-dropdown {
+        width: 100%;
+    }
+    
+    /* Pagination */
+    .pagination {
+        gap: 0.35rem;
+    }
+    
+    .pagination-btn {
+        padding: 0.45rem 0.7rem;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .products-hero,
+    .suppliers-hero {
+        padding: 60px 0 35px;
+        min-height: 180px;
+    }
+    
+    .hero-content {
+        padding: 0 0.5rem;
+    }
+    
+    .hero-title {
+        font-size: 1.8rem;
+        margin-bottom: 0.6rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 0.9rem;
+    }
+    
+    .main-layout {
+        padding: 0 0.5rem;
+    }
+    
+    .products-grid,
+    .suppliers-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.8rem;
+    }
+    
+    .product-card,
+    .supplier-card {
+        padding: 0.85rem;
+    }
+    
+    .product-image,
+    .supplier-logo {
+        height: 150px;
+        border-radius: 10px;
+    }
+    
+    .product-title,
+    .supplier-name {
+        font-size: 0.9rem;
+        margin-bottom: 0.35rem;
+    }
+    
+    .product-description,
+    .supplier-description {
+        font-size: 0.75rem;
+        line-height: 1.4;
+    }
+    
+    .product-price {
+        font-size: 0.95rem;
+    }
+    
+    .product-meta,
+    .supplier-meta {
+        font-size: 0.7rem;
+    }
+    
+    /* Stats bar - 3 cột */
+    .stats-bar {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.6rem;
+        padding: 1rem;
+    }
+    
+    .stat-item {
+        padding: 0.7rem 0.3rem;
+    }
+    
+    .stat-value {
+        font-size: 1.3rem;
+    }
+    
+    .stat-label {
+        font-size: 0.65rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .products-hero,
+    .suppliers-hero {
+        padding: 55px 0 30px;
+        min-height: 160px;
+    }
+    
+    .hero-content {
+        padding: 0 0.375rem;
+    }
+    
+    .hero-title {
+        font-size: 1.6rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 0.85rem;
+    }
+    
+    .main-layout {
+        padding: 0 0.375rem;
+    }
+    
+    .products-grid,
+    .suppliers-grid {
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
+    }
+    
+    .product-card,
+    .supplier-card {
+        padding: 0.8rem;
+    }
+    
+    .product-image,
+    .supplier-logo {
+        height: 180px;
+    }
+    
+    .product-title,
+    .supplier-name {
+        font-size: 0.88rem;
+    }
+    
+    .product-description,
+    .supplier-description {
+        font-size: 0.73rem;
+    }
+    
+    .product-price {
+        font-size: 0.92rem;
+    }
+    
+    .btn-view-detail {
+        padding: 0.55rem 0.9rem;
+        font-size: 0.8rem;
+    }
+    
+    /* Filter buttons */
+    .category-filters {
+        flex-wrap: wrap;
+        gap: 0.45rem;
+    }
+    
+    .category-btn {
+        padding: 0.45rem 0.8rem;
+        font-size: 0.75rem;
+    }
+    
+    /* Stats - 3 cột */
+    .stats-bar {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.5rem;
+        padding: 0.8rem;
+    }
+    
+    .stat-item {
+        padding: 0.6rem 0.25rem;
+    }
+    
+    .stat-value {
+        font-size: 1.1rem;
+    }
+    
+    .stat-label {
+        font-size: 0.6rem;
+    }
+}
+
+@media (max-width: 375px) {
+    .hero-title {
+        font-size: 1.65rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 0.85rem;
+    }
+    
+    .product-card,
+    .supplier-card {
+        padding: 0.8rem;
+    }
+    
+    .product-image,
+    .supplier-logo {
+        height: 180px;
+    }
+    
+    .product-title,
+    .supplier-name {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 320px) {
+    .products-hero,
+    .suppliers-hero {
+        padding: 55px 0 30px;
+        min-height: 160px;
+    }
+    
+    .hero-title {
+        font-size: 1.5rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 0.8rem;
+    }
+    
+    .product-card,
+    .supplier-card {
+        padding: 0.75rem;
+    }
+    
+    .product-image,
+    .supplier-logo {
+        height: 160px;
+    }
+}
+
+/* ==========================================
+   PRODUCT DETAIL PAGE RESPONSIVE
+========================================== */
+@media (max-width: 1024px) {
+    .page-container {
+        padding: 0 1.5rem;
+    }
+    
+    .product-detail-layout {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .product-gallery {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .page-container {
+        margin: 50px auto 2rem;
+        padding: 0 1rem;
+    }
+    
+    .breadcrumb {
+        font-size: 0.85rem;
+        margin-bottom: 0.8rem;
+    }
+    
+    .product-detail-layout {
+        gap: 1.5rem;
+    }
+    
+    /* Gallery */
+    .main-image {
+        height: 350px;
+        border-radius: 12px;
+    }
+    
+    .thumbnail-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.6rem;
+    }
+    
+    .thumbnail {
+        height: 70px;
+        border-radius: 8px;
+    }
+    
+    /* Product Info */
+    .product-name {
+        font-size: 1.8rem;
+        margin-bottom: 0.8rem;
+    }
+    
+    .product-price {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+    }
+    
+    .product-meta-item {
+        font-size: 0.85rem;
+        padding: 0.5rem 0;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+    
+    .btn-primary,
+    .btn-secondary {
+        width: 100%;
+        padding: 0.8rem;
+    }
+    
+    /* Tabs */
+    .product-tabs {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    
+    .tab-btn {
+        padding: 0.6rem 1rem;
+        font-size: 0.85rem;
+    }
+    
+    .tab-content {
+        padding: 1.2rem;
+    }
+    
+    /* Related Products */
+    .related-products-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .page-container {
+        margin: 40px auto 1.5rem;
+        padding: 0 0.875rem;
+    }
+    
+    .breadcrumb {
+        font-size: 0.8rem;
+        flex-wrap: wrap;
+    }
+    
+    /* Gallery */
+    .main-image {
+        height: 300px;
+    }
+    
+    .thumbnail-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.5rem;
+    }
+    
+    .thumbnail {
+        height: 60px;
+    }
+    
+    /* Product Info */
+    .product-name {
+        font-size: 1.6rem;
+        line-height: 1.2;
+    }
+    
+    .product-price {
+        font-size: 1.8rem;
+    }
+    
+    .product-meta-item {
+        font-size: 0.8rem;
+        padding: 0.45rem 0;
+    }
+    
+    .product-meta-item i {
+        width: 20px;
+        font-size: 0.85rem;
+    }
+    
+    /* Tabs */
+    .product-tabs {
+        gap: 0.4rem;
+    }
+    
+    .tab-btn {
+        padding: 0.55rem 0.9rem;
+        font-size: 0.8rem;
+    }
+    
+    .tab-content {
+        padding: 1rem;
+        font-size: 0.9rem;
+    }
+    
+    /* Supplier Box */
+    .supplier-box {
+        padding: 1.2rem;
+    }
+    
+    .supplier-logo {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .supplier-name {
+        font-size: 1.1rem;
+    }
+    
+    .supplier-info {
+        font-size: 0.8rem;
+    }
+    
+    /* Related Products */
+    .related-products-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.8rem;
+    }
+    
+    .related-product-card {
+        padding: 0.8rem;
+    }
+    
+    .related-product-image {
+        height: 140px;
+    }
+    
+    .related-product-title {
+        font-size: 0.9rem;
+    }
+    
+    .related-product-price {
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .page-container {
+        margin: 35px auto 1.2rem;
+        padding: 0 0.75rem;
+    }
+    
+    /* Gallery */
+    .main-image {
+        height: 260px;
+    }
+    
+    .thumbnail-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.4rem;
+    }
+    
+    .thumbnail {
+        height: 65px;
+    }
+    
+    /* Product Info */
+    .product-name {
+        font-size: 1.45rem;
+    }
+    
+    .product-price {
+        font-size: 1.65rem;
+        margin-bottom: 0.8rem;
+    }
+    
+    .product-meta {
+        gap: 0.3rem;
+    }
+    
+    .product-meta-item {
+        font-size: 0.75rem;
+        padding: 0.4rem 0;
+    }
+    
+    .action-buttons {
+        gap: 0.7rem;
+    }
+    
+    .btn-primary,
+    .btn-secondary {
+        padding: 0.7rem;
+        font-size: 0.85rem;
+    }
+    
+    /* Tabs */
+    .product-tabs {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        gap: 0.35rem;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .tab-btn {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.75rem;
+        white-space: nowrap;
+    }
+    
+    .tab-content {
+        padding: 0.9rem;
+        font-size: 0.85rem;
+    }
+    
+    /* Video iframe */
+    .video-container iframe {
+        height: 220px;
+    }
+    
+    /* Supplier Box */
+    .supplier-box {
+        padding: 1rem;
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .supplier-logo {
+        width: 55px;
+        height: 55px;
+        margin: 0 auto 0.8rem;
+    }
+    
+    .supplier-name {
+        font-size: 1rem;
+    }
+    
+    .supplier-info {
+        font-size: 0.75rem;
+    }
+    
+    /* Related Products */
+    .related-products-grid {
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
+    }
+    
+    .related-product-card {
+        display: flex;
+        gap: 1rem;
+    }
+    
+    .related-product-image {
+        width: 100px;
+        height: 100px;
+        flex-shrink: 0;
+    }
+    
+    .related-product-title {
+        font-size: 0.85rem;
+    }
+    
+    .related-product-price {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 375px) {
+    .main-image {
+        height: 240px;
+    }
+    
+    .product-name {
+        font-size: 1.35rem;
+    }
+    
+    .product-price {
+        font-size: 1.55rem;
+    }
+    
+    .thumbnail {
+        height: 55px;
+    }
+}
+
+@media (max-width: 320px) {
+    .page-container {
+        margin: 30px auto 1rem;
+        padding: 0 0.5rem;
+    }
+    
+    .main-image {
+        height: 220px;
+    }
+    
+    .product-name {
+        font-size: 1.25rem;
+    }
+    
+    .product-price {
+        font-size: 1.45rem;
+    }
+    
+    .thumbnail-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.35rem;
+    }
+    
+    .thumbnail {
+        height: 50px;
+    }
+}
+
+/* ==========================================
+   NEWS PAGE RESPONSIVE
+========================================== */
+@media (max-width: 768px) {
+    .news-hero {
+        padding: 80px 0 50px;
+    }
+    
+    .news-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .news-card {
+        padding: 1.2rem;
+    }
+    
+    .news-image {
+        height: 200px;
+    }
+    
+    .news-title {
+        font-size: 1.2rem;
+    }
+    
+    .news-excerpt {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .news-hero {
+        padding: 70px 0 40px;
+    }
+    
+    .news-grid {
+        gap: 1.2rem;
+    }
+    
+    .news-card {
+        padding: 1rem;
+    }
+    
+    .news-image {
+        height: 180px;
+    }
+    
+    .news-title {
+        font-size: 1.1rem;
+    }
+    
+    .news-excerpt {
+        font-size: 0.85rem;
+    }
+    
+    .news-meta {
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .news-hero {
+        padding: 60px 0 35px;
+    }
+    
+    .news-grid {
+        gap: 1rem;
+    }
+    
+    .news-image {
+        height: 160px;
+    }
+    
+    .news-title {
+        font-size: 1rem;
+    }
+    
+    .news-excerpt {
+        font-size: 0.8rem;
+    }
+}
+
+/* ==========================================
+   SEARCH PAGE RESPONSIVE
+========================================== */
+@media (max-width: 768px) {
+    .search-results-grid {
+        grid-template-columns: 1fr;
+        gap: 1.2rem;
+    }
+    
+    .search-result-card {
+        padding: 1.2rem;
+    }
+    
+    .search-result-title {
+        font-size: 1.1rem;
+    }
+    
+    .search-result-description {
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .search-results-grid {
+        gap: 1rem;
+    }
+    
+    .search-result-card {
+        padding: 1rem;
+    }
+    
+    .search-result-title {
+        font-size: 1rem;
+    }
+    
+    .search-result-description {
+        font-size: 0.8rem;
+    }
+}
+
+/* ==========================================
+   ARTICLE/POST DETAIL PAGE RESPONSIVE - FULL WIDTH
+========================================== */
+@media (max-width: 768px) {
+    /* Article Detail Page */
+    .article-container {
+        padding: 0 0.5rem !important; /* Sát viền hơn */
+        width: 100% !important;
+    }
+    
+    .content-wrapper {
+        padding: 0 0.375rem !important; /* Sát viền hơn */
+        width: 100% !important;
+        margin: 1rem 0 !important;
+    }
+    
+    .article-body {
+        padding: 1.5rem 0.75rem !important; /* Giảm padding */
+    }
+    
+    .article-footer {
+        padding: 1.5rem 0.75rem !important;
+    }
+    
+    /* Post Detail Page */
+    .post-detail {
+        padding: 1.5rem 0.75rem !important; /* Giảm padding */
+    }
+    
+    .post-main-column {
+        padding: 0 !important;
+    }
+    
+    /* Comment Form */
+    .comment-form {
+        padding: 1.2rem 0.75rem !important;
+    }
+}
+
+@media (max-width: 640px) {
+    .article-container,
+    .content-wrapper {
+        padding: 0 0.5rem !important;
+    }
+    
+    .article-body,
+    .article-footer,
+    .post-detail {
+        padding: 1.2rem 0.5rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Full màn hình - Sát viền tối đa */
+    .article-container {
+        padding: 0 0.375rem !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+    
+    .content-wrapper {
+        padding: 0 0.375rem !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0.5rem 0 !important;
+    }
+    
+    .article-body,
+    .article-footer {
+        padding: 1rem 0.375rem !important;
+    }
+    
+    .post-detail {
+        padding: 1rem 0.375rem !important;
+        border-radius: 8px !important;
+    }
+    
+    .comment-form {
+        padding: 1rem 0.5rem !important;
+    }
+    
+    /* Breadcrumb */
+    .breadcrumb {
+        font-size: 0.7rem !important;
+        margin-bottom: 1rem !important;
+        padding: 0 !important;
+    }
+    
+    /* Article Title */
+    .article-title,
+    .post-title {
+        font-size: 1.4rem !important;
+        line-height: 1.3 !important;
+        margin-bottom: 1rem !important;
+    }
+    
+    /* Article Content */
+    .article-body h2,
+    .post-content h2 {
+        font-size: 1.2rem !important;
+        margin: 1.5rem 0 0.75rem !important;
+    }
+    
+    .article-body h3,
+    .post-content h3 {
+        font-size: 1.05rem !important;
+        margin: 1.2rem 0 0.6rem !important;
+    }
+    
+    .article-body p,
+    .post-content p {
+        font-size: 0.95rem !important;
+        line-height: 1.7 !important;
+        margin-bottom: 1rem !important;
+    }
+    
+    /* Sidebar */
+    .sidebar-article {
+        padding: 0.75rem 0 !important;
+    }
+    
+    .sidebar-thumbnail {
+        width: 60px !important;
+        height: 60px !important;
+    }
+    
+    .sidebar-article-title {
+        font-size: 0.8rem !important;
+    }
+}
+
+@media (max-width: 375px) {
+    /* iPhone SE và nhỏ hơn - Full màn hình */
+    .article-container,
+    .content-wrapper {
+        padding: 0 0.3rem !important;
+    }
+    
+    .article-body,
+    .article-footer,
+    .post-detail {
+        padding: 0.875rem 0.3rem !important;
+    }
+    
+    .article-title,
+    .post-title {
+        font-size: 1.3rem !important;
+    }
+    
+    .article-body p,
+    .post-content p {
+        font-size: 0.9rem !important;
+    }
+}
+
+@media (max-width: 320px) {
+    /* Màn hình rất nhỏ - Tối ưu tối đa */
+    .article-container,
+    .content-wrapper {
+        padding: 0 0.25rem !important;
+    }
+    
+    .article-body,
+    .article-footer,
+    .post-detail {
+        padding: 0.75rem 0.25rem !important;
+    }
+    
+    .article-title,
+    .post-title {
+        font-size: 1.2rem !important;
+    }
+    
+    .article-body p,
+    .post-content p {
+        font-size: 0.85rem !important;
+    }
+    
+    .sidebar-thumbnail {
+        width: 50px !important;
+        height: 50px !important;
+    }
+}
+
+/* ==========================================
+   PERFORMANCE OPTIMIZATIONS
+========================================== */
 .hero,
 .stats,
 .about,
@@ -133,17 +3090,746 @@
     contain: layout style paint;
 }
 
-/* Performance optimizations for images are handled in HTML attributes */
-
-/* Additional utility classes */
-.sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
+/* Optimize images on mobile */
+@media (max-width: 768px) {
+    img {
+        image-rendering: -webkit-optimize-contrast;
+    }
 }
+
+/* ==========================================
+   SUPPLIER DETAIL PAGE RESPONSIVE
+========================================== */
+@media (max-width: 768px) {
+    /* Supplier Detail - Mobile Optimized */
+    .page-container {
+        margin: 50px auto 2rem !important;
+        padding: 0 0.75rem !important;
+    }
+    
+    .supplier-header {
+        padding: 1.5rem !important;
+        border-radius: 16px !important;
+        margin-bottom: 1.5rem !important;
+    }
+    
+    .supplier-header-content {
+        grid-template-columns: 1fr !important;
+        gap: 1.25rem !important;
+        text-align: center !important;
+    }
+    
+    .supplier-logo {
+        width: 120px !important;
+        height: 120px !important;
+        margin: 0 auto !important;
+        border-radius: 16px !important;
+    }
+    
+    .supplier-name {
+        font-size: 1.8rem !important;
+        margin-bottom: 0.75rem !important;
+    }
+    
+    .supplier-meta {
+        gap: 1rem !important;
+        justify-content: center !important;
+    }
+    
+    .supplier-meta-item {
+        font-size: 0.875rem !important;
+    }
+    
+    /* Content sections */
+    .supplier-content {
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important;
+    }
+    
+    .info-section {
+        padding: 1.5rem !important;
+        border-radius: 14px !important;
+        margin-bottom: 1.25rem !important;
+    }
+    
+    .info-section h3 {
+        font-size: 1.25rem !important;
+        margin-bottom: 1rem !important;
+    }
+    
+    .info-section p {
+        font-size: 0.9rem !important;
+        line-height: 1.6 !important;
+    }
+    
+    /* Contact info */
+    .contact-item {
+        padding: 1rem !important;
+        font-size: 0.875rem !important;
+        border-radius: 10px !important;
+    }
+    
+    .contact-item i {
+        font-size: 1.1rem !important;
+        width: 40px !important;
+        height: 40px !important;
+    }
+    
+    /* Sidebar */
+    .supplier-sidebar {
+        order: -1 !important;
+    }
+    
+    /* Related products */
+    .products-section {
+        padding: 0 0.75rem !important;
+        margin-bottom: 2rem !important;
+    }
+    
+    .products-section .section-header {
+        margin-bottom: 1rem !important;
+    }
+    
+    .products-section h2,
+    .products-section .section-title {
+        font-size: 0.95rem !important;
+        margin-bottom: 0.5rem !important;
+        line-height: 1.25 !important;
+        word-break: break-word !important;
+    }
+    
+    .products-section h2 i,
+    .products-section .section-title i {
+        font-size: 0.85rem !important;
+        margin-right: 0.4rem !important;
+    }
+    
+    .products-section .btn-view-all,
+    .products-section a[href*="products"] {
+        font-size: 0.75rem !important;
+        padding: 0.5rem 0.85rem !important;
+        width: 100% !important;
+    }
+    
+    .products-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+    }
+}
+
+@media (max-width: 640px) {
+    .page-container {
+        padding: 0 0.5rem !important;
+        margin: 40px auto 1.5rem !important;
+    }
+    
+    .breadcrumb {
+        font-size: 0.8rem !important;
+        margin-bottom: 1rem !important;
+    }
+    
+    .supplier-header {
+        padding: 1.25rem !important;
+        border-radius: 14px !important;
+    }
+    
+    .supplier-logo {
+        width: 100px !important;
+        height: 100px !important;
+    }
+    
+    .supplier-name {
+        font-size: 1.6rem !important;
+    }
+    
+    .supplier-meta {
+        flex-direction: column !important;
+        gap: 0.75rem !important;
+    }
+    
+    .supplier-meta-item {
+        font-size: 0.85rem !important;
+        justify-content: center !important;
+    }
+    
+    .info-section {
+        padding: 1.25rem !important;
+        margin-bottom: 1rem !important;
+    }
+    
+    .info-section h3 {
+        font-size: 1.15rem !important;
+    }
+    
+    .info-section p {
+        font-size: 0.875rem !important;
+    }
+    
+    .contact-item {
+        padding: 0.875rem !important;
+        font-size: 0.85rem !important;
+    }
+    
+    .contact-item i {
+        width: 36px !important;
+        height: 36px !important;
+    }
+    
+    .products-section {
+        padding: 0 0.5rem !important;
+    }
+    
+    .products-section h2,
+    .products-section .section-title {
+        font-size: 0.9rem !important;
+        margin-bottom: 0.45rem !important;
+        line-height: 1.2 !important;
+        word-break: break-word !important;
+    }
+    
+    .products-section h2 i,
+    .products-section .section-title i {
+        font-size: 0.8rem !important;
+    }
+    
+    .products-section .btn-view-all,
+    .products-section a[href*="products"] {
+        font-size: 0.72rem !important;
+        padding: 0.48rem 0.8rem !important;
+        width: 100% !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .page-container {
+        padding: 0 0.375rem !important;
+        margin: 35px auto 1.2rem !important;
+    }
+    
+    .breadcrumb {
+        font-size: 0.75rem !important;
+        flex-wrap: wrap !important;
+    }
+    
+    .supplier-header {
+        padding: 1rem !important;
+        border-radius: 12px !important;
+    }
+    
+    .supplier-logo {
+        width: 90px !important;
+        height: 90px !important;
+        border-radius: 12px !important;
+    }
+    
+    .supplier-name {
+        font-size: 1.45rem !important;
+        line-height: 1.2 !important;
+    }
+    
+    .info-section {
+        padding: 1rem !important;
+        border-radius: 12px !important;
+    }
+    
+    .info-section h3 {
+        font-size: 1.05rem !important;
+        margin-bottom: 0.75rem !important;
+    }
+    
+    .info-section p {
+        font-size: 0.85rem !important;
+    }
+    
+    .contact-item {
+        padding: 0.75rem !important;
+        font-size: 0.8rem !important;
+    }
+    
+    .contact-item i {
+        width: 34px !important;
+        height: 34px !important;
+        font-size: 1rem !important;
+    }
+    
+    .products-section {
+        padding: 0 0.375rem !important;
+    }
+    
+    .products-section h2,
+    .products-section .section-title {
+        font-size: 0.85rem !important;
+        margin-bottom: 0.4rem !important;
+        line-height: 1.2 !important;
+    }
+    
+    .products-section h2 i,
+    .products-section .section-title i {
+        font-size: 0.75rem !important;
+    }
+    
+    .products-section .btn-view-all,
+    .products-section a[href*="products"] {
+        font-size: 0.7rem !important;
+        padding: 0.45rem 0.75rem !important;
+        width: 100% !important;
+    }
+    
+    .products-grid {
+        gap: 0.875rem !important;
+    }
+}
+
+@media (max-width: 375px) {
+    .page-container {
+        padding: 0 0.3rem !important;
+    }
+    
+    .supplier-header {
+        padding: 0.875rem !important;
+    }
+    
+    .supplier-logo {
+        width: 80px !important;
+        height: 80px !important;
+    }
+    
+    .supplier-name {
+        font-size: 1.35rem !important;
+    }
+    
+    .info-section {
+        padding: 0.875rem !important;
+    }
+    
+    .info-section h3 {
+        font-size: 1rem !important;
+    }
+    
+    .info-section p {
+        font-size: 0.8rem !important;
+    }
+    
+    .contact-item {
+        padding: 0.7rem !important;
+        font-size: 0.78rem !important;
+    }
+    
+    .products-section {
+        padding: 0 0.3rem !important;
+    }
+    
+    .products-section h2,
+    .products-section .section-title {
+        font-size: 0.82rem !important;
+        margin-bottom: 0.4rem !important;
+        line-height: 1.2 !important;
+    }
+    
+    .products-section h2 i,
+    .products-section .section-title i {
+        font-size: 0.72rem !important;
+    }
+    
+    .products-section .btn-view-all,
+    .products-section a[href*="products"] {
+        font-size: 0.68rem !important;
+        padding: 0.42rem 0.7rem !important;
+    }
+}
+
+@media (max-width: 320px) {
+    .page-container {
+        padding: 0 0.25rem !important;
+        margin: 30px auto 1rem !important;
+    }
+    
+    .supplier-header {
+        padding: 0.75rem !important;
+        border-radius: 10px !important;
+    }
+    
+    .supplier-logo {
+        width: 75px !important;
+        height: 75px !important;
+    }
+    
+    .supplier-name {
+        font-size: 1.25rem !important;
+    }
+    
+    .info-section {
+        padding: 0.75rem !important;
+    }
+    
+    .info-section h3 {
+        font-size: 0.95rem !important;
+    }
+    
+    .info-section p {
+        font-size: 0.78rem !important;
+    }
+    
+    .contact-item {
+        padding: 0.65rem !important;
+        font-size: 0.75rem !important;
+    }
+    
+    .contact-item i {
+        width: 32px !important;
+        height: 32px !important;
+    }
+    
+    .products-section {
+        padding: 0 0.25rem !important;
+    }
+    
+    .products-section h2,
+    .products-section .section-title {
+        font-size: 0.78rem !important;
+        margin-bottom: 0.35rem !important;
+        line-height: 1.2 !important;
+    }
+    
+    .products-section h2 i,
+    .products-section .section-title i {
+        font-size: 0.68rem !important;
+        margin-right: 0.3rem !important;
+    }
+    
+    .products-section .btn-view-all,
+    .products-section a[href*="products"] {
+        font-size: 0.65rem !important;
+        padding: 0.4rem 0.65rem !important;
+    }
+}
+
+/* ==========================================
+   PRODUCT DETAIL PAGE RESPONSIVE
+========================================== */
+@media (max-width: 768px) {
+    /* Product Detail - Mobile Optimized */
+    .product-detail-layout {
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important;
+    }
+    
+    .product-gallery {
+        max-width: 85% !important;
+        margin: 0 auto !important;
+    }
+    
+    .main-image {
+        height: 280px !important;
+        border-radius: 12px !important;
+    }
+    
+    .thumbnail-grid {
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 0.6rem !important;
+    }
+    
+    .thumbnail {
+        height: 70px !important;
+        border-radius: 8px !important;
+    }
+    
+    .product-name {
+        font-size: 1.8rem !important;
+        margin-bottom: 0.8rem !important;
+    }
+    
+    .product-price {
+        font-size: 2rem !important;
+        margin-bottom: 1rem !important;
+    }
+    
+    .product-meta-item {
+        font-size: 0.85rem !important;
+        padding: 0.5rem 0 !important;
+    }
+    
+    .action-buttons {
+        flex-direction: column !important;
+        gap: 0.8rem !important;
+    }
+    
+    .btn-primary,
+    .btn-secondary {
+        width: 100% !important;
+        padding: 0.8rem !important;
+    }
+    
+    .product-tabs {
+        flex-wrap: wrap !important;
+        gap: 0.5rem !important;
+    }
+    
+    .tab-btn {
+        padding: 0.6rem 1rem !important;
+        font-size: 0.85rem !important;
+    }
+    
+    .tab-content {
+        padding: 1.2rem !important;
+    }
+    
+    .related-products-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 1rem !important;
+    }
+}
+
+@media (max-width: 640px) {
+    .product-gallery {
+        max-width: 90% !important;
+    }
+    
+    .main-image {
+        height: 260px !important;
+    }
+    
+    .thumbnail-grid {
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 0.5rem !important;
+    }
+    
+    .thumbnail {
+        height: 55px !important;
+    }
+    
+    .product-name {
+        font-size: 1.6rem !important;
+        line-height: 1.2 !important;
+    }
+    
+    .product-price {
+        font-size: 1.8rem !important;
+    }
+    
+    .product-meta-item {
+        font-size: 0.8rem !important;
+        padding: 0.45rem 0 !important;
+    }
+    
+    .product-meta-item i {
+        width: 20px !important;
+        font-size: 0.85rem !important;
+    }
+    
+    .product-tabs {
+        gap: 0.4rem !important;
+    }
+    
+    .tab-btn {
+        padding: 0.55rem 0.9rem !important;
+        font-size: 0.8rem !important;
+    }
+    
+    .tab-content {
+        padding: 1rem !important;
+        font-size: 0.9rem !important;
+    }
+    
+    .supplier-box {
+        padding: 1.2rem !important;
+    }
+    
+    .supplier-logo {
+        width: 60px !important;
+        height: 60px !important;
+    }
+    
+    .supplier-name {
+        font-size: 1.1rem !important;
+    }
+    
+    .supplier-info {
+        font-size: 0.8rem !important;
+    }
+    
+    .related-products-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.8rem !important;
+    }
+    
+    .related-product-card {
+        padding: 0.8rem !important;
+    }
+    
+    .related-product-image {
+        height: 140px !important;
+    }
+    
+    .related-product-title {
+        font-size: 0.9rem !important;
+    }
+    
+    .related-product-price {
+        font-size: 0.95rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .product-gallery {
+        max-width: 92% !important;
+    }
+    
+    .main-image {
+        height: 240px !important;
+    }
+    
+    .thumbnail-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 0.4rem !important;
+    }
+    
+    .thumbnail {
+        height: 60px !important;
+    }
+    
+    .product-name {
+        font-size: 1.45rem !important;
+    }
+    
+    .product-price {
+        font-size: 1.65rem !important;
+        margin-bottom: 0.8rem !important;
+    }
+    
+    .product-meta {
+        gap: 0.3rem !important;
+    }
+    
+    .product-meta-item {
+        font-size: 0.75rem !important;
+        padding: 0.4rem 0 !important;
+    }
+    
+    .action-buttons {
+        gap: 0.7rem !important;
+    }
+    
+    .btn-primary,
+    .btn-secondary {
+        padding: 0.7rem !important;
+        font-size: 0.85rem !important;
+    }
+    
+    .product-tabs {
+        overflow-x: auto !important;
+        flex-wrap: nowrap !important;
+        gap: 0.35rem !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+    
+    .tab-btn {
+        padding: 0.5rem 0.8rem !important;
+        font-size: 0.75rem !important;
+        white-space: nowrap !important;
+    }
+    
+    .tab-content {
+        padding: 0.9rem !important;
+        font-size: 0.85rem !important;
+    }
+    
+    .video-container iframe {
+        height: 220px !important;
+    }
+    
+    .supplier-box {
+        padding: 1rem !important;
+        flex-direction: column !important;
+        text-align: center !important;
+    }
+    
+    .supplier-logo {
+        width: 55px !important;
+        height: 55px !important;
+        margin: 0 auto 0.8rem !important;
+    }
+    
+    .supplier-name {
+        font-size: 1rem !important;
+    }
+    
+    .supplier-info {
+        font-size: 0.75rem !important;
+    }
+    
+    .related-products-grid {
+        grid-template-columns: 1fr !important;
+        gap: 0.8rem !important;
+    }
+    
+    .related-product-card {
+        display: flex !important;
+        gap: 1rem !important;
+    }
+    
+    .related-product-image {
+        width: 100px !important;
+        height: 100px !important;
+        flex-shrink: 0 !important;
+    }
+    
+    .related-product-title {
+        font-size: 0.85rem !important;
+    }
+    
+    .related-product-price {
+        font-size: 0.9rem !important;
+    }
+}
+
+@media (max-width: 375px) {
+    .product-gallery {
+        max-width: 94% !important;
+    }
+    
+    .main-image {
+        height: 220px !important;
+    }
+    
+    .product-name {
+        font-size: 1.35rem !important;
+    }
+    
+    .product-price {
+        font-size: 1.55rem !important;
+    }
+    
+    .thumbnail {
+        height: 52px !important;
+    }
+}
+
+@media (max-width: 320px) {
+    .product-gallery {
+        max-width: 96% !important;
+    }
+    
+    .main-image {
+        height: 200px !important;
+    }
+    
+    .product-name {
+        font-size: 1.25rem !important;
+    }
+    
+    .product-price {
+        font-size: 1.45rem !important;
+    }
+    
+    .thumbnail-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 0.35rem !important;
+    }
+    
+    .thumbnail {
+        height: 48px !important;
+    }
+}
+
+/* End of Responsive Styles */
