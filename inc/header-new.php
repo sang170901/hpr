@@ -618,7 +618,7 @@ $userData = $isLoggedIn ? [
                 width: 280px;
                 height: calc(100vh - 60px);
                 background: white;
-                box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+                box-shadow: 2px 0 16px rgba(0, 0, 0, 0.08);
                 transition: left 0.3s ease;
                 z-index: 999;
                 overflow-y: auto;
@@ -631,21 +631,26 @@ $userData = $isLoggedIn ? [
             .nav-list {
                 flex-direction: column;
                 gap: 0;
-                padding: 1rem 0;
+                padding: 0.5rem 0;
             }
             
             .nav-item {
                 width: 100%;
-                border-bottom: 1px solid #e2e8f0;
             }
             
             .nav-link {
                 width: 100%;
-                padding: 1rem 1.5rem;
+                padding: 1.2rem 1.5rem;
                 flex-direction: row;
                 justify-content: flex-start;
+                align-items: center;
                 gap: 1rem;
                 border-radius: 0;
+                background: transparent;
+                border: none;
+                border-left: 3px solid transparent;
+                transition: all 0.2s ease;
+                position: relative;
             }
             
             .nav-link::before,
@@ -655,18 +660,33 @@ $userData = $isLoggedIn ? [
             
             .nav-link:hover {
                 background: #f0f9ff;
+                border-left-color: #38bdf8;
                 transform: none;
                 box-shadow: none;
             }
             
+            .nav-link.active {
+                background: #e0f2fe;
+                border-left-color: #0ea5e9;
+            }
+            
             .nav-number {
-                font-size: 0.9rem;
-                min-width: 30px;
+                font-size: 0.85rem;
+                font-weight: 600;
+                color: #0ea5e9;
+                min-width: 24px;
             }
             
             .nav-text {
-                font-size: 0.95rem;
-                letter-spacing: 0.5px;
+                font-size: 1rem;
+                font-weight: 500;
+                letter-spacing: 0;
+                color: #1e293b;
+                flex: 1;
+            }
+            
+            .nav-link:hover .nav-text {
+                color: #0ea5e9;
             }
             
             .action-btn, .btn-login, .lang-toggle-btn, .user-avatar-btn {

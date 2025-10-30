@@ -544,6 +544,7 @@ include __DIR__ . '/inc/header-new.php';
             display: flex;
             align-items: center;
             gap: 0.75rem;
+            flex-wrap: wrap;
         }
         
         .section-title i {
@@ -554,6 +555,7 @@ include __DIR__ . '/inc/header-new.php';
             color: #0284c7;
             text-decoration: none;
             transition: color 0.3s;
+            word-break: break-word;
         }
         
         .section-title a:hover {
@@ -781,6 +783,22 @@ include __DIR__ . '/inc/header-new.php';
                 grid-template-columns: 1fr;
             }
             
+            .product-image {
+                height: 350px;
+            }
+            
+            .main-display {
+                height: 350px;
+            }
+            
+            .thumbnail {
+                height: 70px;
+            }
+            
+            .image-thumbnails {
+                grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+            }
+            
             .product-card {
                 flex: 0 0 260px;
                 min-width: 260px;
@@ -794,7 +812,7 @@ include __DIR__ . '/inc/header-new.php';
             }
             
             .section-title {
-                font-size: 1.5rem;
+                font-size: 1.3rem;
             }
             
             .scroll-nav-btn {
@@ -815,6 +833,24 @@ include __DIR__ . '/inc/header-new.php';
             .page-container {
                 padding: 0 15px;
                 margin-top: 50px;
+            }
+            
+            .product-image {
+                height: 280px;
+            }
+            
+            .main-display {
+                height: 280px;
+            }
+            
+            .thumbnail {
+                height: 60px;
+            }
+            
+            .image-thumbnails {
+                grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+                gap: 8px;
+                margin-top: 10px;
             }
             
             .product-title {
@@ -847,7 +883,11 @@ include __DIR__ . '/inc/header-new.php';
             }
             
             .section-title {
-                font-size: 1.25rem;
+                font-size: 1rem;
+            }
+            
+            .section-title i {
+                font-size: 0.9rem;
             }
             
             .scroll-nav-btn {
@@ -1243,12 +1283,7 @@ include __DIR__ . '/inc/header-new.php';
                         <?php echo htmlspecialchars($product['supplier_name'] ?: 'nhà cung cấp này') ?>
                             <?php endif; ?>
                 </h2>
-                <?php if ($product['supplier_id']): ?>
-                <a href="supplier-detail.php?id=<?php echo $product['supplier_id'] ?>" class="view-all">
-                    Xem tất cả <i class="fas fa-arrow-right"></i>
-                </a>
-                                    <?php endif; ?>
-                                </div>
+            </div>
             <div class="products-scroll-wrapper">
                 <button class="scroll-nav-btn prev" data-scroll="supplier-products">
                     <i class="fas fa-chevron-left"></i>
@@ -1289,12 +1324,7 @@ include __DIR__ . '/inc/header-new.php';
                     <i class="fas fa-th-large"></i>
                     Sản phẩm cùng danh mục
                 </h2>
-                <?php if ($product['category']): ?>
-                <a href="products.php?category=<?php echo urlencode($product['category']) ?>" class="view-all">
-                    Xem tất cả <i class="fas fa-arrow-right"></i>
-                        </a>
-                        <?php endif; ?>
-                    </div>
+            </div>
             <div class="products-scroll-wrapper">
                 <button class="scroll-nav-btn prev" data-scroll="related-products">
                     <i class="fas fa-chevron-left"></i>

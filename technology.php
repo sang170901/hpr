@@ -472,6 +472,95 @@ try {
             flex-direction: column;
         }
     }
+    
+    @media (max-width: 640px) {
+        .technology-hero {
+            padding: 80px 15px 60px;
+            min-height: 350px;
+        }
+        
+        .hero-title {
+            font-size: 1.5rem;
+        }
+        
+        .hero-subtitle {
+            font-size: 1rem;
+        }
+        
+        .hero-search {
+            max-width: 100%;
+            padding: 0 10px;
+        }
+        
+        .search-form {
+            border-radius: 12px;
+        }
+        
+        .search-btn {
+            padding: 12px 20px;
+            font-size: 0.9rem;
+        }
+        
+        .main-content {
+            padding: 20px 0;
+        }
+        
+        .filter-section {
+            border-radius: 0;
+            padding: 20px 15px;
+            margin-bottom: 20px;
+        }
+        
+        .filter-header {
+            font-size: 1rem;
+        }
+        
+        .technology-grid {
+            gap: 20px;
+            padding: 0 10px;
+            grid-template-columns: 1fr;
+        }
+        
+        .technology-card {
+            width: 100%;
+            border-radius: 12px;
+        }
+        
+        .technology-header {
+            height: 200px;
+        }
+        
+        .technology-body {
+            padding: 20px;
+        }
+        
+        .technology-name {
+            font-size: 1.1rem;
+        }
+        
+        .technology-description {
+            font-size: 0.9rem;
+        }
+        
+        .results-header {
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .results-count {
+            font-size: 1rem;
+        }
+        
+        .pagination {
+            padding: 0 15px;
+            margin-top: 30px;
+        }
+        
+        .page-link {
+            padding: 10px 12px;
+            font-size: 0.9rem;
+        }
+    }
 </style>
 
 <!-- Hero Section -->
